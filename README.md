@@ -1,5 +1,5 @@
-# RadCamp - a training bootcamp based on [ipyrad](https://github.com/dereneaton/ipyrad) for RAD-seq type sequence data assembly and analysis
+# Field to Phylogeny
 
-Navigate to [http://radcamp.github.io/](http://radcamp.github.io/) for more information
+Navigate to [http://fieldtophylogeny.github.io/](http://fieldtophylogeny.github.io/) for more information
 
 
