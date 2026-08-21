@@ -2,4 +2,3 @@
 
 Navigate to [https://fieldtophylogeny.github.io/](https://fieldtophylogeny.github.io/) for more information
 
-
