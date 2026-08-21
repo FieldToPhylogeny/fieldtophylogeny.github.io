@@ -10,7 +10,7 @@ Antananarivo, Madagascar
   - Dr Sara Ruane (Field Museum; instructor/organizer)
   - Fandresena Rakotoarimalala (University of Antananarivo; instructor/organizer)
   - Dr Voahangy Soarimalala (Association Vahatra; collaborator)
-  - Fidisoa Rasambainarivo (East Carolina University; collaborator)
+  - Dr Fidisoa Rasambainarivo (East Carolina University; collaborator)
   - Dr Isaac Overcast (University of Maine; INHS; collaborator)
 
 ## Registration
