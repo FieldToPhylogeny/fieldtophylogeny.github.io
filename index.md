@@ -20,7 +20,7 @@ communicate research to agency partners,
 * (4) strengthen data literacy skills by analyzing real samples and interpreting 
 and communicating results.
 
-# Who should attend?
+## Who should attend?
 Field-to-Phylogeny workshops are normally geared toward practicing field biologists with little or no 
 computational experience.
 
@@ -33,15 +33,15 @@ Workshop attendees will need to bring a laptop computer.
 ## Past events:
 
 
-# Sponsorship Acknowledgments
+## Sponsorship Acknowledgments
 
 We acknowledge generous support of the European Society of Evolutionary
 Biology (ESEB) through their Global Evolutionary Biology Initiatives (GEBI)
 program.
 
-# RADCamp tutorial contributors and instructors (over the years)
+## Field-to-Phylogeny tutorial contributors and instructors (over the years)
 Arianna Kuhn, Sara Ruan, Fandresena Rakotoarimalala, Voahangy Soarimalala,
 Fidisoa Rasambainarivo, Isaac Overcast
 
-# Acknowledgements
+## Acknowledgements
 [RADCamp](https://radcamp.github.io/) - Which inspired the design of this workshop and also of this site.
