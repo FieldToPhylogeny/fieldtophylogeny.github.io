@@ -34,7 +34,7 @@ Times       | Day 1 (Tue Nov 10) | Day 2 (Wed Nov 11) | Day 3 (Thu Nov 12) |
 
 ## Refreshments provided and workshop sponsored by:
 <div align="center" markdown="1">
-  <img src="images/ESEB-Logo.png" alt="ESEB GEBI" width="250">
+  <img src="images/ESEB-Logo.png" alt="ESEB GEBI" width="500">
 </div>
 Special thanks to the European Society for Evolutionary Biology for
 their support through the Global Evolutionary Biology Initiative program.
