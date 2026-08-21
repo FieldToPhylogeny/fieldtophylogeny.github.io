@@ -4,6 +4,27 @@ November 10-12, 2026
 Association Vahatra (2 days), Mahaliana (1 day)  
 Antananarivo, Madagascar
 
+## Overview
+This three-day workshop will provide participants with hands-on training in 
+molecular and phylogenetic techniques commonly used in biodiversity research. 
+Participants will work through the complete process of generating and analyzing 
+DNA barcode data, beginning with tissue samples collected in Madagascar and 
+ending with phylogenetic interpretation of sequence data. The workshop combines 
+lectures, laboratory exercises, and computer-based analyses to provide a 
+comprehensive introduction to molecular workflows used in species identification 
+and evolutionary studies.
+
+## Learning Objectives
+By the end of this workshop, participants will be able to:
+
+1. Explain the role of DNA barcoding and phylogenetics in biodiversity research and conservation
+2. Become familiar with following protocols to extract and quantifying DNA from tissue samples
+3. Understand the process of generating DNA barcodes
+4. Import and edit raw sequence chromatograms to generate consensus sequences (contigs) from forward and reverse reads
+5. Use online tools such as BLAST searches to confirm species identity and obtain comparative sequence data to build DNA barcode sequence alignments
+6. Construct and interpret phylogenetic trees
+7. Evaluate sample uniqueness using phylogenetic evidence (sequence uniqueness) and sample metadata.
+
 ## Organisers, Instructors, and Facilitators
 
   - Dr Arianna Kuhn (Illinois Natural History Survey; instructor/organizer)
