@@ -4,7 +4,7 @@ November 10-12, 2026
 Association Vahatra (2 days), Mahaliana (1 day)  
 Antananarivo, Madagascar
 
-# Organisers, Instructors, and Facilitators
+## Organisers, Instructors, and Facilitators
 
   - Dr Arianna Kuhn (Illinois Natural History Survey; instructor/organizer)
   - Dr Sara Ruane (Field Museum; instructor/organizer)
@@ -13,7 +13,7 @@ Antananarivo, Madagascar
   - Fidisoa Rasambainarivo (East Carolina University; collaborator)
   - Dr Isaac Overcast (University of Maine; INHS; collaborator)
 
-# Registration
+## Registration
 
 Registration for this edition of Field-to-Phylogeny is **free**, but 
 participation will be limited to students enrolled at University of
@@ -22,7 +22,7 @@ Please fill out this brief registration survey, so we can get a better idea of w
 
 [**Register for Field-to-Phylogeny Madagascar 2026**](https://forms.gle/3hPyBJ4kKJkxMiM59)
 
-# Schedule Outline (View the [detailed schedule](https://docs.google.com/spreadsheets/d/113yLp8xCCP2BzPe6VioBBe7qrpIqij_uJ8uj1u2RQao))
+## Schedule Outline (View the [detailed schedule](https://docs.google.com/spreadsheets/d/113yLp8xCCP2BzPe6VioBBe7qrpIqij_uJ8uj1u2RQao))
 
 Times       | Day 1 (Tue Nov 10) | Day 2 (Wed Nov 11) | Day 3 (Thu Nov 12) |
 -----       | ----- | ----- | ----- |
@@ -34,7 +34,7 @@ Times       | Day 1 (Tue Nov 10) | Day 2 (Wed Nov 11) | Day 3 (Thu Nov 12) |
 
 ## Refreshments provided and workshop sponsored by:
 <div align="center" markdown="1">
-![ESEB GEBI](images/ESEB-Logo.png)
+  <img src="images/ESEB-Logo.png" alt="ESEB GEBI" style="width: 250px; height: auto;"
 </div>
 Special thanks to the European Society for Evolutionary Biology for
 their support through the Global Evolutionary Biology Initiative program.
