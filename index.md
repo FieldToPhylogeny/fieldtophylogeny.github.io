@@ -40,7 +40,7 @@ Biology (ESEB) through their Global Evolutionary Biology Initiatives (GEBI)
 program.
 
 ## Field-to-Phylogeny tutorial contributors and instructors (over the years)
-Arianna Kuhn, Sara Ruan, Fandresena Rakotoarimalala, Voahangy Soarimalala,
+Arianna Kuhn, Sara Ruane, Fandresena Rakotoarimalala, Voahangy Soarimalala,
 Fidisoa Rasambainarivo, Isaac Overcast
 
 ## Acknowledgements
