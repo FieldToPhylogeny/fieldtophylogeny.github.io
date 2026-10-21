@@ -45,12 +45,12 @@ Please fill out this brief registration survey, so we can get a better idea of w
 
 ## Schedule Outline (View the [detailed schedule](https://docs.google.com/spreadsheets/d/113yLp8xCCP2BzPe6VioBBe7qrpIqij_uJ8uj1u2RQao))
 
-Times       | Day 1 (Tue Nov 10) | Day 2 (Wed Nov 11) | Day 3 (Thu Nov 12) |
------       | ----- | ----- | ----- |
-8:30-9:00   | Check-in and refreshments | Check-in and refreshments | Check-in and refreshments |
-9:00-12:00  | Intro, Lecture & DNA Extraction Lab | Lecture & Sequence Editing Lab | Lecture & Phylogenetics Lab |
-12:00-13:30 | Lunch | Lunch | Lunch |
-13:30-17:00 | Lecture & DNA Quantification Lab | Lecture & DNA Barcoding Lab | Phylogenetics Lab (cont.) |
+Times       | Day 1 (Wed Nov 11) | Day 2 (Thu Nov 12) |
+-----       | ----- | ----- |
+8:30-9:00   | Check-in and refreshments | Check-in and refreshments |
+9:00-12:00  | Intro, Lecture & DNA Extraction Lab | DNA Barcoding & Sequence Editing Lab |
+12:00-13:30 | Lunch | Lunch |
+13:30-17:00 | Lecture & DNA Quantification Lab | Phylogenetics Lab |
 
 
 ## Refreshments provided and workshop sponsored by:
