@@ -45,7 +45,7 @@ Please fill out this brief registration survey, so we can get a better idea of w
 
 ## Schedule Outline (View the [detailed schedule](https://docs.google.com/spreadsheets/d/113yLp8xCCP2BzPe6VioBBe7qrpIqij_uJ8uj1u2RQao))
 
-Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Association Vahatra |
+Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Vahatra |
 -----       | ----- | ----- |
 8:30-9:00   | Check-in and refreshments | Check-in and refreshments |
 9:00-12:00  | Intro, Lecture & DNA Extraction Lab | DNA Barcoding & Sequence Editing Lab |
