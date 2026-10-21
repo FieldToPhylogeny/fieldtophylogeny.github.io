@@ -1,11 +1,11 @@
 # Welcome to Field-to-Phylogeny 2026 - The Madagascar Edition
 
-November 10-12, 2026  
-Association Vahatra (2 days), Mahaliana (1 day)  
+November 11-12, 2026  
+Mahaliana (1 day), Association Vahatra (1 day)
 Antananarivo, Madagascar
 
 ## Overview
-This three-day workshop will provide participants with hands-on training in 
+This two-day workshop will provide participants with hands-on training in 
 molecular and phylogenetic techniques commonly used in biodiversity research. 
 Participants will work through the complete process of generating and analyzing 
 DNA barcode data, beginning with tissue samples collected in Madagascar and 
@@ -45,7 +45,7 @@ Please fill out this brief registration survey, so we can get a better idea of w
 
 ## Schedule Outline (View the [detailed schedule](https://docs.google.com/spreadsheets/d/113yLp8xCCP2BzPe6VioBBe7qrpIqij_uJ8uj1u2RQao))
 
-Times       | Day 1 (Wed Nov 11) | Day 2 (Thu Nov 12) |
+Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Association Vahatra |
 -----       | ----- | ----- |
 8:30-9:00   | Check-in and refreshments | Check-in and refreshments |
 9:00-12:00  | Intro, Lecture & DNA Extraction Lab | DNA Barcoding & Sequence Editing Lab |
