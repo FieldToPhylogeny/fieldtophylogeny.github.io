@@ -1,8 +1,9 @@
 # Welcome to Field-to-Phylogeny 2026 - The Madagascar Edition
 
-November 11-12, 2026  
-Mahaliana (1 day), Association Vahatra (1 day)
-Antananarivo, Madagascar
+November 11-12, 2026   
+[Mahaliana](https://www.mahaliana.org/) (Day 1)  
+[Association Vahatra](https://www.vahatra.mg/en/) (Day 2)   
+Antananarivo, Madagascar 
 
 ## Overview
 This two-day workshop will provide participants with hands-on training in 
@@ -27,21 +28,17 @@ By the end of this workshop, participants will be able to:
 
 ## Organisers, Instructors, and Facilitators
 
-  - Dr Arianna Kuhn (Illinois Natural History Survey; instructor/organizer)
-  - Dr Sara Ruane (Field Museum; instructor/organizer)
+  - Dr. Arianna Kuhn (Illinois Natural History Survey; instructor/organizer)
+  - Dr. Sara Ruane (Field Museum; instructor/organizer)
   - Fandresena Rakotoarimalala (University of Antananarivo; instructor/organizer)
-  - Dr Voahangy Soarimalala (Association Vahatra; collaborator)
-  - Dr Fidisoa Rasambainarivo (East Carolina University; collaborator)
-  - Dr Isaac Overcast (University of Maine; INHS; collaborator)
+  - Dr. Santatra Randrianarisoa (Mahaliana; instructor)
+  - Dr. Voahangy Soarimalala (Association Vahatra; collaborator)
+  - Dr. Fidisoa Rasambainarivo (East Carolina University; collaborator)
+  - Dr. Isaac Overcast (University of Maine; INHS; collaborator)
 
 ## Registration
 
-Registration for this edition of Field-to-Phylogeny is **free**, but 
-participation will be limited to students enrolled at University of
-Antananarivo and participating in the Association Vahatra internship program. 
-Please fill out this brief registration survey, so we can get a better idea of who will attend:
-
-[**Register for Field-to-Phylogeny Madagascar 2026**](https://forms.gle/3hPyBJ4kKJkxMiM59)
+Registration for this edition of Field-to-Phylogeny is now closed. For information about future offerings, contact Arianna Kuhn (alkuhn@illinois.edu)
 
 ## Schedule Outline (View the [detailed schedule](https://docs.google.com/spreadsheets/d/113yLp8xCCP2BzPe6VioBBe7qrpIqij_uJ8uj1u2RQao))
 
