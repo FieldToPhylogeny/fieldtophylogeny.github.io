@@ -62,8 +62,8 @@ their support through the Global Evolutionary Biology Initiative program.
 
 ## Exit Survey
 
-Don't forget to make an exit survey!
-<!--[RADCamp UIUC 2026 Exit Survey](https://docs.google.com/forms/d/1RJ5HRDczQGQkIfNv1QEtk6fbTULx8i6yg2cJ5nFGFCE/edit) -->
+Don't forget to fill this out at the end of the workshop!  
+[Field to Phylogeny 2026 Exit Survey](https://forms.gle/R9cGQnnbPN2m3jgY7)
 
 ## Group Photo
 
