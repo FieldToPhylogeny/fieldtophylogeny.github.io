@@ -44,8 +44,8 @@ Registration for this edition of Field-to-Phylogeny is now closed. For informati
 
 Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Vahatra |
 -----       | ----- | ----- |
-8:30-9:00   | Check-in and refreshments | Check-in and refreshments |
-9:00-12:00  | Intro, Lecture & DNA Extraction Lab | DNA Barcoding & Sequence Editing Lab |
+8:30-9:00   | Check-in | Check-in and computer setup |
+9:00-12:00  | Intro, Lecture & DNA Extraction Lab | DNA Barcoding & [Sequence Editing Lab](sequence-editing-lab.md) |
 12:00-13:30 | Lunch | Lunch |
 13:30-17:00 | Lecture & DNA Quantification Lab | Phylogenetics Lab |
 
