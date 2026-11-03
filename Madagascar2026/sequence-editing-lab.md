@@ -8,6 +8,8 @@ Here is a Chromatogram (visual trace plot) visualized in [Geneious Prime](https:
 
 Base quality is tracked for each nucleotide position (here, this is viewed by shade of blue as well as by light blue quality bars):
 
+![Chromatogram-BaseQuality](images/Chromatogram-BaseQuality.png)
+
 Often, two raw files are produced per individual: the forward sequence, and the reverse sequence. These two sequences can be put together as a singe contiguous sequence (a "contig"), where both sequences overlap to account for low quality bases at the ends of the sequence. Let's download our raw .ab1 files Here:  
 
 Group A:  
