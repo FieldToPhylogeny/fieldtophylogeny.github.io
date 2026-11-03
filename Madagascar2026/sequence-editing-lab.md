@@ -15,13 +15,13 @@ Often, two raw files are produced per individual: the forward sequence, and the 
 ## Sequence translation
 These sequences can be translated into protein coding sequences - for every 3 _nucleotides_ (basepairs) there is a corresponding _codon_. Strings of codons make amino acids. Many amino acids make a protein. Here, we sequenced a fragment of a larger gene. Thus, multiple reading frames must be checked for the correct translation - if there is a stop codon, then this isn't the correct reading frame, because a stop codon would terminate the sequence, and the amino acid would not be built.
 
-Reading Frame I  
+**Reading Frame I**  
 ![Reading Frame I](images/Chromatogram-ReadingFrame1.png)  
 
-Reading Frame II 
+**Reading Frame II** 
 ![Reading Frame II](images/Chromatogram-ReadingFrame2.png)
 
-Reading Frame III. 
+**Reading Frame III** 
 ![Reading Frame III](images/Chromatogram-ReadingFrame3.png)  
 
 _Which reading frame is correct for this pair of sequences?_
@@ -30,12 +30,12 @@ _Which reading frame is correct for this pair of sequences?_
 Now, let's download our raw .ab1 files and view the chromatograms in the TraceLab Viewer:  
 
 Group A:  
-[Mystery-Sequence-A-Forward.ab1]  
-[Mystery-Sequence-A-Reverse.ab1]   
+[Mystery-Sequence-A-Forward.ab1](data/APR_13144_B05_FWD.ab1)  
+[Mystery-Sequence-A-Reverse.ab1](data/APR_13144_B05_RVS.ab1)  
 
 Group B:  
-[Mystery-Sequence-B-Forward.ab1]  
-[Mystery-Sequence-B-Reverse.ab1]  
+[Mystery-Sequence-B-Forward.ab1](data/APR_14116_D05_FWD.ab1)   
+[Mystery-Sequence-B-Reverse.ab1](data/APR_14116_D05_RVS.ab1)   
 
 [TraceLab Chromatogram Viewer](TraceLab Chromatograms.html)
 
