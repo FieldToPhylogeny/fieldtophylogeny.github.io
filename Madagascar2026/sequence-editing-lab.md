@@ -18,4 +18,6 @@ Group A:
 
 Group B:  
 [Mystery-Sequence-B-Forward.ab1]  
-[Mystery-Sequence-B-Reverse.ab1]   
+[Mystery-Sequence-B-Reverse.ab1]  
+
+[TraceLab Chromatogram Viewer](TraceLab Chromatograms.html)
