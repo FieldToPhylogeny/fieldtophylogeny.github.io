@@ -1,3 +1,5 @@
+[TraceLab Chromatogram Viewer](TraceLab Chromatograms.html)
+
 ### Important documentation:  
 * [ipyrad full documentation](https://ipyrad.readthedocs.io)
 * [radcamp home](https://radcamp.github.io/)
