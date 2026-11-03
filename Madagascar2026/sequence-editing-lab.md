@@ -1,6 +1,6 @@
 # Sequence editing
 ## Raw sequence files  
-After Sanger sequencing, files are usually returned in raw format (with the extension ".ab1" or ). This raw format can be visualized as a chromatogram. This allows a quality control check to identify the quality of the sequence results, individual base calls, and the certainty of each base call. 
+After Sanger sequencing, files are usually returned in raw format (with the extension ".ab1" or ".scf"). This raw format can be visualized as a chromatogram. This allows a quality control check to identify the quality of the sequence results, individual base calls, and the certainty of each base call. 
 
 Here is a Chromatogram (visual trace plot) visualized in [Geneious Prime](https://www.geneious.com/features/prime#sequence-analysis) (Proprietary software, but free trial versions available). This shows fluorescent signal intensity (peak height) and base calls (codon letters; A, T, G, & C):
 
