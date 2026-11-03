@@ -37,7 +37,8 @@ Group B:
 [Mystery-Sequence-B-Forward.ab1](data/APR_14116_D05_FWD.ab1)   
 [Mystery-Sequence-B-Reverse.ab1](data/APR_14116_D05_RVS.ab1)   
 
-[TraceLab Chromatogram Viewer](TraceLab Chromatograms.html)
+Open TraceLab, and upload your forward and reverse sequences, then follow these parts of the exercise
+[TraceLab Chromatogram Viewer](TraceLab-V2.html)
 
 ## Exercises
 1.) After uploading your forward and reverse sequences to the viewer, how many basepairs were ambiguous?  
