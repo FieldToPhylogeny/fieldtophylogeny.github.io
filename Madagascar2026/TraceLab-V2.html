@@ -1,0 +1,660 @@
+<title>TraceLab Chromatograms</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a toolbar band, a file list, then a full-width scrolling trace panel with a detail strip below. */
+:root{
+  --bg:#f6f7f5; --panel:#ffffff; --fg:#1d2420; --muted:#5f6b64; --line:#d9ddd8; --accent:#1f6f5c; --accent-ink:#ffffff;
+  --sel:#f3c84b; --flag:#fbe7a6; --gapflag:#f6d0c8; --lowq:#c9503a; --midq:#d9a23a; --hiq:#9aa7a0; --trim:#e8ebe7;
+  --bA:#1f9a55; --bC:#2462b8; --bG:#c29a12; --bT:#d23b2a; --bN:#8a8f8c;
+  /* base boxes (Geneious-like) and quality bins: dark = low quality, light = high quality */
+  --xA:#4fc35a; --xC:#4a7df0; --xG:#f2c230; --xT:#e2483d; --xN:#b9bfbc; --xInk:#10140f;
+  --q1:#1c46b8; --q2:#4c82e6; --q3:#93bff4; --q4:#d3f0fb; --q1ink:#ffffff; --q2ink:#ffffff; --q3ink:#10203a; --q4ink:#10203a;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151a18; --panel:#1c2220; --fg:#e4e9e6; --muted:#9aa5a0; --line:#2f3834; --accent:#5cc2a6; --accent-ink:#0f1513;
+  --sel:#c9a43a; --flag:#5a4b1c; --gapflag:#5b2f27; --lowq:#e2735f; --midq:#d6b058; --hiq:#5f6b66; --trim:#232a27;
+  --bA:#4cc785; --bC:#6aa2ee; --bG:#e8c34a; --bT:#f0705f; --bN:#7d8581; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151a18; --panel:#1c2220; --fg:#e4e9e6; --muted:#9aa5a0; --line:#2f3834; --accent:#5cc2a6; --accent-ink:#0f1513;
+  --sel:#c9a43a; --flag:#5a4b1c; --gapflag:#5b2f27; --lowq:#e2735f; --midq:#d6b058; --hiq:#5f6b66; --trim:#232a27;
+  --bA:#4cc785; --bC:#6aa2ee; --bG:#e8c34a; --bT:#f0705f; --bN:#7d8581; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--sans);margin:0}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 28px;max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;justify-content:space-between}
+h1{font-size:20px;margin:0;letter-spacing:.01em}
+h1 span{color:var(--muted);font-weight:500;font-size:14px;margin-left:8px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:6px;padding:6px 11px;cursor:pointer}
+button:hover,.btn:hover{border-color:var(--accent)}
+button:focus-visible,.btn:focus-within,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.primary,.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button[disabled]{opacity:.45;cursor:default}
+.btn input{display:none}
+select{font:inherit;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 16px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;color:var(--muted);font-size:13px;min-width:0}
+.steps li::before{content:counter(s);display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700;margin-right:6px}
+.steps b{color:var(--fg)}
+table.files{width:100%;border-collapse:collapse;font-size:13px}
+table.files th{text-align:left;font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:4px 8px;border-bottom:1px solid var(--line)}
+table.files td{padding:6px 8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;vertical-align:middle}
+.tablewrap{overflow-x:auto}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:3px 9px;font-size:12px}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;padding:8px 12px;font-weight:600;color:var(--muted)}
+.tabs button.on{color:var(--fg);border-bottom-color:var(--accent)}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.stats b{color:var(--fg);font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.ok{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
+.pill.warn{background:var(--flag);color:var(--fg)}
+.viewer{position:relative;border:1px solid var(--line);border-radius:8px;background:var(--panel);overflow:hidden}
+.scroller{overflow-x:auto;overflow-y:hidden}
+.spacer{height:1px}
+canvas{display:block;position:sticky;left:0}
+.detail{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:13px}
+.detail .pick{display:flex;gap:4px}
+.detail .pick button{font-family:var(--mono);font-weight:700;width:34px;padding:5px 0}
+.mono{font-family:var(--mono)}
+textarea{width:100%;min-height:110px;font:12px/1.4 var(--mono);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);padding:8px;resize:vertical}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px}
+.empty{color:var(--muted);text-align:center;padding:36px 12px}
+.hint{font-size:12px;color:var(--muted)}
+.err{color:var(--lowq);font-size:13px}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>TraceLab <span data-i18n="subtitle">Sanger chromatograms · offline</span></h1>
+    <div class="bar">
+      <div class="seg" role="group" aria-label="Language">
+        <button id="lang-en" class="on" type="button">EN</button><button id="lang-fr" type="button">FR</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="card">
+    <ol class="steps">
+      <li data-i18n-html="s1"><b>Load</b> the forward and reverse .ab1 files for one sample.</li>
+      <li data-i18n-html="s2"><b>Check direction:</b> the reverse read is flipped (reverse-complemented) so both read the same way.</li>
+      <li data-i18n-html="s3"><b>Trim:</b> grey ends have low quality and are left out.</li>
+      <li data-i18n-html="s4"><b>Fix:</b> jump to each yellow column, look at both peaks, choose the base.</li>
+      <li data-i18n-html="s5"><b>Export</b> the consensus as FASTA for the alignment.</li>
+    </ol>
+  </section>
+
+  <section class="card" style="display:flex;flex-direction:column;gap:10px">
+    <div class="bar">
+      <label class="btn primary"><span data-i18n="load">Load .ab1 files</span><input id="file" type="file" accept=".ab1,.abi,.ab!" multiple></label>
+      <button id="demo" type="button" data-i18n="demo">Load example (mystery sample A)</button>
+      <span class="hint" data-i18n="drop">or drag files onto this page</span>
+    </div>
+    <div id="err" class="err" hidden></div>
+    <div class="tablewrap"><table class="files" id="files" hidden>
+      <thead><tr><th data-i18n="th-file">File</th><th data-i18n="th-sample">Sample</th><th data-i18n="th-dir">Direction</th><th data-i18n="th-len">Bases</th><th data-i18n="th-q">Mean quality</th><th data-i18n="th-use">Use</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div id="empty" class="empty" data-i18n="empty">No reads yet. Load a forward and a reverse .ab1 file, or open the example.</div>
+  </section>
+
+  <section id="work" hidden style="display:flex;flex-direction:column;gap:10px">
+    <div class="tabs" role="tablist">
+      <button id="tab-contig" class="on" type="button" data-i18n="tab-contig">Contig: forward + reverse</button>
+      <button id="tab-reads" type="button" data-i18n="tab-reads">Raw reads and trimming</button>
+    </div>
+    <div class="bar" style="justify-content:space-between">
+      <div class="stats" id="stats"></div>
+      <div class="bar">
+        <label class="hint" for="trim" data-i18n="trim">Trim stringency</label>
+        <select id="trim">
+          <option value="0.10" data-i18n="trim-l">Light</option>
+          <option value="0.05" selected data-i18n="trim-m">Standard</option>
+          <option value="0.02" data-i18n="trim-s">Strict</option>
+        </select>
+        <button id="prev" type="button" data-i18n="prev">◀ Previous flag</button>
+        <button id="next" type="button" class="primary" data-i18n="next">Next flag ▶</button>
+      </div>
+    </div>
+    <div class="bar" style="gap:8px 18px">
+      <span class="bar"><span class="hint" data-i18n="colorby">Colour bases</span>
+        <span class="seg" role="group" aria-label="Colour bases"><button id="cm-base" class="on" type="button" data-i18n="by-base">By base</button><button id="cm-q" type="button" data-i18n="by-q">By quality</button></span></span>
+      <span class="bar"><span class="hint" data-i18n="translate">Translate</span>
+        <span class="seg" role="group" aria-label="Reading frame" id="frames"><button data-f="0" class="on" type="button" data-i18n="off">Off</button><button data-f="1" type="button" data-i18n="f1">Frame 1</button><button data-f="2" type="button" data-i18n="f2">Frame 2</button><button data-f="3" type="button" data-i18n="f3">Frame 3</button></span></span>
+      <span class="bar"><label class="hint" for="gcode" data-i18n="code">Genetic code</label>
+        <select id="gcode"><option value="2" data-i18n="code-mt">Vertebrate mitochondrial (COI)</option><option value="1" data-i18n="code-std">Standard (nuclear)</option></select></span>
+      <span id="stopinfo"></span>
+    </div>
+    <div class="viewer"><div class="scroller" id="scroller"><canvas id="cv"></canvas><div class="spacer" id="spacer"></div></div></div>
+    <div class="legend">
+      <span id="lg-bases"><span><i class="sw" style="background:var(--xA)"></i>A</span> <span><i class="sw" style="background:var(--xC)"></i>C</span>
+      <span><i class="sw" style="background:var(--xG)"></i>G</span> <span><i class="sw" style="background:var(--xT)"></i>T</span></span>
+      <span id="lg-qual" hidden><span><i class="sw" style="background:var(--q1)"></i>Q&lt;20</span> <span><i class="sw" style="background:var(--q2)"></i>Q20–29</span>
+      <span><i class="sw" style="background:var(--q3)"></i>Q30–39</span> <span><i class="sw" style="background:var(--q4);outline:1px solid var(--line)"></i>Q40+</span></span>
+      <span id="lg-aa" hidden><i class="sw" style="background:#000"></i><span data-i18n="lg-stop">* = stop codon</span></span>
+      <span><i class="sw" style="background:var(--flag)"></i><span data-i18n="lg-dis">Reads disagree</span></span>
+      <span><i class="sw" style="background:var(--gapflag)"></i><span data-i18n="lg-gap">Base in only one read</span></span>
+      <span><i class="sw" style="background:var(--trim)"></i><span data-i18n="lg-trim">Trimmed (low quality)</span></span>
+      <span data-i18n="lg-q">Bars = quality (red &lt;20, amber 20–30)</span>
+    </div>
+    <div class="card detail" id="detail"><span class="hint" data-i18n="clickhint">Click a column (or use ← →) to inspect it. Keys A C G T N set the base; Delete removes it.</span></div>
+    <div class="card" style="display:flex;flex-direction:column;gap:8px">
+      <div class="bar" style="justify-content:space-between">
+        <b data-i18n="consensus">Consensus (FASTA)</b>
+        <div class="bar"><button id="copy" type="button" data-i18n="copy">Copy FASTA</button><button id="save" type="button" data-i18n="save">Save .fasta</button></div>
+      </div>
+      <textarea id="fasta" readonly aria-label="Consensus FASTA"></textarea>
+    </div>
+  </section>
+</div>
+
+<script>// TraceLab core: ABIF parsing, orientation, trimming, alignment, consensus.
+// Pure functions, no DOM. Shared by the page and the node test.
+const TL = (() => {
+  const COMP = { A: 'T', C: 'G', G: 'C', T: 'A', N: 'N', R: 'Y', Y: 'R', K: 'M', M: 'K', S: 'S', W: 'W', '-': '-' };
+  const revcomp = s => s.split('').reverse().map(c => COMP[c] || 'N').join('');
+
+  function parseABIF(buf) {
+    const dv = new DataView(buf);
+    const u8 = new Uint8Array(buf);
+    const str = (o, n) => String.fromCharCode(...u8.subarray(o, o + n));
+    if (str(0, 4) !== 'ABIF') throw new Error('Not an .ab1 (ABIF) file');
+    const nEl = dv.getInt32(18), dirOff = dv.getInt32(26);
+    const tags = {};
+    for (let i = 0; i < nEl; i++) {
+      const o = dirOff + i * 28;
+      const name = str(o, 4), num = dv.getInt32(o + 4), et = dv.getInt16(o + 8);
+      const ne = dv.getInt32(o + 12), ds = dv.getInt32(o + 16);
+      const dOff = ds <= 4 ? o + 20 : dv.getInt32(o + 20);
+      tags[name + num] = { et, ne, ds, dOff };
+    }
+    const chars = k => { const t = tags[k]; return t ? str(t.dOff, t.ne) : null; };
+    const bytes = k => { const t = tags[k]; return t ? Array.from(u8.subarray(t.dOff, t.dOff + t.ne)) : null; };
+    const shorts = k => {
+      const t = tags[k]; if (!t) return null;
+      const a = new Array(t.ne); for (let i = 0; i < t.ne; i++) a[i] = dv.getInt16(t.dOff + 2 * i); return a;
+    };
+    const pstr = k => { const t = tags[k]; if (!t) return ''; const n = u8[t.dOff]; return str(t.dOff + 1, n); };
+    const seq = (chars('PBAS2') || chars('PBAS1') || '').toUpperCase();
+    const ploc = shorts('PLOC2') || shorts('PLOC1');
+    let qual = bytes('PCON2') || bytes('PCON1');
+    if (!qual || qual.length !== seq.length) qual = seq.split('').map(() => 20);
+    const order = (chars('FWO_1') || 'GATC').toUpperCase();
+    const traces = {};
+    ['DATA9', 'DATA10', 'DATA11', 'DATA12'].forEach((k, i) => { traces[order[i]] = shorts(k) || []; });
+    let sample = '';
+    try { sample = pstr('SMPL1'); } catch (e) { /* optional */ }
+    if (!seq || !ploc || !traces.A.length) throw new Error('Missing base calls or traces');
+    return { seq, qual, ploc, traces, sample };
+  }
+
+  // Orient a parsed read. rev=true gives the reverse complement, with traces flipped and channels swapped.
+  function orient(raw, rev) {
+    if (!rev) return { seq: raw.seq, qual: raw.qual.slice(), ploc: raw.ploc.slice(), traces: raw.traces };
+    const L = raw.traces.A.length;
+    const flip = a => { const b = new Array(a.length); for (let i = 0; i < a.length; i++) b[i] = a[a.length - 1 - i]; return b; };
+    return {
+      seq: revcomp(raw.seq),
+      qual: raw.qual.slice().reverse(),
+      ploc: raw.ploc.map(p => L - 1 - p).reverse(),
+      traces: { A: flip(raw.traces.T), C: flip(raw.traces.G), G: flip(raw.traces.C), T: flip(raw.traces.A) },
+    };
+  }
+
+  // Modified Mott trimming: keep the best-scoring stretch where error prob < cutoff.
+  function mott(qual, cutoff) {
+    let best = 0, cur = 0, s = 0, bs = 0, be = 0;
+    for (let i = 0; i < qual.length; i++) {
+      cur += cutoff - Math.pow(10, -qual[i] / 10);
+      if (cur < 0) { cur = 0; s = i + 1; }
+      if (cur > best) { best = cur; bs = s; be = i + 1; }
+    }
+    return [bs, be];
+  }
+
+  // Semi-global alignment (free end gaps). Returns arrays of index pairs (or -1 for gap).
+  function align(a, b, match = 2, mis = -3, gap = -5) {
+    const n = a.length, m = b.length, W = m + 1;
+    const H = new Int32Array((n + 1) * W), T = new Uint8Array((n + 1) * W);
+    for (let i = 1; i <= n; i++) {
+      const ai = a.charCodeAt(i - 1);
+      for (let j = 1; j <= m; j++) {
+        const d = H[(i - 1) * W + j - 1] + (ai === b.charCodeAt(j - 1) ? match : mis);
+        const u = H[(i - 1) * W + j] + gap, l = H[i * W + j - 1] + gap;
+        let v = d, t = 0; if (u > v) { v = u; t = 1; } if (l > v) { v = l; t = 2; }
+        H[i * W + j] = v; T[i * W + j] = t;
+      }
+    }
+    let bi = n, bj = m, bs = H[n * W + m];
+    for (let j = 0; j <= m; j++) if (H[n * W + j] > bs) { bs = H[n * W + j]; bi = n; bj = j; }
+    for (let i = 0; i <= n; i++) if (H[i * W + m] > bs) { bs = H[i * W + m]; bi = i; bj = m; }
+    const A = [], B = [];
+    for (let i = n; i > bi; i--) { A.push(i - 1); B.push(-1); }
+    for (let j = m; j > bj; j--) { A.push(-1); B.push(j - 1); }
+    let i = bi, j = bj;
+    while (i > 0 && j > 0) {
+      const t = T[i * W + j];
+      if (t === 0) { A.push(i - 1); B.push(j - 1); i--; j--; }
+      else if (t === 1) { A.push(i - 1); B.push(-1); i--; }
+      else { A.push(-1); B.push(j - 1); j--; }
+    }
+    while (i > 0) { A.push(i - 1); B.push(-1); i--; }
+    while (j > 0) { A.push(-1); B.push(j - 1); j--; }
+    return { A: A.reverse(), B: B.reverse(), score: bs };
+  }
+
+  // Build a contig from oriented reads (each {seq,qual,lo,hi}). Up to two reads.
+  // Returns columns: [{a: baseIdx|-1, b: baseIdx|-1, call, flag}] where flag in
+  // '' | 'disagree' | 'low' | 'gap'. Indices refer to the full (untrimmed) oriented read.
+  function contig(reads, minQ = 20) {
+    if (reads.length === 1) {
+      const r = reads[0], cols = [];
+      for (let k = r.lo; k < r.hi; k++) {
+        const q = r.qual[k];
+        cols.push({ a: k, b: -1, call: q >= minQ ? r.seq[k] : 'N', flag: q >= minQ ? '' : 'low' });
+      }
+      return { cols, overlap: 0 };
+    }
+    const [r1, r2] = reads;
+    const s1 = r1.seq.slice(r1.lo, r1.hi), s2 = r2.seq.slice(r2.lo, r2.hi);
+    const al = align(s1, s2);
+    let first = al.A.findIndex((x, k) => x >= 0 && al.B[k] >= 0);
+    let last = -1; for (let k = al.A.length - 1; k >= 0; k--) if (al.A[k] >= 0 && al.B[k] >= 0) { last = k; break; }
+    const cols = []; let overlap = 0;
+    for (let k = 0; k < al.A.length; k++) {
+      const a = al.A[k] >= 0 ? al.A[k] + r1.lo : -1, b = al.B[k] >= 0 ? al.B[k] + r2.lo : -1;
+      const qa = a >= 0 ? r1.qual[a] : -1, qb = b >= 0 ? r2.qual[b] : -1;
+      const ca = a >= 0 ? r1.seq[a] : null, cb = b >= 0 ? r2.seq[b] : null;
+      const inside = k >= first && k <= last;
+      let call, flag = '';
+      if (ca && cb) {
+        overlap++;
+        if (ca === cb) call = ca;
+        else { call = qa >= qb ? ca : cb; flag = 'disagree'; }
+      } else {
+        const c = ca || cb, q = ca ? qa : qb;
+        if (inside) { call = q >= minQ ? c : '-'; flag = 'gap'; }
+        else { call = q >= minQ ? c : 'N'; flag = q >= minQ ? '' : 'low'; }
+      }
+      cols.push({ a, b, call, flag });
+    }
+    return { cols, overlap };
+  }
+
+  // Consensus without gaps; ragged ends are cut back to the first/last 10-base window with no N.
+  const consensusString = (cols, overrides) => {
+    const s = cols.map((c, k) => (overrides && overrides[k] != null ? overrides[k] : c.call)).join('').replace(/-/g, '');
+    const m = s.match(/[ACGT]{10}/); if (!m) return s.replace(/^N+|N+$/g, '');
+    const start = m.index; const r = s.split('').reverse().join('').match(/[ACGT]{10}/);
+    const end = s.length - r.index; return s.slice(start, end);
+  };
+
+  return { parseABIF, orient, mott, align, contig, consensusString, revcomp };
+})();
+if (typeof module !== 'undefined') module.exports = TL;
+</script>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const I18N = {
+  en: {},
+  fr: {
+    subtitle: 'Chromatogrammes Sanger · hors ligne',
+    s1: '<b>Chargez</b> les fichiers .ab1 sens et antisens d’un échantillon.',
+    s2: '<b>Vérifiez le sens :</b> la lecture antisens est retournée (complément inverse) pour lire dans le même sens.',
+    s3: '<b>Nettoyez :</b> les extrémités grises sont de mauvaise qualité et sont exclues.',
+    s4: '<b>Corrigez :</b> allez à chaque colonne jaune, comparez les pics, choisissez la base.',
+    s5: '<b>Exportez</b> la séquence consensus en FASTA pour l’alignement.',
+    load: 'Charger des fichiers .ab1', demo: 'Charger l’exemple (échantillon mystère A)', drop: 'ou glissez les fichiers sur cette page',
+    'th-file': 'Fichier', 'th-sample': 'Échantillon', 'th-dir': 'Sens', 'th-len': 'Bases', 'th-q': 'Qualité moyenne', 'th-use': 'Utiliser',
+    empty: 'Aucune lecture. Chargez un fichier .ab1 sens et un antisens, ou ouvrez l’exemple.',
+    'tab-contig': 'Contig : sens + antisens', 'tab-reads': 'Lectures brutes et nettoyage',
+    trim: 'Sévérité du nettoyage', 'trim-l': 'Léger', 'trim-m': 'Standard', 'trim-s': 'Strict',
+    prev: '◀ Signal précédent', next: 'Signal suivant ▶',
+    'lg-dis': 'Lectures en désaccord', 'lg-gap': 'Base dans une seule lecture', 'lg-trim': 'Exclu (faible qualité)', 'lg-q': 'Barres = qualité (rouge <20, orange 20–30)',
+    clickhint: 'Cliquez sur une colonne (ou ← →) pour l’examiner. Touches A C G T N pour choisir la base ; Suppr pour l’enlever.',
+    consensus: 'Consensus (FASTA)', copy: 'Copier le FASTA', save: 'Enregistrer .fasta',
+    fwd: 'Sens', rev: 'Antisens', remove: 'Retirer', copied: 'Copié', flags: 'signaux', overlap: 'chevauchement', length: 'longueur consensus',
+    col: 'Colonne', call: 'Base retenue', none: 'aucune', del: 'Suppr', reset: 'Rétablir', disagree: 'Les lectures diffèrent : gardez le pic net et de haute qualité.',
+    gap: 'Base présente dans une seule lecture (souvent un pic en trop ou manquant).', low: 'Une seule lecture, faible qualité.', ok: 'Les lectures concordent.',
+    allclear: 'Aucun signal restant', notab1: 'n’est pas un fichier .ab1 lisible', twomax: 'Choisissez une ou deux lectures (sens + antisens).', fixed: 'corrigés',
+    readlbl: 'Lecture', rc: 'complément inverse', trimmed: 'exclu', kept: 'conservé', consrow: 'Consensus',
+    colorby: 'Couleur des bases', 'by-base': 'Par base', 'by-q': 'Par qualité', translate: 'Traduire', off: 'Non',
+    f1: 'Cadre 1', f2: 'Cadre 2', f3: 'Cadre 3', code: 'Code génétique', 'code-mt': 'Mitochondrial des vertébrés (COI)', 'code-std': 'Standard (nucléaire)',
+    'lg-stop': '* = codon stop', frame: 'Cadre', stop1: 'codon stop', stopN: 'codons stop'
+  }
+};
+const EN = {fwd:'Forward', rev:'Reverse', remove:'Remove', copied:'Copied', flags:'flags', overlap:'overlap', length:'consensus length',
+  col:'Column', call:'Called base', none:'none', del:'Del', reset:'Reset', disagree:'Reads disagree: keep the clean, high-quality peak.',
+  gap:'Base in only one read (often an extra or missing peak).', low:'Single read, low quality.', ok:'Reads agree.',
+  allclear:'No flags left', notab1:'is not a readable .ab1 file', twomax:'Pick one or two reads (forward + reverse).', fixed:'fixed',
+  readlbl:'Read', rc:'reverse-complemented', trimmed:'trimmed', kept:'kept', consrow:'Consensus',
+  frame:'Frame', stop1:'stop codon', stopN:'stop codons'};
+let lang = 'en';
+try { lang = localStorage.getItem('tracelab-lang') || 'en'; } catch(e){}
+const t = k => (lang === 'fr' && I18N.fr[k]) || EN[k] || k;
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if (!el.dataset.en) el.dataset.en = el.textContent; el.textContent = lang==='fr' && I18N.fr[k] ? I18N.fr[k] : el.dataset.en; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { const k = el.dataset.i18nHtml; if (!el.dataset.en) el.dataset.en = el.innerHTML; el.innerHTML = lang==='fr' && I18N.fr[k] ? I18N.fr[k] : el.dataset.en; });
+  $('#lang-en').classList.toggle('on', lang==='en'); $('#lang-fr').classList.toggle('on', lang==='fr');
+  renderFiles(); if (state.view) { renderStats(); renderDetail(); draw(); }
+}
+$('#lang-en').onclick = () => { lang='en'; try{localStorage.setItem('tracelab-lang',lang);}catch(e){} applyLang(); };
+$('#lang-fr').onclick = () => { lang='fr'; try{localStorage.setItem('tracelab-lang',lang);}catch(e){} applyLang(); };
+
+const state = { reads: [], tab: 'contig', view: null, sel: -1, overrides: {}, cutoff: 0.05, cmode: 'base', frame: 0, code: 2 };
+
+// ---------- translation ----------
+const B = 'TCAG';
+const AA1 = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG'; // standard
+const AA2 = 'FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSS**VVVVAAAADDEEGGGG'; // vertebrate mitochondrial
+function codonAA(c, code){
+  const i = B.indexOf(c[0]), j = B.indexOf(c[1]), k = B.indexOf(c[2]);
+  if (i<0||j<0||k<0) return 'X';
+  return (code===2?AA2:AA1)[i*16+j*4+k];
+}
+const AACOL = { A:'#c8c8c8', R:'#9fdde3', N:'#6ff5f5', D:'#f07f6e', C:'#f0e68c', Q:'#7fb0f2', E:'#ee3cee', G:'#a6c95a', H:'#f0923e',
+  I:'#6cc47a', L:'#e9527c', K:'#9cc8fa', M:'#79e0a6', F:'#c79cf0', P:'#f8f354', S:'#f6b9a2', T:'#f8e79a', W:'#f2b0b6', Y:'#c3ef6c', V:'#6df06d', X:'#e2e5e3', '*':'#000000' };
+// boxes: [{k0, k1, aa}] for a list of {k (column), b (base)} in reading order, starting in frame f (1-3)
+function codonBoxes(list, f){
+  const out = [];
+  for (let p = f-1; p+2 < list.length; p += 3){
+    const c = list[p].b + list[p+1].b + list[p+2].b;
+    out.push({ k0: list[p].k, k1: list[p+2].k, aa: codonAA(c, state.code) });
+  }
+  return out;
+}
+// consensus bases with their columns, trimmed exactly like the exported FASTA
+function consensusList(){
+  const v = state.view; if (!v) return [];
+  const all = [];
+  state.cols.forEach((c,k)=>{ const b = state.overrides[k]!=null ? state.overrides[k] : c.call; if (b && b!=='-') all.push({k,b}); });
+  const s = all.map(x=>x.b).join('');
+  const m = s.match(/[ACGT]{10}/); if (!m) return all;
+  const r = s.split('').reverse().join('').match(/[ACGT]{10}/);
+  return all.slice(m.index, s.length - r.index);
+}
+function readList(ti){
+  const v = state.view, r = v.reads[ti], out = [];
+  state.cols.forEach((c,k)=>{ const bi = c.idx[ti]; if (bi>=0 && bi!==undefined) out.push({k, b: r.seq[bi]}); });
+  return out;
+}
+// In the contig view every row uses the consensus codon boundaries, so the frames line up.
+function translations(){
+  const v = state.view; if (!v || !state.frame) return null;
+  const f = state.frame;
+  if (state.tab === 'contig'){
+    const cl = consensusList(), cons = codonBoxes(cl, f);
+    const reads = v.reads.map((r,ti)=> cons.map(bx=>{
+      const bases = cl.filter(x=>x.k>=bx.k0 && x.k<=bx.k1).map(x=>{ const bi=state.cols[x.k].idx[ti]; return bi>=0&&bi!==undefined ? r.seq[bi] : '-'; }).join('');
+      return { k0:bx.k0, k1:bx.k1, aa: bases.includes('-') ? '' : codonAA(bases, state.code) };
+    }));
+    return { reads, cons };
+  }
+  return { reads: v.reads.map((r,ti)=>codonBoxes(readList(ti), f)), cons: null };
+}
+function stopCount(){
+  const tr = translations(); if (!tr) return null;
+  if (tr.cons) return tr.cons.filter(b=>b.aa==='*').length;
+  const r = state.view.reads[0]; // raw tab: count only the kept (trimmed) part of the read
+  return tr.reads[0].filter(b=>b.aa==='*' && b.k0>=r.lo && b.k1<r.hi).length;
+}
+const isRevName = n => /(^|[_\-. ])(R|REV|RVS|RV|REVERSE)([_\-. ]|\.ab1$|$)/i.test(n.replace(/\.ab1$/i,'')+'.ab1') && !/(FWD|FOR|FORWARD)/i.test(n);
+
+function addRead(name, buf){
+  try {
+    const raw = TL.parseABIF(buf);
+    state.reads.push({ name, raw, rev: isRevName(name), use: true });
+  } catch(e){ showErr(name + ' ' + t('notab1')); }
+}
+function showErr(m){ const e=$('#err'); e.textContent=m; e.hidden=false; setTimeout(()=>{e.hidden=true;},6000); }
+async function loadFiles(list){
+  for (const f of list) addRead(f.name, await f.arrayBuffer());
+  autoUse(); rebuild();
+}
+function autoUse(){
+  // keep only the two most recent if more than two are marked
+  const used = state.reads.filter(r=>r.use);
+  if (used.length > 2) state.reads.forEach((r,i)=>{ r.use = i >= state.reads.length-2; });
+}
+$('#file').onchange = e => { loadFiles([...e.target.files]); e.target.value=''; };
+['dragover','drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); if (ev==='drop' && e.dataTransfer.files.length) loadFiles([...e.dataTransfer.files]); }));
+$('#demo').onclick = () => {
+  if (typeof DEMO === 'undefined') return;
+  state.reads = [];
+  for (const [name,b64] of DEMO) { const bin = atob(b64); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); addRead(name, u.buffer); }
+  rebuild();
+};
+if (typeof DEMO === 'undefined') $('#demo').hidden = true;
+
+function meanQ(q){ return Math.round(q.reduce((a,b)=>a+b,0)/q.length); }
+function renderFiles(){
+  const tb = $('#files tbody'); tb.innerHTML='';
+  $('#files').hidden = !state.reads.length; $('#empty').hidden = !!state.reads.length;
+  state.reads.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="mono" style="overflow-wrap:anywhere;min-width:9ch">${r.name}</td><td>${r.raw.sample||'—'}</td>
+      <td><div class="seg"><button type="button" class="${!r.rev?'on':''}">${t('fwd')}</button><button type="button" class="${r.rev?'on':''}">${t('rev')}</button></div></td>
+      <td>${r.raw.seq.length}</td><td>${meanQ(r.raw.qual)}</td>
+      <td><input type="checkbox" id="use-${i}" ${r.use?'checked':''} aria-label="use"></td>
+      <td><button type="button" class="rm">${t('remove')}</button></td>`;
+    const [bf,br] = tr.querySelectorAll('.seg button');
+    bf.onclick=()=>{r.rev=false;rebuild();}; br.onclick=()=>{r.rev=true;rebuild();};
+    tr.querySelector('input').onchange=e=>{ r.use=e.target.checked; if(state.reads.filter(x=>x.use).length>2){ e.target.checked=false; r.use=false; showErr(t('twomax')); } rebuild(); };
+    tr.querySelector('.rm').onclick=()=>{ state.reads.splice(i,1); rebuild(); };
+    tb.appendChild(tr);
+  });
+}
+
+function rebuild(){
+  renderFiles();
+  const used = state.reads.filter(r=>r.use);
+  $('#work').hidden = !used.length;
+  if (!used.length){ state.view=null; return; }
+  // forward first
+  used.sort((a,b)=>(a.rev?1:0)-(b.rev?1:0));
+  const reads = used.map(r=>{ const o=TL.orient(r.raw, r.rev); const [lo,hi]=TL.mott(o.qual, state.cutoff); return Object.assign(o,{lo,hi,name:r.name,rev:r.rev,ymax:pct(o)}); });
+  const ct = TL.contig(reads);
+  state.overrides = {}; state.sel = -1;
+  state.view = { reads, ct };
+  layout(); renderStats(); renderDetail(); draw(); updateFasta();
+}
+function pct(o){ // 99th percentile peak height for scaling
+  const v=[]; for (const ch of 'ACGT'){ const tr=o.traces[ch]; for (let i=0;i<o.ploc.length;i++) v.push(tr[o.ploc[i]]||0); }
+  v.sort((a,b)=>a-b); return Math.max(50, v[Math.floor(v.length*0.98)]||1);
+}
+
+// ---------- drawing ----------
+const W = 14, LBL = 18, ROWB = 16, ROWQ = 16, TRH = 92, GAP = 10, RULER = 18, ROWAA = 17;
+const aaH = () => state.frame ? ROWAA + 2 : 0;
+const cv = $('#cv'), sc = $('#scroller'), sp = $('#spacer');
+function columns(){
+  const v = state.view; if (!v) return [];
+  if (state.tab === 'contig') return v.ct.cols.map(c=>({ idx:[c.a,c.b], call:c.call, flag:c.flag }));
+  // raw tab: each read on its own full-length track, aligned only by base index
+  const n = Math.max(...v.reads.map(r=>r.seq.length));
+  const cols=[]; for(let k=0;k<n;k++) cols.push({ idx:v.reads.map(r=>k<r.seq.length?k:-1), call:null, flag:'' }); return cols;
+}
+function trackCount(){ const v=state.view; return v ? v.reads.length : 0; }
+function totalH(){ const n=trackCount(); return RULER + n*(LBL+ROWQ+TRH+ROWB+aaH()+GAP) + (state.tab==='contig' ? LBL+ROWB+aaH()+8 : 4); }
+function layout(){
+  const cols = columns(); state.cols = cols;
+  sp.style.width = (cols.length*W + 40) + 'px';
+  sizeCanvas();
+}
+function sizeCanvas(){
+  const dpr = window.devicePixelRatio||1, w = sc.clientWidth, h = totalH();
+  cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr); cv.style.width = w+'px'; cv.style.height = h+'px';
+  cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0);
+  sp.style.marginTop = (-h) + 'px'; sc.style.height = (h + 14) + 'px';
+}
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function draw(){
+  const v = state.view; if (!v) return;
+  const ctx = cv.getContext('2d'), w = sc.clientWidth, h = totalH(), x0 = sc.scrollLeft, cols = state.cols;
+  const C = { bg:css('--panel'), fg:css('--fg'), muted:css('--muted'), line:css('--line'), flag:css('--flag'), gapf:css('--gapflag'), sel:css('--sel'), trim:css('--trim'),
+    lo:css('--lowq'), mid:css('--midq'), hi:css('--hiq'), A:css('--bA'), Cc:css('--bC'), G:css('--bG'), T:css('--bT'), N:css('--bN') };
+  const bc = b => ({A:C.A,C:C.Cc,G:C.G,T:C.T}[b]||C.N);
+  ctx.fillStyle = C.bg; ctx.fillRect(0,0,w,h);
+  const c0 = Math.max(0, Math.floor(x0/W)-1), c1 = Math.min(cols.length, Math.ceil((x0+w)/W)+1);
+  const X = k => 20 + k*W - x0;
+  // column backgrounds
+  for (let k=c0;k<c1;k++){
+    const col=cols[k]; let fill=null;
+    if (state.tab==='contig'){ if (col.flag==='disagree') fill=C.flag; else if (col.flag==='gap'||col.flag==='low'||col.call==='N') fill=C.gapf; }
+    if (state.overrides[k]!=null && state.tab==='contig') fill=C.flag;
+    if (fill){ ctx.globalAlpha = state.overrides[k]!=null ? 0.35 : 1; ctx.fillStyle=fill; ctx.fillRect(X(k),RULER,W,h-RULER); ctx.globalAlpha=1; }
+  }
+  // ruler
+  ctx.font = '10px ' + css('--mono'); ctx.fillStyle = C.muted; ctx.textAlign='center';
+  for (let k=c0;k<c1;k++) if ((k+1)%10===0){ ctx.fillText(String(k+1), X(k)+W/2, 12); ctx.fillRect(X(k)+W/2, 14, 1, 4); }
+  const Q = { box:[css('--q1'),css('--q2'),css('--q3'),css('--q4')], ink:[css('--q1ink'),css('--q2ink'),css('--q3ink'),css('--q4ink')] };
+  const XB = { A:css('--xA'), C:css('--xC'), G:css('--xG'), T:css('--xT'), N:css('--xN'), ink:css('--xInk') };
+  const qbin = q => q<20?0:q<30?1:q<40?2:3;
+  // one base as a coloured box with its letter (by base, or by quality bin)
+  const baseBox = (b, q, x, yy, h, fade) => {
+    let fill, ink;
+    if (state.cmode==='q' && q!=null){ const i=qbin(q); fill=Q.box[i]; ink=Q.ink[i]; }
+    else { fill = XB[b] || XB.N; ink = XB.ink; }
+    ctx.globalAlpha = fade ? .45 : 1;
+    ctx.fillStyle = fill; ctx.fillRect(x, yy, W, h);
+    ctx.fillStyle = ink; ctx.fillText(b, x+W/2, yy+h-4);
+    ctx.globalAlpha = 1;
+  };
+  const tr = translations();
+  const drawAA = (boxes, yy) => {
+    if (!boxes) return;
+    ctx.font = '600 11px ' + css('--sans'); ctx.textAlign='center';
+    for (const bx of boxes){
+      if (bx.k1 < c0-3 || bx.k0 > c1+3 || !bx.aa) continue;
+      const xa = X(bx.k0)+1, xb = X(bx.k1)+W-1;
+      ctx.fillStyle = AACOL[bx.aa] || AACOL.X; ctx.fillRect(xa, yy, xb-xa, ROWAA);
+      ctx.fillStyle = bx.aa==='*' ? '#ffffff' : '#10140f'; ctx.fillText(bx.aa, (xa+xb)/2, yy+ROWAA-4.5);
+    }
+  };
+  let y = RULER;
+  v.reads.forEach((r, ti) => {
+    // label
+    ctx.textAlign='left'; ctx.font = '600 11px ' + css('--sans'); ctx.fillStyle = C.fg;
+    const lbl = `${r.rev ? t('rev') : t('fwd')} · ${r.name}${r.rev ? '  (' + t('rc') + ')' : ''}${state.frame ? '  ·  ' + t('frame') + ' ' + state.frame : ''}`;
+    ctx.fillText(lbl, 8, y+12);
+    const yq = y+LBL, yt = yq+ROWQ, yb = yt+TRH;
+    ctx.font = '700 12px ' + css('--mono'); ctx.textAlign='center';
+    for (let k=c0;k<c1;k++){
+      const bi = cols[k].idx[ti]; if (bi<0 || bi===undefined) continue;
+      const trimmed = bi < r.lo || bi >= r.hi, x = X(k);
+      if (trimmed){ ctx.fillStyle=C.trim; ctx.globalAlpha=.85; ctx.fillRect(x, yq, W, ROWQ+TRH); ctx.globalAlpha=1; }
+      ctx.font = '700 12px ' + css('--mono'); ctx.textAlign='center';
+      baseBox(r.seq[bi], r.qual[bi], x, yb, ROWB, trimmed);
+      const q = r.qual[bi], bh = Math.min(1, q/60)*(ROWQ-3);
+      ctx.fillStyle = q<20 ? C.lo : q<30 ? C.mid : C.hi; ctx.fillRect(x+2, yq+ROWQ-1-bh, W-4, bh);
+      // trace segment for this base
+      const pl = r.ploc, s0 = bi>0 ? (pl[bi-1]+pl[bi])/2 : pl[bi]-(pl[bi+1]-pl[bi])/2, s1 = bi<pl.length-1 ? (pl[bi]+pl[bi+1])/2 : pl[bi]+(pl[bi]-pl[bi-1])/2;
+      const a0 = Math.max(0, Math.floor(s0)), a1 = Math.min(r.traces.A.length-1, Math.ceil(s1));
+      for (const ch of 'ACGT'){
+        const tr = r.traces[ch]; ctx.strokeStyle = bc(ch); ctx.lineWidth = 1.2; ctx.globalAlpha = trimmed ? .45 : 1; ctx.beginPath();
+        for (let p=a0;p<=a1;p++){ const xx = x + (p-s0)/(s1-s0)*W, yy = yt+TRH-2 - Math.min(1.08, (tr[p]||0)/r.ymax)*(TRH-8); if(p===a0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); }
+        ctx.stroke(); ctx.globalAlpha=1;
+      }
+    }
+    if (tr) drawAA(tr.reads[ti], yb+ROWB+2);
+    y = yb+ROWB+aaH()+GAP;
+    ctx.fillStyle=C.line; ctx.fillRect(0,y-GAP/2,w,1);
+  });
+  if (state.tab==='contig'){
+    ctx.textAlign='left'; ctx.font = '600 11px ' + css('--sans'); ctx.fillStyle = C.fg;
+    ctx.fillText(t('consrow') + (state.frame ? '  ·  ' + t('frame') + ' ' + state.frame : ''), 8, y+12);
+    const yb = y+LBL; ctx.font = '700 12px ' + css('--mono'); ctx.textAlign='center';
+    for (let k=c0;k<c1;k++){
+      const b = state.overrides[k]!=null ? state.overrides[k] : cols[k].call; if (b==='-') continue;
+      const qs = cols[k].idx.map((bi,ti)=> bi>=0&&bi!==undefined ? v.reads[ti].qual[bi] : -1);
+      ctx.font = '700 12px ' + css('--mono'); ctx.textAlign='center';
+      baseBox(b, state.overrides[k]!=null ? 60 : Math.max(...qs), X(k), yb, ROWB, false);
+    }
+    if (tr) drawAA(tr.cons, yb+ROWB+2);
+  }
+  if (state.sel>=0 && state.sel>=c0 && state.sel<c1){ ctx.strokeStyle=C.sel; ctx.lineWidth=2; ctx.strokeRect(X(state.sel)+1, RULER+1, W-2, h-RULER-2); }
+}
+sc.addEventListener('scroll', () => requestAnimationFrame(draw), {passive:true});
+window.addEventListener('resize', () => { if(state.view){ sizeCanvas(); draw(); } });
+if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', ()=>draw());
+
+cv.addEventListener('click', e => {
+  const r = cv.getBoundingClientRect(); const k = Math.floor((e.clientX - r.left + sc.scrollLeft - 20)/W);
+  if (k>=0 && k<state.cols.length){ state.sel = k; renderDetail(); draw(); }
+});
+function flags(){ if(state.tab!=='contig') return []; const s=TL.consensusString(state.view.ct.cols); const first=state.cols.findIndex(c=>c.call!=='N'&&c.call!=='-'); let last=state.cols.length-1; while(last>0&&(state.cols[last].call==='N'||state.cols[last].call==='-')) last--;
+  return state.cols.map((c,k)=>(c.flag==='disagree'||c.flag==='gap'||(c.call==='N'&&k>first&&k<last))?k:-1).filter(k=>k>=0); }
+function goto(k){ state.sel=k; sc.scrollLeft = Math.max(0, 20 + k*W - sc.clientWidth/2); renderDetail(); draw(); }
+$('#next').onclick = () => { const f=flags().filter(k=>state.overrides[k]==null); const n=f.find(k=>k>state.sel); if(n!=null) goto(n); else if(f.length) goto(f[0]); else showErr(t('allclear')); };
+$('#prev').onclick = () => { const f=flags().filter(k=>state.overrides[k]==null); const p=[...f].reverse().find(k=>k<state.sel); if(p!=null) goto(p); else if(f.length) goto(f[f.length-1]); };
+document.addEventListener('keydown', e => {
+  if (!state.view || e.target.matches('input,textarea,select')) return;
+  if (e.key==='ArrowRight'){ goto(Math.min(state.cols.length-1, state.sel+1)); e.preventDefault(); }
+  else if (e.key==='ArrowLeft'){ goto(Math.max(0, state.sel-1)); e.preventDefault(); }
+  else if (state.tab==='contig' && state.sel>=0){
+    const k=e.key.toUpperCase();
+    if ('ACGTN'.includes(k) && k.length===1) setCall(k);
+    else if (e.key==='Delete'||e.key==='Backspace') setCall('-');
+  }
+});
+function setCall(b){ state.overrides[state.sel]=b; renderDetail(); renderStats(); draw(); updateFasta(); }
+function renderStats(){
+  const v=state.view; if(!v) return;
+  const f=flags(), left=f.filter(k=>state.overrides[k]==null).length, cons=TL.consensusString(v.ct.cols, state.overrides);
+  const parts = v.reads.map(r=>`${r.rev?t('rev'):t('fwd')}: <b>${r.hi-r.lo}</b>/${r.seq.length} ${t('kept')}`);
+  if (state.tab==='contig'){
+    if (v.reads.length===2) parts.push(`${t('overlap')}: <b>${v.ct.overlap}</b> bp`);
+    parts.push(`${t('length')}: <b>${cons.length}</b> bp`);
+    parts.push(left ? `<span class="pill warn">${left} ${t('flags')}</span>` : `<span class="pill ok">${t('allclear')}</span>`);
+    if (f.length-left) parts.push(`${f.length-left} ${t('fixed')}`);
+  }
+  $('#stats').innerHTML = parts.map(p=>`<span>${p}</span>`).join('');
+  const sc_ = stopCount(), si = $('#stopinfo');
+  if (sc_==null) si.innerHTML = '';
+  else si.innerHTML = `<span class="pill ${sc_? 'warn':'ok'}">${t('frame')} ${state.frame}: ${sc_} ${sc_===1?t('stop1'):t('stopN')}</span>`;
+}
+function renderDetail(){
+  const d=$('#detail'), v=state.view; if(!v) return;
+  if (state.sel<0){ d.innerHTML = `<span class="hint">${lang==='fr'?I18N.fr.clickhint:'Click a column (or use ← →) to inspect it. Keys A C G T N set the base; Delete removes it.'}</span>`; return; }
+  const col=state.cols[state.sel];
+  const rd = v.reads.map((r,ti)=>{ const bi=col.idx[ti]; return `<span>${r.rev?t('rev'):t('fwd')}: ${bi>=0&&bi!==undefined?`<b class="mono">${r.seq[bi]}</b> (Q${r.qual[bi]}${bi<r.lo||bi>=r.hi?', '+t('trimmed'):''})`:'—'}</span>`; }).join('');
+  let html = `<span>${t('col')} <b>${state.sel+1}</b></span>${rd}`;
+  if (state.tab==='contig'){
+    const cur = state.overrides[state.sel]!=null ? state.overrides[state.sel] : col.call;
+    const msg = col.flag==='disagree'?t('disagree'):col.flag==='gap'?t('gap'):col.flag==='low'?t('low'):t('ok');
+    html += `<span>${t('call')}: <b class="mono">${cur==='-'?t('none'):cur}</b></span><span class="pick">${['A','C','G','T','N'].map(b=>`<button type="button" data-b="${b}" style="color:var(--b${b})">${b}</button>`).join('')}<button type="button" data-b="-">${t('del')}</button>${state.overrides[state.sel]!=null?`<button type="button" data-b="reset">${t('reset')}</button>`:''}</span><span class="hint">${msg}</span>`;
+  }
+  d.innerHTML = html;
+  d.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ if(b.dataset.b==='reset'){ delete state.overrides[state.sel]; renderDetail(); renderStats(); draw(); updateFasta(); } else setCall(b.dataset.b); });
+}
+function sampleName(){ const v=state.view; const s=(v.reads[0].name||'sample').replace(/\.ab1$/i,'').replace(/[_\-. ](FWD|RVS|REV|FOR|F|R)$/i,''); return s.replace(/\s+/g,'_'); }
+function updateFasta(){ const v=state.view; if(!v) return; const s=TL.consensusString(v.ct.cols, state.overrides); $('#fasta').value = `>${sampleName()}_consensus\n` + s.replace(/(.{60})/g,'$1\n').trim() + '\n'; }
+$('#copy').onclick = async () => { const ta=$('#fasta'); try { await navigator.clipboard.writeText(ta.value); $('#copy').textContent=t('copied'); setTimeout(()=>{ $('#copy').textContent = lang==='fr'?I18N.fr.copy:'Copy FASTA'; },1500); } catch(e){ ta.focus(); ta.select(); } };
+$('#save').onclick = () => { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([$('#fasta').value],{type:'text/plain'})); a.download=sampleName()+'_consensus.fasta'; document.body.appendChild(a); a.click(); a.remove(); };
+$('#trim').onchange = e => { state.cutoff = parseFloat(e.target.value); rebuild(); };
+function refreshView(){ if(!state.view) return; layout(); renderStats(); draw(); }
+function setCmode(m){ state.cmode=m; $('#cm-base').classList.toggle('on',m==='base'); $('#cm-q').classList.toggle('on',m==='q');
+  $('#lg-bases').hidden = m!=='base'; $('#lg-qual').hidden = m!=='q'; draw(); }
+$('#cm-base').onclick = () => setCmode('base');
+$('#cm-q').onclick = () => setCmode('q');
+document.querySelectorAll('#frames button').forEach(b => b.onclick = () => {
+  state.frame = +b.dataset.f;
+  document.querySelectorAll('#frames button').forEach(x=>x.classList.toggle('on', x===b));
+  $('#lg-aa').hidden = !state.frame; refreshView();
+});
+$('#gcode').onchange = e => { state.code = +e.target.value; refreshView(); };
+$('#tab-contig').onclick = () => { state.tab='contig'; $('#tab-contig').classList.add('on'); $('#tab-reads').classList.remove('on'); state.sel=-1; layout(); renderStats(); renderDetail(); draw(); };
+$('#tab-reads').onclick = () => { state.tab='reads'; $('#tab-reads').classList.add('on'); $('#tab-contig').classList.remove('on'); state.sel=-1; layout(); renderStats(); renderDetail(); draw(); };
+applyLang();
+})();
+</script>
