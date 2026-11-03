@@ -4,7 +4,7 @@ After Sanger sequencing, files are usually returned in raw format with the exten
 
 Here is a Chromatogram (visual trace plot) visualized in [Geneious Prime](https://www.geneious.com/features/prime#sequence-analysis) (Proprietary software, but free trial versions available). This shows fluorescent signal intensity (peak height) and base calls (codon letters; A, T, G, & C):
 
-
+![Chromatogram-BaseCalls](images/Chromatogram-BaseCalls.png)
 
 Base quality is tracked for each nucleotide position (here, this is viewed by shade of blue as well as by light blue quality bars):
 
