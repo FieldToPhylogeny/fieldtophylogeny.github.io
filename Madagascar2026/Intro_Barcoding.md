@@ -16,20 +16,20 @@ Barcode data can be used for many downstream applications (for example: building
 
 <img src="images/Petzold-et-al-2020.png" width="400">
 
-> <sub>**Figure adapted from Petzold et al 2025. Multiple lines of evidence (morphology, mtDNA, nuDNA, geography) used to identify unique species, including barcode marker COI</sub>**
+> <sub>**Figure adapted from Petzold et al 2025. Multiple lines of evidence (morphology, mtDNA, nuDNA, geography) used to identify unique species, including barcode marker COI**</sub>
 
-Developing these libraries not only helps species identification in the present, but has shown important long-term use in unexpected ways. For example, [Reddy et al. 2025]((https://onlinelibrary.wiley.com/doi/full/10.1111/1755-0998.70027)) used a library of Vanga bird barcodes to identify parasite hosts using invertebrate-derived DNA (iDNA) collected from leeches.
+Developing these libraries not only helps species identification in the present, but has shown important long-term use in unexpected ways. For example, [Reddy et al. 2025]((https://onlinelibrary.wiley.com/doi/full/10.1111/1755-0998.70027)) used a library of Vanga bird barcodes to identify parasite hosts using invertebrate-derived DNA (iDNA) collected from leeches!
 
 <img src="images/Reddy-et-al-2025.png" width="300">
 
-> **Figure from Reddy et al. 2025.**
+> <sub> **Figure from Reddy et al. 2025.** </sub>
 
 ### What does the future of barcoding look like?
 In Madagascar, biodiversity is rich, and many species still remain undocumented and undescribed. New methods for increasing the speed, transportability and accuracy of barcode data to quickly identify species or the species present in an environmental DNA sample will be important for conservation, management, and biodiversity discovery.
 
 Although more high throughput sequencing method are becoming less expensive, they are not always the correct or most cost efficient way to rapidly assess biodiversity, confirm sample identity when morphology is unclear, or develop tools that can be used for long term conservation management.
 
-## I am planning a project with RADseq data, Ultraconserved elements, or whole genome data...do I still need barcodes?
+## I am planning a project with RADseq data, Ultraconserved Elements (UCEs), or whole genome data. Do I still need barcodes?
 * In short, it depends!
 * If you wish to contribute to larger databases and initiatives so other studies can readily access and use your barcodes, this becomes an important step. For example, we published a study examining population expansion and bottlenecks is Malagasy reptiles & amphibians using only barcode data already submitted to public repositories (**Kuhn et al. 2022**)
 
