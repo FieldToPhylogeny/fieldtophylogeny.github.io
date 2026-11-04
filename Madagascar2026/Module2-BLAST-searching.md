@@ -4,4 +4,4 @@ From our last session, you shoild have aligned your forward and reverse raw sequ
 
 # Sequence Identification
 
-# Sequence similarity search
+# Sequence Similarity Searches
