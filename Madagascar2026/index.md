@@ -36,6 +36,10 @@ By the end of this workshop, participants will be able to:
   - Dr. Fidisoa Rasambainarivo (East Carolina University; collaborator)
   - Dr. Isaac Overcast (University of Maine; INHS; collaborator)
 
+### Instructor and partricipant introduction slides
+
+[Brief introductions for the instructors and participants](https://docs.google.com/presentation/d/1RBkyEjekzo9iSPmykFqkeRvw5_-QtKkCoJFK7NFnG1c) (1-2 min. each)
+
 ## Registration
 
 Registration for this edition of Field-to-Phylogeny is now closed. For information about future offerings, contact Arianna Kuhn (alkuhn@illinois.edu)
