@@ -14,7 +14,7 @@ The limitations of barcoding are related to how good the database for comparison
 
 Barcode data can be used for many downstream applications (for example: [building phylogenetic trees](https://orca.cardiff.ac.uk/id/eprint/175691/), [species inventories](https://onlinelibrary.wiley.com/doi/10.1002/edn3.474), [tracking illegal wildlife trade](https://www.sciencedirect.com/science/article/pii/S266693742400009X), but it is still limited as mtDNA only represents **maternal inheritance**, and a **single locus** in the mtDNA (not nuclear) genome. If your downstream goals are to build well-resolved phylogenies for recently evolved species, [look at ancient reticulation](https://academic.oup.com/evolut/article/77/4/931/6998222), or reconstruct biogeographic histories, you may need additional molecular or other supporting data.
 
-<img src="images/Petzold-et-al-20205.png" width="400">
+<img src="images/Petzold-et-al-20205.png" width="700">
 
 > <sub>**Figure adapted from Petzold et al 2025. Multiple lines of evidence (morphology, geography, mtDNA + nuDNA) used to identify a new microhylid frog species from Tsingy de Bemaraha, including barcode marker COI**</sub>
 
