@@ -6,42 +6,37 @@ DNA barcoding was developed formally in 2003 and refers to the process of sequen
 
 The core concept of DNA barcoding is to make use of large libraries with other mitochondrial markers that we can use to identify species, and it is often (1) fast, (2) realiable and (3) cost efficient. Developing these libraries not only helps species identification in the present, but has shown important long-term use in unexpected ways.  
 
-![png](images/)
+![png](images/barcoding_schematic.png)
 
 ### What are the limitations?
 
 The limitations of barcoding are related to how good the database for comparison is: if you have 10 undescribed species, and use a database to search for similar sequences, you may not find much information about your mystery species. How will, however, be able to build evidence that the species has not yet been descrbied.
 
-Barcode data can be used for many downstream applications (for example: building phylogenetic trees, radpid species identification, building eDNA assay libraries, tracking illegal wildlife trade), but it is still limited to specific analyses because mtDNA only represents maternal inheritance, and a single locus in the mtDNA (not nuclear) genome. If your downstream goals are to buid well-resolved phylogenies for recently evolved species, look at ancient reticulation, or reconstruct biogeographic histories, you may need additional molecular data.  
+Barcode data can be used for many downstream applications (for example: building phylogenetic trees, rapid species identification, building eDNA assay libraries, tracking illegal wildlife trade), but it is still limited to specific analyses because mtDNA only represents maternal inheritance, and a single locus in the mtDNA (not nuclear) genome. If your downstream goals are to buid well-resolved phylogenies for recently evolved species, [look at ancient reticulation](https://academic.oup.com/evolut/article/77/4/931/6998222), or reconstruct biogeographic histories, you may need additional molecular data.  
 
-![png](images/RAD.png)
+![png](images/.png)
 
-> **Figure from Andrews et al 2016.**
+> **Figure adapted from Petzold et al 2025.**
 
 ### What does the future of barcoding look like?
-Many protocols exist that generate fragments in numerous different ways,
-including using 1 or 2 restriction enzymes, with or without a PCR step,
-including multiplexed barcodes to further increase sample throughput, and so on.
-It's also possible to sequence a library as single-end or paired-end, adding
-further information, but also somewhat further complications in assembly. Here
-are a couple more conceptual diagrams for different protocols (again from
-Andrews).
+In Madagascar, biodiversity is rich, and many species still remain undocumented and undescribed. New methods for increasing the speed, transportability and accuracy of barcode data to quickly identify species or the species present in an environmental DNA sample will be important for conservation, management, and biodiversity discovery.
 
-![png](images/GBS.png)
+Although more high throughput sequencing method are becoming less expensive, they are not always the correct or most cost efficient way to rapidly assess biodiversity, confirm sample identity when morphology is unclear, or develop tools that can be used for long term conservation management.
 
 ## I am planning a project with RADseq data, Ultraconserved elements, or whole genome data...do I still need barcodes?
-* Simple: Easy to install, easy to use.
-* Resourceful: Documentation, tutorials, cookbooks, and help forums available.
-* Reproducible: Promoting the use of Jupyter Notebooks to organize workflows.
-* Flexible: API access to functions and data to build custom assemblies.
-* Transparent: Providing human readable code and data files.
+* In short, it depends!
+* If you wish to contribute to larger databases and initiatives so other studies can readily access and use your barcodes, this becomes an important step. For example, we published a study examining population expansion and bottlenecks is Malagasy reptiles & amphibians using only barcode data already submitted to public repositories (**Kuhn et al. 2022**)
+
+![png](images/Kuhn-et-al-Fig1.png)
+![png](images/Kuhn-et-al-Fig2.png)
+
+* By barcoding your samples before high throughput sequencing, you can identify cryptic or misidentified samples, thus saving money or time later on by preventing submission of incorrect samples. For example, in **[Williams et al. 2020]**(https://www.nature.com/articles/s41437-019-0260-9), the methods state *"To investigate species boundaries between our samples, we first confirmed the species assignment of our individuals using mtDNA barcoding. We used cytochrome c oxidase subunit II (COII) sequencing and NCBI Genbank to access a subset of COII sequences from across the Cheirogaleus clade."*
+* However, depending on the quality of your genome data, it is possible to extract the same COI data you would get by barcoding your samples initially.
 
 ## References
-* Andrews KR, Good JM, Miller MR, Luikart G, Hohenlohe PA. Harnessing the power
-of RADseq for ecological and evolutionary genomics. Nature Reviews Genetics.
-2016 Feb;17(2):81.
-* Eaton DA, Overcast I. ipyrad: Interactive assembly and analysis of RADseq
-datasets. Bioinformatics. 2020.*  
+* Kuhn, Arianna, Marcelo Gehara, Mamy SM Andrianarimalala, Nirhy Rabibisoa, Bernard Randriamahatantsoa, Isaac Overcast, Christopher J. Raxworthy, Sara Ruane, and Frank T. Burbrink. "Drivers of unique and asynchronous population dynamics in Malagasy herpetofauna." [Journal of Biogeography 49, no. 4 (2022): 600-616](https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/jbi.14315).
+* Petzold, Alice, Frank Glaw, Katherine E. Mullin, Andolalao Rakotoarison, Achille P. Raselimanana, Angelica Cottini, Pablo Orozco-terWengel et al. "A preliminary assessment of the diversity in the frog genus' Anilany'(Microhylidae: Cophylinae) with description of a new species from western Madagascar." Salamandra 61, no. 1 (2025): 70-94.*
+* Williams, Rachel C., Marina B. Blanco, Jelmer W. Poelstra, Kelsie E. Hunnicutt, Aaron A. Comeault, and Anne D. Yoder. "Conservation genomic analysis reveals ancient introgression and declining levels of genetic diversity in Madagascar’s hibernating dwarf lemurs." Heredity 124, no. 1 (2020): 236-251.*
 
 ### Return to home page:  
 * [Field2Phylogeny home](https://fieldtophylogeny.github.io/)
