@@ -1,11 +1,8 @@
-[TraceLab Chromatogram Viewer](TraceLab Chromatograms.html)
-
 ### Important documentation:  
-* [ipyrad full documentation](https://ipyrad.readthedocs.io)
-* [radcamp home](https://radcamp.github.io/)
+* [Field2Phylogeny home](https://fieldtophylogeny.github.io/)
 
-## RAD-Seq
-### What is RADSeq data?
+## DNA Barcoding
+### What is Barcoding?
 RADSeq is a technique for creating a reduced representation of genomic
 variation of a given set of samples. Restriction endonucleases are used
 to randomly fragment genomic DNA, which is followed by several different
