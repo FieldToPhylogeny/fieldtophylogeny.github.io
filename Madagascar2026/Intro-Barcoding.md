@@ -29,7 +29,7 @@ In Madagascar, biodiversity is rich, and many species still remain undocumented 
 
 Although more high throughput sequencing method are becoming less expensive, they are not always the correct or most cost efficient way to rapidly assess biodiversity, confirm sample identity when morphology is unclear, or develop tools that can be used for long term conservation management.
 
-## I am planning a project with RADseq data, Ultraconserved Elements (UCEs), or whole genome data. Do I still need barcodes?
+### I am planning a project with RADseq data, Ultraconserved Elements (UCEs), or whole genome data. Do I still need barcodes?
 In short, it depends!
 
 If you wish to contribute to larger databases and initiatives so other studies can readily access and use your barcodes, this becomes an important step. For example, we published a study examining population expansion and bottlenecks is Malagasy reptiles & amphibians using only barcode data already submitted to public repositories (**Kuhn et al. 2022**)
