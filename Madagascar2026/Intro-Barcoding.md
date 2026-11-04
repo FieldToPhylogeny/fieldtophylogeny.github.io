@@ -12,11 +12,11 @@ The core concept of DNA barcoding is to make use of large libraries with other m
 
 The limitations of barcoding are related to how good the database for comparison is: if you have 10 undescribed species, and use a database to search for similar sequences, you may not find much information about your mystery species. How will, however, be able to build evidence that the species has not yet been descrbied.
 
-Barcode data can be used for many downstream applications (for example: [building phylogenetic trees](https://orca.cardiff.ac.uk/id/eprint/175691/), [species inventories](https://onlinelibrary.wiley.com/doi/10.1002/edn3.474), [tracking illegal wildlife trade](https://www.sciencedirect.com/science/article/pii/S266693742400009X), but it is still limited as mtDNA only represents **maternal inheritance**, and a **single locus** in the mtDNA (not nuclear) genome. If your downstream goals are to build well-resolved phylogenies for recently evolved species, [look at ancient reticulation](https://academic.oup.com/evolut/article/77/4/931/6998222), or reconstruct biogeographic histories, you may need additional molecular or other supporting data (see Petzgold et al. 2025) 
+Barcode data can be used for many downstream applications (for example: [building phylogenetic trees](https://orca.cardiff.ac.uk/id/eprint/175691/), [species inventories](https://onlinelibrary.wiley.com/doi/10.1002/edn3.474), [tracking illegal wildlife trade](https://www.sciencedirect.com/science/article/pii/S266693742400009X), but it is still limited as mtDNA only represents **maternal inheritance**, and a **single locus** in the mtDNA (not nuclear) genome. If your downstream goals are to build well-resolved phylogenies for recently evolved species, [look at ancient reticulation](https://academic.oup.com/evolut/article/77/4/931/6998222), or reconstruct biogeographic histories, you may need additional molecular or other supporting data.
 
-<img src="images/Petzold-et-al-2020.png" width="300">
+<img src="images/Petzold-et-al-20205.png" width="400">
 
-> <sub>**Figure adapted from Petzold et al 2025. Multiple lines of evidence (morphology, mtDNA, nuDNA, geography) used to identify unique species, including barcode marker COI**</sub>
+> <sub>**Figure adapted from Petzold et al 2025. Multiple lines of evidence (morphology, geography, mtDNA + nuDNA) used to identify a new microhylid frog species from Tsingy de Bemaraha, including barcode marker COI**</sub>
 
 Developing these libraries not only helps species identification in the present, but has shown important long-term use in unexpected ways. For example, [Reddy et al. 2025]((https://onlinelibrary.wiley.com/doi/full/10.1111/1755-0998.70027)) used a library of Vanga bird barcodes to identify parasite hosts using invertebrate-derived DNA (iDNA) collected from leeches!
 
