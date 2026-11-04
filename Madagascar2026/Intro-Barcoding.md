@@ -1,6 +1,6 @@
 <img src="images/Field2Phylogeny-logo.png" width="600">
 
-## *exploring phylogenetic methods for rapidly assessing biodiversity*  
+## *Exploring molecular phylogenetic methods for rapidly assessing biodiversity*  
 ### What is Barcoding?
 DNA barcoding was developed formally in 2003 and refers to the process of sequencing a fast-evolving part of the mitochondrial genome. One of the most commonly used markers is **Cytochrom Oxidase I** or **CO1**.  
 
@@ -12,7 +12,7 @@ The core concept of DNA barcoding is to make use of large libraries with other m
 
 The limitations of barcoding are related to how good the database for comparison is: if you have 10 undescribed species, and use a database to search for similar sequences, you may not find much information about your mystery species. How will, however, be able to build evidence that the species has not yet been descrbied.
 
-Barcode data can be used for many downstream applications (for example: building phylogenetic trees, [species inventories](https://onlinelibrary.wiley.com/doi/10.1002/edn3.474), [tracking illegal wildlife trade](https://www.sciencedirect.com/science/article/pii/S266693742400009X), but it is still limited as mtDNA only represents **maternal inheritance**, and a **single locus** in the mtDNA (not nuclear) genome. If your downstream goals are to build well-resolved phylogenies for recently evolved species, [look at ancient reticulation](https://academic.oup.com/evolut/article/77/4/931/6998222), or reconstruct biogeographic histories, you may need additional molecular or other supporting data ([see Petzgold et al. 2025](https://orca.cardiff.ac.uk/id/eprint/175691/)) 
+Barcode data can be used for many downstream applications (for example: [building phylogenetic trees](https://orca.cardiff.ac.uk/id/eprint/175691/), [species inventories](https://onlinelibrary.wiley.com/doi/10.1002/edn3.474), [tracking illegal wildlife trade](https://www.sciencedirect.com/science/article/pii/S266693742400009X), but it is still limited as mtDNA only represents **maternal inheritance**, and a **single locus** in the mtDNA (not nuclear) genome. If your downstream goals are to build well-resolved phylogenies for recently evolved species, [look at ancient reticulation](https://academic.oup.com/evolut/article/77/4/931/6998222), or reconstruct biogeographic histories, you may need additional molecular or other supporting data (see Petzgold et al. 2025) 
 
 <img src="images/Petzold-et-al-2020.png" width="300">
 
