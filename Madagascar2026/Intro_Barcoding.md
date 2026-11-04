@@ -1,6 +1,6 @@
 <img src="images/Field2Phylogeny-logo.png" width="600">
 
-## DNA Barcoding
+## *exploring phylogenetic methods for rapidly assessing biodiversity*  
 ### What is Barcoding?
 DNA barcoding was developed formally in 2003 and refers to the process of sequencing a fast-evolving part of the mitochondrial genome. One of the most commonly used markers is **Cytochrom Oxidase I** or **CO1**.  
 
@@ -16,11 +16,11 @@ Barcode data can be used for many downstream applications (for example: building
 
 <img src="images/Petzold-et-al-2020.png" width="400">
 
-> **Figure adapted from Petzold et al 2025.**
+> <sub>**Figure adapted from Petzold et al 2025. Multiple lines of evidence (morphology, mtDNA, nuDNA, geography) used to identify unique species, including barcode marker COI</sub>**
 
 Developing these libraries not only helps species identification in the present, but has shown important long-term use in unexpected ways. For example, [Reddy et al. 2025]((https://onlinelibrary.wiley.com/doi/full/10.1111/1755-0998.70027)) used a library of Vanga bird barcodes to identify parasite hosts using invertebrate-derived DNA (iDNA) collected from leeches.
 
-<img src="images/Reddy-et-al-2025.png" width="400">
+<img src="images/Reddy-et-al-2025.png" width="300">
 
 > **Figure from Reddy et al. 2025.**
 
