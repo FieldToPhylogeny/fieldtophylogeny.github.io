@@ -54,12 +54,12 @@ Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Vahatra |
 13:30-17:00 | Lecture & DNA Quantification Lab | Phylogenetics Lab |
 
 
-## Refreshments provided and workshop sponsored by:
+## Workshop sponsored by:
 <div align="center" markdown="1">
   <img src="images/ESEB-Logo.png" alt="ESEB GEBI" width="500">
 </div>
-Special thanks to the European Society for Evolutionary Biology for
-their support through the Global Evolutionary Biology Initiative program.
+Special thanks to the [European Society for Evolutionary Biology](https://eseb.org/) for
+supporting this workshop through the **Global Evolutionary Biology Initiative program**.
 
 ## Exit Survey
 
@@ -73,4 +73,4 @@ Really don't forget to take a few group photos!
 
 
 ## Acknowledgements
-
+A huge thank you to the CCGL Lab for supply assembly assistance!
