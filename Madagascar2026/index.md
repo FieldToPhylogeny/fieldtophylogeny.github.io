@@ -73,4 +73,4 @@ Really don't forget to take a few group photos!
 
 
 ## Acknowledgements
-A huge thank you to the CCGL Lab for supply assembly assistance!
+A huge thank you to the [CCGL Lab](https://conservation-genetics.inhs.illinois.edu/) for supply assembly assistance!
