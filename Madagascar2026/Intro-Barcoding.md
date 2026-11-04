@@ -22,7 +22,7 @@ Developing these libraries not only helps species identification in the present,
 
 <img src="images/Reddy-et-al-2025.png" width="300">
 
-> <sub> **Figure from Reddy et al. 2025. VAnga species identifications listed were derived from barcoded leech blood meals** </sub>
+> <sub> **Figure from Reddy et al. 2025. Vanga bird species identifications listed were derived from barcoded leech blood meals** </sub>
 
 ### What does the future of barcoding look like?
 In Madagascar, biodiversity is rich, and many species still remain undocumented and undescribed. New methods for increasing the speed, transportability and accuracy of barcode data to quickly identify species or the species present in an environmental DNA sample will be important for conservation, management, and biodiversity discovery.
