@@ -18,26 +18,11 @@ By the end of this module, you should be able to:
 
 ## What data are we using?
 
-Download the original alignment: [pseudoxy.aln.fasta](pseudoxy.aln.fasta).
+Download the original alignment: [pseudoxy.aln.fasta](data/pseudoxy.aln.fasta).
 
 This file contains **200 sequences of Malagasy snakes**, with **671 alignment columns** per sequence. Each row represents a sample; each column represents a position proposed to be homologous across samples. There are multiple individuals for many named species, as well as provisional identifications such as `sp.` and `aff.`. The labels `nan_56` and `nan_109` have no species identification; treat them as unidentified samples.
 
 The alignment contains gaps (`-`) and a few ambiguous nucleotide codes (`N`, `R`, and `Y`). Gaps at the ends of shorter sequences can represent missing coverage. **671 columns does not mean every sample has 671 observed nucleotides.** Keep these characters in place: deleting gaps separately from each row would destroy the alignment.
-
-### A small but important preparation step
-
-For this RAxML-NG exercise, download the prepared copy: **[pseudoxy.aln.raxml.fasta](pseudoxy.aln.raxml.fasta)**.
-
-This copy has exactly the same sequences, gaps, order, and alignment length as the original. Only whitespace in FASTA headers has been replaced by underscores:
-
-```text
-Original: >Langaha madagascariensis_148
-Prepared: >Langaha_madagascariensis_148
-```
-
-The RAxML-NG FASTA reader used by this workflow truncates labels at the first space. Submitting the original file therefore produces duplicate names such as `Lycodryas`. The prepared copy preserves species names and sample identifiers in unique labels. You do not need to edit the file yourself.
-
-> *What problems could arise if two different samples had the same label?*
 
 ## Methods for estimating trees: Maximum likelihood
 
@@ -95,7 +80,7 @@ Our input is already aligned. We are deliberately keeping those columns. Automat
 
 ### 2. Provide the aligned sequences
 
-Use **pseudoxy.aln.raxml.fasta**, the prepared copy linked above. Click the upload area to choose the file, or open it in a plain text editor and paste its **entire contents** into **Or paste sequences here**. Use one input method. Include every header beginning with `>` and all sequence lines; pasting a filename is not enough.
+Use **pseudoxy.aln.fasta**, the prepared copy linked above. Click the upload area to choose the file, or open it in a plain text editor and paste its **entire contents** into **Or paste sequences here**. Use one input method. Include every header beginning with `>` and all sequence lines; pasting a filename is not enough.
 
 The example run used the paste option. The form allows up to 200 sequences, so our dataset is at that limit. Check the current limit before adding more samples.
 
@@ -144,6 +129,12 @@ When the job finishes, check that the page reports success and the RAxML-NG step
 4. Read the log to confirm input dimensions, model, bootstrap method, completed replicate count, and warnings. Record the version from the log; it may differ from the website's references panel. Save the random seed if reported.
 5. Save an image for discussion as well as the Newick file and log. The server displays a deletion date for each job: download the files before that date.
 
+## Export the tree as Newick
+
+For downstream plotting you can export the tree using the text-based 'newick' format.
+
+![Phylogeny.fr export menu](images/phylogeny-fr-04-export.png)
+
 ### First checks before interpretation
 
 **Branch lengths are not bootstrap values.** In an ML phylogram, branch lengths represent estimated substitutions per site; support labels describe stability to resampling. A long branch does not automatically have strong support and does not directly measure elapsed time.
@@ -171,7 +162,7 @@ Complete this methods statement using your own results:
 
 | Problem | What to check |
 | --- | --- |
-| Duplicate sequence names | Use `pseudoxy.aln.raxml.fasta`. Spaces cause RAxML-NG to truncate names in this workflow. Keep unique sample identifiers. |
+| Duplicate sequence names | Use `pseudoxy.aln.fasta`. Spaces cause RAxML-NG to truncate names in this workflow. Keep unique sample identifiers. |
 | Input rejected or alignment error | Use the aligned file, not `pseudoxy.fasta`. Confirm every row has 671 columns including gaps, and all FASTA headers and rows were copied. |
 | No GTR option | Set Sequence Type to DNA first. |
 | No bootstrap values | Check standard bootstrapping was enabled and use the supported tree rather than a tree containing only topology and branch lengths. |
