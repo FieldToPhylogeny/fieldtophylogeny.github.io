@@ -31,7 +31,7 @@ By the end of this workshop, participants will be able to:
 
   - [Dr. Arianna Kuhn](https://directory.illinois.edu/detail?userId=alkuhn@illinois.edu&widgetId=15) (Illinois Natural History Survey; instructor/organizer)
   - [Dr. Sara Ruane](https://www.fieldmuseum.org/about/staff/profile/sara-ruane) (Field Museum; instructor/organizer)
-  - Fandresena Rakotoarimalala (University of Antananarivo; instructor/organizer)
+  - [Fandresena Rakotoarimalala](https://orcid.org/0000-0003-3795-5954) (University of Antananarivo; instructor/organizer)
   - [Dr. Santatra Randrianarisoa](https://santatra.owlstown.net/) (Mahaliana; instructor)
   - [Dr. Voahangy Soarimalala](https://provost.ncsu.edu/global-one-health-academy/people/voahangy-soarimalala/) (Association Vahatra; collaborator)
   - [Dr. Fidisoa Rasambainarivo](https://biology.ecu.edu/faculty/fidisoa-rasambainarivo/) (East Carolina University; collaborator)
