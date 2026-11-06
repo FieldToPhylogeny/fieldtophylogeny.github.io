@@ -1,3 +1,5 @@
+<img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
+
 # Molecular Laboratory Methods
 
 ## Molecular Lab Techniques
