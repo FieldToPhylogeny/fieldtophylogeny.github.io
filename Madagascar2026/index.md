@@ -1,9 +1,10 @@
 # Welcome to Field-to-Phylogeny 2026 - The Madagascar Edition
 
 November 11-12, 2026   
-[Mahaliana](https://www.mahaliana.org/) (Day 1)  
-[Association Vahatra](https://www.vahatra.mg/en/) (Day 2)   
 Antananarivo, Madagascar 
+**Day 1:** [Mahaliana](https://www.mahaliana.org/) 
+**Day 2:** [Association Vahatra](https://www.vahatra.mg/en/) 
+
 
 ## Overview
 This two-day workshop will provide participants with hands-on training in 
@@ -28,13 +29,13 @@ By the end of this workshop, participants will be able to:
 
 ## Organisers, Instructors, and Facilitators
 
-  - Dr. Arianna Kuhn (Illinois Natural History Survey; instructor/organizer)
-  - Dr. Sara Ruane (Field Museum; instructor/organizer)
+  - [Dr. Arianna Kuhn](https://directory.illinois.edu/detail?userId=alkuhn@illinois.edu&widgetId=15) (Illinois Natural History Survey; instructor/organizer)
+  - [Dr. Sara Ruane](https://www.fieldmuseum.org/about/staff/profile/sara-ruane) (Field Museum; instructor/organizer)
   - Fandresena Rakotoarimalala (University of Antananarivo; instructor/organizer)
-  - Dr. Santatra Randrianarisoa (Mahaliana; instructor)
-  - Dr. Voahangy Soarimalala (Association Vahatra; collaborator)
-  - Dr. Fidisoa Rasambainarivo (East Carolina University; collaborator)
-  - Dr. Isaac Overcast (University of Maine; INHS; collaborator)
+  - [Dr. Santatra Randrianarisoa](https://santatra.owlstown.net/) (Mahaliana; instructor)
+  - [Dr. Voahangy Soarimalala](https://provost.ncsu.edu/global-one-health-academy/people/voahangy-soarimalala/) (Association Vahatra; collaborator)
+  - [Dr. Fidisoa Rasambainarivo](https://biology.ecu.edu/faculty/fidisoa-rasambainarivo/) (East Carolina University; collaborator)
+  - [Dr. Isaac Overcast](https://isaacovercast.github.io/) (University of Maine; INHS; collaborator)
 
 ### Instructor and partricipant introduction slides
 
@@ -48,10 +49,10 @@ Registration for this edition of Field-to-Phylogeny is now closed. For informati
 
 Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Vahatra |
 -----       | ----- | ----- |
-8:30-9:00   | Check-in | Check-in and computer setup |
-9:00-12:00  | Intro, Lecture & DNA Extraction Lab | [DNA Barcoding](Intro-Barcoding.md), [Sequence Editing Lab](Module1-sequence-editing-lab.md), [BLAST Searches](Module2-BLAST-searching.md)|
+8:30-9:00   | Check-in & Intro to Pipetting | Check-in and computer setup |
+9:00-12:00  | DNA Extraction Part I Lab & Molecular Lab Lecture | [DNA Barcoding](Intro-Barcoding.md), [Sequence Editing Lab](Module1-sequence-editing-lab.md), [BLAST Searches](Module2-BLAST-searching.md)|
 12:00-13:30 | Lunch | Lunch |
-13:30-17:00 | Lecture & DNA Quantification Lab | [Phylogenetic Inference w/ RAxML](Module4-estimating-phylogenetic-trees.md) & Phylogenetics Lab |
+13:30-17:00 | DNA Extraction Part II & DNA Quantification Lab | [Phylogenetic Inference w/ RAxML](Module4-estimating-phylogenetic-trees.md) & [Phylogenetics Lab]( |
 
 
 ## Workshop sponsored by:
