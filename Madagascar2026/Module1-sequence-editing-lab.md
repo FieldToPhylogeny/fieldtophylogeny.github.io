@@ -1,3 +1,5 @@
+<img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
+
 # Sequence editing
 ## Raw sequence files  
 After Sanger sequencing, files are usually returned in raw format (with the extension ".ab1" or ".scf"). This raw format can be visualized as a chromatogram. This allows a quality control check to identify the quality of the sequence results, individual base calls, and the certainty of each base call. 
