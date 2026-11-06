@@ -50,9 +50,9 @@ Registration for this edition of Field-to-Phylogeny is now closed. For informati
 Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Vahatra |
 -----       | ----- | ----- |
 8:30-9:00   | Check-in & Intro to Pipetting | Check-in and computer setup |
-9:00-12:00  | DNA Extraction Part I & Molecular Lab Lecture | [DNA Barcoding](Intro-Barcoding.md), [Sequence Editing Lab](Module1-sequence-editing-lab.md), [BLAST Searches](Module2-BLAST-searching.md), [Sequence Alignment Lab](Module3-sequence-alignment)|
+9:00-12:00  | [DNA Extraction Part I](DNA-extraction.md) & Molecular Lab Lecture | [DNA Barcoding](Intro-Barcoding.md), [Sequence Editing Lab](Module1-sequence-editing-lab.md), [BLAST Searches](Module2-BLAST-searching.md), [Sequence Alignment Lab](Module3-sequence-alignment)|
 12:00-13:30 | Lunch | Lunch |
-13:30-17:00 | DNA Extraction Part II & DNA Quantification Lab | [Phylogenetic Inference w/ RAxML](Module4-estimating-phylogenetic-trees.md) & [Phylogenetics Visualization Lab](Module5-interpreting-phylogentic-trees.md) |
+13:30-17:00 | [DNA Extraction Part II](DNA-extraction.md) & DNA Quantification Lab | [Phylogenetic Inference w/ RAxML](Module4-estimating-phylogenetic-trees.md) & [Phylogenetics Visualization Lab](Module5-interpreting-phylogentic-trees.md) |
 
 
 ## Workshop sponsored by:
