@@ -19,13 +19,13 @@ and evolutionary studies.
 ## Learning Objectives
 By the end of this workshop, participants will be able to:
 
-1. Explain the role of DNA barcoding and phylogenetics in biodiversity research and conservation
-2. Become familiar with following protocols to extract and quantifying DNA from tissue samples
-3. Understand the process of generating DNA barcodes
-4. Import and edit raw sequence chromatograms to generate consensus sequences (contigs) from forward and reverse reads
-5. Use online tools such as BLAST searches to confirm species identity and obtain comparative sequence data to build DNA barcode sequence alignments
-6. Construct and interpret phylogenetic trees
-7. Evaluate sample uniqueness using phylogenetic evidence (sequence uniqueness) and sample metadata.
+1. Understand the role of DNA barcoding and evolution in biodiversity research and conservation
+2. Become familiar with following protocols to extract and quantifying DNA from field-collected tissue samples
+3. Import and edit raw sequence data to generate consensus sequences from forward and reverse reads
+4. Use online databases (such as BLAST) to confirm species identity and obtain comparative sequence data to build and edit alignments
+5. Estimate and interpret phylogenetic trees
+6. Interpret phylogenetic results (e.g., sequence uniqueness) to address meaningful evolutionary hypotheses
+
 
 ## Organisers, Instructors, and Facilitators
 
@@ -50,16 +50,16 @@ Registration for this edition of Field-to-Phylogeny is now closed. For informati
 Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Vahatra |
 -----       | ----- | ----- |
 8:30-9:00   | Check-in & Intro to Pipetting | Check-in and computer setup |
-9:00-12:00  | DNA Extraction Part I Lab & Molecular Lab Lecture | [DNA Barcoding](Intro-Barcoding.md), [Sequence Editing Lab](Module1-sequence-editing-lab.md), [BLAST Searches](Module2-BLAST-searching.md)|
+9:00-12:00  | DNA Extraction Part I & Molecular Lab Lecture | [DNA Barcoding](Intro-Barcoding.md), [Sequence Editing Lab](Module1-sequence-editing-lab.md), [BLAST Searches](Module2-BLAST-searching.md), [Sequence Alignment Lab](Module3-sequence-alignment)|
 12:00-13:30 | Lunch | Lunch |
-13:30-17:00 | DNA Extraction Part II & DNA Quantification Lab | [Phylogenetic Inference w/ RAxML](Module4-estimating-phylogenetic-trees.md) & [Phylogenetics Lab]( |
+13:30-17:00 | DNA Extraction Part II & DNA Quantification Lab | [Phylogenetic Inference w/ RAxML](Module4-estimating-phylogenetic-trees.md) & [Phylogenetics Visualization Lab](Module5-interpreting-phylogentic-trees.md) |
 
 
 ## Workshop sponsored by:
 <div align="center" markdown="1">
   <img src="images/ESEB-Logo.png" alt="ESEB GEBI" width="500">
 </div>
-Special thanks to the [European Society for Evolutionary Biology](https://eseb.org/) for
+Special thanks to generous funding from the [European Society for Evolutionary Biology](https://eseb.org/) for
 supporting this workshop through the **Global Evolutionary Biology Initiative program**.
 
 ## Exit Survey
