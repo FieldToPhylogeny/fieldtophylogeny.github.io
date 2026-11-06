@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TreeLab Phylogenies</title>
+<style>
+:root{
+  --bg:#f6f7f5; --panel:#ffffff; --fg:#1d2420; --muted:#5f6b64; --line:#d9ddd8; --accent:#1f6f5c; --accent-ink:#ffffff;
+  --branch:#24302b; --hover:#e0b04a; --low:#c9503a; --root:#c9503a; --node:#1f6f5c;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151a18; --panel:#1c2220; --fg:#e4e9e6; --muted:#9aa5a0; --line:#2f3834; --accent:#5cc2a6; --accent-ink:#0f1513; --branch:#dfe6e2; --node:#5cc2a6; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151a18; --panel:#1c2220; --fg:#e4e9e6; --muted:#9aa5a0; --line:#2f3834; --accent:#5cc2a6; --accent-ink:#0f1513; --branch:#dfe6e2; --node:#5cc2a6; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--sans);margin:0}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 28px;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;justify-content:space-between}
+h1{font-size:20px;margin:0} h1 span{color:var(--muted);font-weight:500;font-size:14px;margin-left:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.group{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.hint{font-size:12px;color:var(--muted)}
+button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:6px;padding:5px 10px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:4px 10px;font-size:12px}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+label.chk{display:inline-flex;gap:5px;align-items:center;font-size:13px;cursor:pointer}
+input[type=range]{accent-color:var(--accent);width:120px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 16px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;color:var(--muted);font-size:13px}
+.steps li::before{content:counter(s);display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700;margin-right:6px}
+.steps b{color:var(--fg)}
+#tree{width:100%;height:auto;display:block;touch-action:manipulation}
+.br{stroke:var(--branch);stroke-width:3;fill:none;stroke-linecap:square}
+.hitbr{stroke:transparent;stroke-width:16;fill:none;cursor:pointer}
+.hitbr:hover + .br, .br.hl{stroke:var(--hover)}
+.nd{fill:var(--node);stroke:var(--panel);stroke-width:2;cursor:pointer}
+.nd:hover{fill:var(--hover)}
+.tip{font-size:15px;font-style:italic;fill:var(--fg)}
+.tipid{font-style:normal;fill:var(--muted);font-size:13px}
+.sup{font-size:12px;font-weight:700;fill:var(--muted)}
+.sup.low{fill:var(--low)}
+.len{font-size:11px;fill:var(--muted)}
+.rootmark{fill:var(--root)}
+.scale{stroke:var(--branch);stroke-width:2}
+.msg{min-height:22px;font-size:13px}
+.msg b{color:var(--accent)}
+textarea{width:100%;min-height:58px;font:12px/1.4 var(--mono);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);padding:8px;resize:vertical}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted)}
+.sw{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:-1px;margin-right:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>TreeLab <span data-i18n="subtitle">reading and drawing phylogenies</span></h1>
+    <div class="seg" role="group" aria-label="Language"><button id="lang-en" class="on" type="button">EN</button><button id="lang-fr" type="button">FR</button></div>
+  </header>
+
+  <section class="card">
+    <ol class="steps">
+      <li data-i18n-html="s1"><b>Choose</b> how many species (3–6).</li>
+      <li data-i18n-html="s2"><b>Root</b> the tree: pick the root tool, then click the branch of the outgroup.</li>
+      <li data-i18n-html="s3"><b>Rotate</b> nodes: pick the rotate tool, then click a node. Do the relationships change?</li>
+      <li data-i18n-html="s4"><b>Support</b>: show bootstrap values and collapse weak branches.</li>
+    </ol>
+  </section>
+
+  <section class="card" style="display:flex;flex-direction:column;gap:10px">
+    <div class="bar">
+      <div class="group"><span class="hint" data-i18n="ntaxa">Species</span>
+        <span class="seg" id="ntaxa" role="group" aria-label="Number of species"><button data-n="3" type="button">3</button><button data-n="4" type="button">4</button><button data-n="5" type="button">5</button><button data-n="6" class="on" type="button">6</button></span></div>
+      <div class="group"><span class="hint" data-i18n="tool">Click tool</span>
+        <span class="seg" id="tool" role="group" aria-label="Click tool"><button data-t="rotate" class="on" type="button" data-i18n="t-rotate">Rotate node</button><button data-t="root" type="button" data-i18n="t-root">Root on branch</button></span></div>
+      <div class="group"><span class="hint" data-i18n="view">View</span>
+        <span class="seg" id="view" role="group" aria-label="View"><button data-v="rooted" class="on" type="button" data-i18n="v-rooted">Rooted</button><button data-v="unrooted" type="button" data-i18n="v-unrooted">Unrooted</button></span>
+        <span class="seg" id="lens" role="group" aria-label="Branch lengths"><button data-l="phylo" class="on" type="button" data-i18n="l-phylo">Phylogram</button><button data-l="clado" type="button" data-i18n="l-clado">Cladogram</button></span></div>
+    </div>
+    <div class="bar">
+      <div class="group"><button id="ladup" type="button" data-i18n="ladup">Ladderize ↑</button><button id="laddn" type="button" data-i18n="laddn">Ladderize ↓</button><button id="flipall" type="button" data-i18n="flipall">Flip whole tree</button><button id="shuffle" type="button" data-i18n="shuffle">Scramble</button><button id="reset" type="button" data-i18n="reset">Reset</button></div>
+      <div class="group">
+        <label class="chk"><input type="checkbox" id="showsup" checked> <span data-i18n="showsup">Bootstrap values</span></label>
+        <label class="chk"><input type="checkbox" id="showlen"> <span data-i18n="showlen">Branch lengths</span></label>
+        <label class="chk"><span data-i18n="collapse">Collapse below</span> <input type="range" id="collapse" min="0" max="100" step="5" value="0" aria-label="Collapse branches with support below"> <b id="collv">0</b>%</label>
+      </div>
+    </div>
+    <svg id="tree" viewBox="0 0 900 420" role="img" aria-label="Phylogenetic tree"></svg>
+    <div class="msg" id="msg"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section class="card" style="display:flex;flex-direction:column;gap:6px">
+    <div class="bar"><b data-i18n="newick">Newick text of this tree</b><button id="copy" type="button" data-i18n="copy">Copy</button><span class="hint" id="copied"></span></div>
+    <textarea id="nwk" readonly aria-label="Newick"></textarea>
+    <span class="hint" data-i18n="nwkhint">This is how tree programs (RAxML, FigTree, R) store a tree: brackets group sister taxa, numbers after ":" are branch lengths, numbers after ")" are bootstrap values.</span>
+  </section>
+</div>
+
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+/* ---------- text ---------- */
+const FR = {
+  subtitle:'lire et dessiner des phylogénies',
+  s1:'<b>Choisir</b> le nombre d’espèces (3–6).', s2:'<b>Enraciner</b> l’arbre : choisir l’outil racine, puis cliquer sur la branche du groupe externe.',
+  s3:'<b>Pivoter</b> des nœuds : choisir l’outil pivoter, puis cliquer sur un nœud. Les relations changent-elles ?', s4:'<b>Support</b> : afficher les valeurs de bootstrap et regrouper les branches faibles.',
+  ntaxa:'Espèces', tool:'Outil', 't-rotate':'Pivoter un nœud', 't-root':'Raciner sur une branche', view:'Vue', 'v-rooted':'Enraciné', 'v-unrooted':'Non enraciné',
+  'l-phylo':'Phylogramme', 'l-clado':'Cladogramme', ladup:'Ordonner ↑', laddn:'Ordonner ↓', flipall:'Retourner tout l’arbre', shuffle:'Mélanger', reset:'Réinitialiser',
+  showsup:'Valeurs de bootstrap', showlen:'Longueurs de branches', collapse:'Regrouper sous', newick:'Texte Newick de cet arbre', copy:'Copier',
+  nwkhint:'C’est ainsi que les logiciels (RAxML, FigTree, R) stockent un arbre : les parenthèses regroupent les taxons frères, les nombres après « : » sont les longueurs de branches, ceux après « ) » les valeurs de bootstrap.'
+};
+const MSG = {
+  en:{ rotated:'Node rotated. The picture changed, but <b>the relationships did not</b>: every pair of sister groups is still the same.', rooted:'Rooted on the branch to <b>{x}</b>. The root sets the direction of time: everything else is now more closely related to each other than to the root side.',
+       rootedin:'Rooted inside the tree. Which species should be the outgroup?', ogok:'Rooted with the outgroup ({x}): the ingroup is now one clade.', unrooted:'An unrooted tree shows relationships but not where the common ancestor is. Pick <b>Root on branch</b> and click a branch to place the root.',
+       ladder:'Ladderized: nodes are turned so the larger clades are on one side. Relationships are unchanged.', flipped:'Whole tree flipped top to bottom. Relationships are unchanged.', scrambled:'Nodes turned at random. Is it still the same tree? Compare the sister pairs.',
+       collapsed:'{n} branch(es) with support below {t}% collapsed into polytomies.', scale:'substitutions per site', low:'bootstrap < 70% (weak)', outg:'outgroup', ing:'ingroup', copied:'Copied.' },
+  fr:{ rotated:'Nœud pivoté. Le dessin a changé, mais <b>pas les relations</b> : chaque paire de groupes frères est la même.', rooted:'Raciné sur la branche de <b>{x}</b>. La racine donne la direction du temps.',
+       rootedin:'Raciné à l’intérieur de l’arbre. Quelle espèce devrait être le groupe externe ?', ogok:'Raciné avec le groupe externe ({x}) : le groupe interne forme maintenant un seul clade.', unrooted:'Un arbre non enraciné montre les relations mais pas l’ancêtre commun. Choisissez <b>Raciner sur une branche</b> puis cliquez sur une branche.',
+       ladder:'Arbre ordonné : les nœuds sont tournés pour mettre les grands clades d’un côté. Les relations ne changent pas.', flipped:'Arbre retourné de haut en bas. Les relations ne changent pas.', scrambled:'Nœuds tournés au hasard. Est-ce le même arbre ? Comparez les paires de taxons frères.',
+       collapsed:'{n} branche(s) avec un support < {t} % regroupées en polytomies.', scale:'substitutions par site', low:'bootstrap < 70 % (faible)', outg:'groupe externe', ing:'groupe interne', copied:'Copié.' }
+};
+let lang='en';
+const m = (k, o={}) => (MSG[lang][k]||k).replace(/\{(\w)\}/g,(_,v)=>o[v]);
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ if(!el.dataset.en) el.dataset.en=el.textContent; el.textContent = lang==='fr' && FR[el.dataset.i18n] ? FR[el.dataset.i18n] : el.dataset.en; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{ if(!el.dataset.en) el.dataset.en=el.innerHTML; el.innerHTML = lang==='fr' && FR[el.dataset.i18nHtml] ? FR[el.dataset.i18nHtml] : el.dataset.en; });
+  $('#lang-en').classList.toggle('on',lang==='en'); $('#lang-fr').classList.toggle('on',lang==='fr'); document.documentElement.lang=lang; draw();
+}
+
+/* ---------- the master tree (unrooted, as RAxML returns it) ---------- */
+// Species, colour group, and whether it is an outgroup
+const TAXA = {
+  Cb:{name:'Compsophis boulengeri', id:'RAX3461', col:'#2f9a5a', og:false},
+  Ci:{name:'Compsophis infralineatus', id:'RAN44845', col:'#2f9a5a', og:false},
+  Cl:{name:'Compsophis laphystius', id:'RAX3459', col:'#2f9a5a', og:false},
+  Cv:{name:'Compsophis vinckei', id:'RAN37978', col:'#2f9a5a', og:false},
+  Ly:{name:'Lycodryas inopinae', id:'RAX12426', col:'#3b6fd0', og:true},
+  Ma:{name:'Madagascarophis sp.', id:'RAX12582', col:'#3b6fd0', og:true}
+};
+// edges: [a, b, length, bootstrap]; internal nodes are n1..n4
+const MASTER = [
+  ['Cb','n4',0.031,null],['Ci','n4',0.042,null],['n4','n3',0.022,96],['Cl','n3',0.058,null],['n3','n2',0.016,64],
+  ['Cv','n2',0.071,null],['n2','n1',0.054,100],['Ly','n1',0.118,null],['n1','Ma',0.139,null]
+];
+const SETS = {3:['Cb','Cv','Ma'],4:['Cb','Ci','Cv','Ma'],5:['Cb','Ci','Cl','Cv','Ma'],6:['Cb','Ci','Cl','Cv','Ly','Ma']};
+const START_ROOT = {3:'Cb',4:'Ci',5:'Cl',6:'Cv'}; // start rooted on the wrong branch on purpose
+
+/* ---------- unrooted graph ---------- */
+let G, root, flipRoot=false, n=6;
+function build(nt){
+  n=nt; const keep=new Set(SETS[n]);
+  // adjacency: node -> array of {to, len, sup}
+  G=new Map(); const add=(a,b,l,s)=>{ if(!G.has(a))G.set(a,[]); if(!G.has(b))G.set(b,[]); G.get(a).push({to:b,len:l,sup:s}); G.get(b).push({to:a,len:l,sup:s}); };
+  MASTER.forEach(e=>add(...e));
+  // prune leaves not kept, then dissolve internal nodes of degree 2 (and degree 1)
+  for (const leaf of Object.keys(TAXA)) if(!keep.has(leaf) && G.has(leaf)) removeNode(leaf);
+  let changed=true;
+  while(changed){ changed=false;
+    for (const v of [...G.keys()]){ if(TAXA[v] || !G.has(v)) continue; const adj=G.get(v);
+      if (adj.length===1){ removeNode(v); changed=true; break; }
+      else if (adj.length===2){ const [x,y]=adj; const l=x.len+y.len;
+        const s=[x,y].filter(e=>!TAXA[e.to] && e.sup!=null).map(e=>e.sup)[0] ?? null;
+        removeNode(v); link(x.to,y.to,l,(TAXA[x.to]||TAXA[y.to])?null:s); changed=true; break; } } }
+  const r=START_ROOT[n]; root={a:r, b:G.get(r)[0].to, f:0.5}; flipRoot=false;
+}
+function removeNode(v){ for(const e of G.get(v)) G.set(e.to, G.get(e.to).filter(x=>x.to!==v)); G.delete(v); }
+function link(a,b,l,s){ G.get(a).push({to:b,len:l,sup:s}); G.get(b).push({to:a,len:l,sup:s}); }
+const edge=(a,b)=>G.get(a).find(e=>e.to===b);
+
+/* ---------- rooted view ---------- */
+// rooted node: {id, len, sup, kids:[], leaf}
+function rooted(){
+  const e=edge(root.a,root.b);
+  const sub=(v,parent,len,sup)=>{ const kids=G.get(v).filter(x=>x.to!==parent).map(x=>sub(x.to,v,x.len,TAXA[x.to]?null:x.sup)); return {id:v,len,sup,kids,leaf:!!TAXA[v]}; };
+  const A=sub(root.a,root.b,e.len*root.f,null), B=sub(root.b,root.a,e.len*(1-root.f),null);
+  const r={id:'root',len:0,sup:null,kids:flipRoot?[B,A]:[A,B],leaf:false};
+  return collapse(r);
+}
+function collapse(t){
+  const thr=+$('#collapse').value; let count=0;
+  const go=node=>{ if(node.leaf) return node; let kids=[];
+    for (const k of node.kids.map(go)){ if(!k.leaf && k.sup!=null && k.sup<thr){ count++; k.kids.forEach(g=>{ g.len+=k.len; kids.push(g); }); } else kids.push(k); }
+    node.kids=kids; return node; };
+  const out=go(t); out.collapsed=count; return out;
+}
+// rotate the child order of node v (as seen from the current root)
+function rotate(v){
+  if (v==='root'){ flipRoot=!flipRoot; return; }
+  const parent=parentOf(v); const adj=G.get(v); const p=adj.findIndex(x=>x.to===parent);
+  const others=adj.filter((_,i)=>i!==p).reverse(); const res=[]; let k=0;
+  for (let i=0;i<adj.length;i++) res.push(i===p?adj[p]:others[k++]); G.set(v,res);
+}
+function parentOf(v){ // walk from the root edge
+  let found=null; const walk=(x,par)=>{ if(x===v){found=par;return;} for(const e of G.get(x)) if(e.to!==par) walk(e.to,x); };
+  walk(root.a,root.b); if(found===null) walk(root.b,root.a); return found;
+}
+const tips = t => t.leaf ? 1 : t.kids.reduce((s,k)=>s+tips(k),0);
+function ladderize(up){
+  const order=(v,par)=>{ const adj=G.get(v), p=adj.find(x=>x.to===par);
+    const kids=adj.filter(x=>x.to!==par); kids.forEach(k=>order(k.to,v));
+    const size=x=>{ let c=0; const w=(y,pp)=>{ if(TAXA[y]){c++;return;} G.get(y).forEach(e=>{ if(e.to!==pp) w(e.to,y); }); }; w(x.to,v); return c; };
+    kids.sort((a,b)=> up? size(a)-size(b) : size(b)-size(a)); G.set(v, p?[p,...kids]:kids); };
+  order(root.a,root.b); order(root.b,root.a);
+  const sa=countTips(root.a,root.b), sb=countTips(root.b,root.a); flipRoot = up ? sa>sb : sa<sb;
+}
+function countTips(v,par){ if(TAXA[v]) return 1; return G.get(v).filter(e=>e.to!==par).reduce((s,e)=>s+countTips(e.to,v),0); }
+function scramble(){ for (const [v] of G) if(!TAXA[v] && Math.random()<0.5) rotate(v); if(Math.random()<0.5) flipRoot=!flipRoot; }
+
+/* ---------- drawing ---------- */
+const svg=$('#tree'); const NS='http://www.w3.org/2000/svg';
+const el=(tag,attrs,parent=svg)=>{ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); parent.appendChild(e); return e; };
+let state={tool:'rotate', view:'rooted', lens:'phylo'};
+function draw(){
+  svg.innerHTML=''; if(!G) return;
+  if (state.view==='unrooted') drawUnrooted(); else drawRooted();
+  const ogs=SETS[n].filter(k=>TAXA[k].og);
+  $('#legend').innerHTML = `<span><i class="sw" style="background:#2f9a5a"></i>${m('ing')}: <i>Compsophis</i></span>`+(ogs.length?`<span><i class="sw" style="background:#3b6fd0"></i>${m('outg')}: ${ogs.map(k=>'<i>'+TAXA[k].name.split(' ')[0]+'</i>').join(', ')}</span>`:'')+
+    ($('#showsup').checked?`<span style="color:var(--low)">${m('low')}</span>`:'');
+  $('#nwk').value = newick(rooted())+';';
+}
+function drawRooted(){
+  const t=rooted(), W=900, top=24, rowH=n<=4?78:62, H=top*2+(tips(t)-1)*rowH+40; svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const clado=state.lens==='clado';
+  // x positions
+  const depth=(node,d)=>{ node.x=d; let mx=d; node.kids.forEach(k=>{ mx=Math.max(mx, depth(k, d+(clado?1:k.len))); }); node.maxd=mx; return mx; };
+  const maxd=depth(t,0);
+  if (clado){ const h=node=>node.leaf?0:1+Math.max(...node.kids.map(h)); const H0=h(t); const setx=(node)=>{ node.x=H0-h(node); node.kids.forEach(setx); }; setx(t); }
+  const scaleMax = clado ? Math.max(...collect(t).map(x=>x.x)) : maxd;
+  const L=40, R=W-330, X=v=>L+(v/scaleMax)*(R-L);
+  let row=0; const sety=node=>{ if(node.leaf){ node.y=top+row*rowH; row++; } else { node.kids.forEach(sety); node.y=(node.kids[0].y+node.kids[node.kids.length-1].y)/2; } }; sety(t);
+  const showSup=$('#showsup').checked, showLen=$('#showlen').checked;
+  const g=el('g',{});
+  // root stub
+  el('line',{x1:L-26,y1:t.y,x2:X(t.x),y2:t.y,class:'br'},g);
+  el('circle',{cx:L-26,cy:t.y,r:6,class:'rootmark'},g); el('text',{x:L-26,y:t.y+22,'text-anchor':'middle',class:'len'},g).textContent='root';
+  const branches=[];
+  const rec=(node,parent)=>{
+    if (parent){
+      const path=`M${X(parent.x)},${node.y} H${X(node.x)}`;
+      const hit=el('path',{d:path,class:'hitbr'},g); const br=el('path',{d:path,class:'br'},g);
+      hit.addEventListener('click',()=>onBranch(node,parent)); hit.addEventListener('mouseenter',()=>br.classList.add('hl')); hit.addEventListener('mouseleave',()=>br.classList.remove('hl'));
+      if (showLen){ el('text',{x:(X(parent.x)+X(node.x))/2,y:node.y-6,'text-anchor':'middle',class:'len'},g).textContent=node.len.toFixed(3); }
+    }
+    if (!node.leaf){
+      el('path',{d:`M${X(node.x)},${node.kids[0].y} V${node.kids[node.kids.length-1].y}`,class:'br'},g);
+      node.kids.forEach(k=>rec(k,node));
+      const c=el('circle',{cx:X(node.x),cy:node.y,r:7,class:'nd'},g); c.addEventListener('click',()=>onNode(node));
+      el('title',{},c).textContent = lang==='fr'?'Cliquer pour pivoter':'Click to rotate';
+      if (showSup && node.sup!=null){ el('text',{x:X(node.x)-10,y:node.y-9,'text-anchor':'end',class:'sup'+(node.sup<70?' low':'')},g).textContent=node.sup; }
+    } else {
+      const tx=TAXA[node.id];
+      el('circle',{cx:X(node.x)+12,cy:node.y,r:6,fill:tx.col},g);
+      const tt=el('text',{x:X(node.x)+24,y:node.y+5,class:'tip'},g); tt.textContent=tx.name+' ';
+      const sp=el('tspan',{class:'tipid'},tt); sp.textContent=tx.id;
+    }
+  };
+  t.kids.forEach(k=>rec(k,t));
+  if (!t.leaf){ el('path',{d:`M${X(t.x)},${t.kids[0].y} V${t.kids[t.kids.length-1].y}`,class:'br'},g);
+    const c=el('circle',{cx:X(t.x),cy:t.y,r:7,class:'nd'},g); c.addEventListener('click',()=>onNode(t)); }
+  if (!clado){ // scale bar 0.05
+    const y=H-18, len=0.05, x0=L; el('line',{x1:x0,y1:y,x2:x0+(len/scaleMax)*(R-L),y2:y,class:'scale'});
+    el('text',{x:x0+(len/scaleMax)*(R-L)+8,y:y+4,class:'len'}).textContent=`0.05 ${m('scale')}`; }
+  if (t.collapsed) say(m('collapsed',{n:t.collapsed,t:$('#collapse').value}), true);
+}
+function collect(t){ const out=[]; const w=x=>{ out.push(x); x.kids.forEach(w); }; w(t); return out; }
+function drawUnrooted(){
+  const W=900,H=480; svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  // equal-angle layout from an internal node
+  const start=[...G.keys()].find(v=>!TAXA[v]) || root.a;
+  const pos=new Map(), par=new Map(); const clado=state.lens==='clado';
+  const lay=(v,pv,x,y,a0,a1)=>{ pos.set(v,[x,y]); par.set(v,pv); const kids=G.get(v).filter(e=>e.to!==pv); const tot=kids.reduce((s,e)=>s+countTips(e.to,v),0); let a=a0;
+    for (const e of kids){ const w=(a1-a0)*countTips(e.to,v)/tot, mid=a+w/2, l=clado?0.06:e.len; lay(e.to,v,x+l*Math.cos(mid),y+l*Math.sin(mid),a,a+w); a+=w; } };
+  lay(start,null,0,0,0,2*Math.PI);
+  const xs=[...pos.values()].map(p=>p[0]), ys=[...pos.values()].map(p=>p[1]);
+  const minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys);
+  const s=Math.min((W-420)/(maxx-minx||1),(H-110)/(maxy-miny||1)); const P=v=>{ const [x,y]=pos.get(v); return [210+(x-minx)*s+((W-420)-(maxx-minx)*s)/2, 55+(y-miny)*s+((H-110)-(maxy-miny)*s)/2]; };
+  const g=el('g',{}); const seen=new Set(); const showSup=$('#showsup').checked;
+  for (const [v,adj] of G) for (const e of adj){ const k=[v,e.to].sort().join('|'); if(seen.has(k)) continue; seen.add(k);
+    const [x1,y1]=P(v),[x2,y2]=P(e.to); const d=`M${x1},${y1} L${x2},${y2}`;
+    const hit=el('path',{d,class:'hitbr'},g); const br=el('path',{d,class:'br'},g);
+    hit.addEventListener('click',()=>{ setRoot(v,e.to); }); hit.addEventListener('mouseenter',()=>br.classList.add('hl')); hit.addEventListener('mouseleave',()=>br.classList.remove('hl'));
+    if (showSup && e.sup!=null){ el('text',{x:(x1+x2)/2+6,y:(y1+y2)/2-6,class:'sup'+(e.sup<70?' low':'')},g).textContent=e.sup; }
+    if (v===root.a&&e.to===root.b || v===root.b&&e.to===root.a){ const f=v===root.a?root.f:1-root.f; el('circle',{cx:x1+(x2-x1)*f,cy:y1+(y2-y1)*f,r:7,class:'rootmark'},g); }
+  }
+  for (const [v] of G){ const [x,y]=P(v); if(TAXA[v]){ const tx=TAXA[v]; const [cx,cy]=P(par.get(v)); const ang=Math.atan2(y-cy,x-cx); const c=Math.cos(ang), sn=Math.sin(ang);
+      el('circle',{cx:x,cy:y,r:6,fill:tx.col},g);
+      const anchor = Math.abs(c)<0.35 ? 'middle' : (c>0?'start':'end');
+      const tt=el('text',{x:x+c*14,y:y+5+sn*16,'text-anchor':anchor,class:'tip'},g); tt.textContent=tx.name; }
+    else el('circle',{cx:x,cy:y,r:4,fill:'var(--branch)'},g); }
+  say(m('unrooted'), true);
+}
+function newick(t){ const f=node=>{ let s = node.leaf ? (TAXA[node.id].name.replace(/[ .]/g,'_').replace(/_$/,'')+'_'+TAXA[node.id].id) : '('+node.kids.map(f).join(',')+')'+(node.sup!=null?node.sup:'');
+  return node.id==='root'? s : s+':'+node.len.toFixed(4); }; return f(t); }
+
+/* ---------- interactions ---------- */
+let quiet=false;
+function say(html, keep){ if(!keep||!$('#msg').innerHTML||quiet) $('#msg').innerHTML=html; }
+function onNode(node){ if(state.tool!=='rotate'){ setTool('rotate'); } rotate(node.id); draw(); say(m('rotated')); }
+function onBranch(node,parent){
+  if (state.tool!=='root'){ setTool('root'); }
+  // branch between node and parent (the root's two kids share the root edge)
+  let a=node.id, b=parent.id==='root' ? (rooted().kids.find(k=>k.id!==node.id)||{}).id : parent.id;
+  setRoot(a,b);
+}
+function setRoot(a,b){
+  if (!a || !b || !edge(a,b)) return;
+  root={a,b,f:TAXA[a]?0.5:0.5}; flipRoot=false; ladderize(false);
+  const side = TAXA[a] ? a : TAXA[b] ? b : null;
+  if (side){ const ok=TAXA[side].og || (n<6 && side==='Ma');
+    say(ok? m('ogok',{x:'<i>'+TAXA[side].name+'</i>'}) : m('rooted',{x:'<i>'+TAXA[side].name+'</i>'})); }
+  else {
+    // root on an internal edge: is it the outgroup split?
+    const og=SETS[n].filter(k=>TAXA[k].og); const sideTips=collectTips(a,b);
+    const isOG = og.length>1 && og.every(k=>sideTips.has(k)) && sideTips.size===og.length || og.length>1 && og.every(k=>!sideTips.has(k)) && SETS[n].length-sideTips.size===og.length;
+    say(isOG? m('ogok',{x:og.map(k=>'<i>'+TAXA[k].name+'</i>').join(' + ')}) : m('rootedin'));
+  }
+  state.view='rooted'; syncSeg('#view','v','rooted'); draw();
+}
+function collectTips(v,par){ const s=new Set(); const w=(x,p)=>{ if(TAXA[x]){s.add(x);return;} G.get(x).forEach(e=>{ if(e.to!==p) w(e.to,x); }); }; w(v,par); return s; }
+function setTool(t){ state.tool=t; syncSeg('#tool','t',t); }
+function syncSeg(sel,key,val){ document.querySelectorAll(sel+' button').forEach(b=>b.classList.toggle('on',b.dataset[key]===val)); }
+document.querySelectorAll('#ntaxa button').forEach(b=>b.onclick=()=>{ syncSeg('#ntaxa','n',b.dataset.n); build(+b.dataset.n); $('#msg').innerHTML=''; draw(); });
+document.querySelectorAll('#tool button').forEach(b=>b.onclick=()=>setTool(b.dataset.t));
+document.querySelectorAll('#view button').forEach(b=>b.onclick=()=>{ state.view=b.dataset.v; syncSeg('#view','v',b.dataset.v); $('#msg').innerHTML=''; draw(); });
+document.querySelectorAll('#lens button').forEach(b=>b.onclick=()=>{ state.lens=b.dataset.l; syncSeg('#lens','l',b.dataset.l); draw(); });
+$('#ladup').onclick=()=>{ ladderize(true); draw(); say(m('ladder')); };
+$('#laddn').onclick=()=>{ ladderize(false); draw(); say(m('ladder')); };
+$('#flipall').onclick=()=>{ const all=[...G.keys()].filter(v=>!TAXA[v]); all.forEach(v=>rotate(v)); flipRoot=!flipRoot; draw(); say(m('flipped')); };
+$('#shuffle').onclick=()=>{ scramble(); draw(); say(m('scrambled')); };
+$('#reset').onclick=()=>{ build(n); $('#collapse').value=0; $('#collv').textContent='0'; $('#msg').innerHTML=''; draw(); };
+$('#showsup').onchange=draw; $('#showlen').onchange=draw;
+$('#collapse').oninput=e=>{ $('#collv').textContent=e.target.value; $('#msg').innerHTML=''; draw(); };
+$('#copy').onclick=async()=>{ try{ await navigator.clipboard.writeText($('#nwk').value); }catch(e){ $('#nwk').select(); document.execCommand&&document.execCommand('copy'); } $('#copied').textContent=m('copied'); setTimeout(()=>$('#copied').textContent='',1500); };
+$('#lang-en').onclick=()=>{lang='en';applyLang();}; $('#lang-fr').onclick=()=>{lang='fr';applyLang();};
+build(6); draw();
+</script>
+</body>
+</html>
