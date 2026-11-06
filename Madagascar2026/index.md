@@ -57,7 +57,7 @@ Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Vahatra |
 
 ## Workshop sponsored by:
 <div align="center" markdown="1">
-  <img src="images/ESEB-Logo.png" alt="ESEB GEBI" width="500">
+  <img src="images/ESEB-Logo.png" alt="ESEB GEBI" width="400">
 </div>
 Special thanks to generous funding from the [European Society for Evolutionary Biology](https://eseb.org/) for
 supporting this workshop through the **Global Evolutionary Biology Initiative program**.
