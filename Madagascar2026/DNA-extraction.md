@@ -1,14 +1,7 @@
 <img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
 
 ---
-Pipetting and DNA Extraction
----
-
-![Field2Phylogeny](images/Field2Phylogeny-logo.png)
-
 # Pipetting and DNA Extraction
-
-## *From tissue samples in the field to isolated, genomic DNA*
 
 Today you will extract DNA from reptile and amphibian tissue using the **Qiagen DNeasy Blood & Tissue Kit**. Before you start, you will practise using a **micropipette**, because almost every step of the extraction depends on measuring small volumes accurately.
 
@@ -27,7 +20,7 @@ By the end of this module you should be able to:
 
 ### Parts of a micropipette
 
-<img src="images/pipette-parts.png" alt="Parts of a micropipette" width="180">
+<img src="images/pipette-parts.png" alt="Parts of a micropipette" width="160">
 
 *Figure 1: The parts of a micropipette.*
 
@@ -46,9 +39,8 @@ By the end of this module you should be able to:
 
 | | Position | Use it to |
 |---|---|---|
-| 1 | Rest | Starting position |
-| 2 | **First stop** (you feel resistance) | Take up liquid, and release most of it |
-| 3 | **Second stop** (press harder, past the resistance) | Push out the last drop when releasing. **Never** use it when taking up liquid. |
+| 1 | **First stop** (you feel resistance) | Take up liquid, and release most of it |
+| 2 | **Second stop** (press harder, past the resistance) | Push out the last drop when releasing. **Never** use it when taking up liquid. |
 
 ### Choose the right pipette
 
@@ -56,16 +48,13 @@ Always use the **smallest pipette that can hold the volume**. A pipette is most 
 
 | Pipette | Volume range | Use it today for |
 |---|---|---|
-| P2.5 | 0.25–2.5 µL | Very small volumes (not needed today) |
-| P10 | 0.5–10 µL | DNA sample for the Qubit (5 µL); practice (5 µL) |
-| P20 | 2–20 µL | Proteinase K (20 µL); practice (20 µL) |
-| P100 | 10–100 µL | Buffer AE for elution (100 µL) |
-| P200 | 20–200 µL | Buffer ATL (180 µL), Buffer AL (200 µL), ethanol (200 µL), Buffer AE (100 µL), Qubit working solution |
-| P1000 | 100–1000 µL | Moving the lysate to the column (~600 µL), AW1 and AW2 (500 µL each); practice (900 µL) |
+| P10 | 0.5–10 µL | DNA sample for the Qubit (5 µL)|
+| P200 | 20–200 µL | Buffer ATL (180 µL)|
+| P1000 | 100–1000 µL | Buffer AW1 and AW2 (500 µL each) |
 
-The labs' pipettes come from several brands (Eppendorf, VWR, Thermo Scientific, miniPCR). They all work the same way, but **the volume display can look different**. Ask an instructor to show you how to read yours before you start.
+The labs' pipettes come from several brands (Eppendorf, VWR, Thermo Scientific, miniPCR). They all work the same way, but **the volume display can look different**. 
 
-> **Never** turn the volume past the top or bottom of the range. It damages the pipette and it will no longer measure correctly.
+> **Never** turn the volume past the top or bottom of the range or press beyond the stop to suck up liquid. It will result in incorrect measurements.
 
 ### Take up and release liquid
 
@@ -77,16 +66,16 @@ The labs' pipettes come from several brands (Eppendorf, VWR, Thermo Scientific, 
 6. Keep the plunger pressed down while you lift the tip out of the tube. Then let the plunger go.
 7. Press the **tip ejector** to drop the tip in the waste.
 
-Some extra tips:
+> Some extra tips:
 
 * **Never** lay a pipette down, or turn it upside down, with liquid in the tip. Liquid runs into the pipette and contaminates it.
 * Let the plunger come up slowly. If it snaps up, you will pull in air bubbles or splash liquid into the pipette.
 * Ethanol and some buffers drip from the tip. Take up and release the liquid once (**pre-wet** the tip), then take up the volume you need.
-* Buffer AL foams. Pipette it slowly.
+* Buffer AL foams! Pipette very bubbly solutions slowly.
 
 ### Practice exercise
 
-Use the coloured water at your bench.
+Use the water at your bench.
 
 | Volume | Pipette | Into |
 |---|---|---|
@@ -94,16 +83,14 @@ Use the coloured water at your bench.
 | 20 µL | P20 | A drop on parafilm. Compare it with the instructor's reference drop. |
 | 5 µL | P10 | A drop on parafilm. Compare it with the 20 µL drop. |
 
-Repeat each volume three times. Your three drops should be the same size.
-
 ### Quiz: pipetting
 
 Answer each question in your head (or with your partner) first, then click to check.
 
 <details markdown="1">
-<summary><b>1. You need 180 µL of Buffer ATL. Which pipette do you use?</b> <i>(click for the answer)</i></summary>
+<summary><b>1. You need 180 µL of Buffer ATL. Which pipette do you use?</b> <i>(click for the answer)</i></summary>  
 
-**P200.** Always use the smallest pipette that can hold the volume. A P1000 *can* take up 180 µL, but it is much less accurate at the bottom of its range.
+**P200.** *Always use the smallest pipette that can hold the volume. A P1000 *can* take up 180 µL, but it is much less accurate for small volumes.*
 
 </details>
 
@@ -380,21 +367,13 @@ Other companies (Zymo, Macherey-Nagel, Thermo Fisher, NEB and others) make kits 
 
 ## Questions for discussion
 
-1.) Which pipette would you use for 180 µL? For 18 µL? For 1.8 µL? Why not use the P1000 for everything?
+1.) What is the difference between the first stop and the second stop?
 
-2.) What is the difference between the first stop and the second stop?
+2.) What would happen if we forgot to add Proteinase K to the lysis buffer?
 
-3.) Why do we add Proteinase K to the lysis buffer?
+3.) You need DNA from a snake that was fixed in formalin in 1950. What problems do you expect?
 
-4.) What do Buffer AL and ethanol do that makes DNA stick to the silica membrane?
-
-5.) Why is the last wash spin longer and faster than the others?
-
-6.) Why does Buffer AE release the DNA from the membrane when the other buffers did not?
-
-7.) You need DNA from a snake that was fixed in formalin in 1950. What problems do you expect? What would you change?
-
-8.) A colleague wants to sequence a whole genome with long reads. Why is today's kit not the best choice?
+4.) A colleague wants to sequence a whole genome with long reads. Why is today's kit not the best choice?
 
 ### Record your extraction
 
@@ -413,9 +392,7 @@ Other companies (Zymo, Macherey-Nagel, Thermo Fisher, NEB and others) make kits 
 
 ## References
 
-* <sub>Boom, R., Sol, C. J., Salimans, M. M., Jansen, C. L., Wertheim-van Dillen, P. M., & van der Noordaa, J. (1990). Rapid and simple method for purification of nucleic acids. [Journal of Clinical Microbiology, 28(3), 495–503](https://doi.org/10.1128/jcm.28.3.495-503.1990).</sub>
 * <sub>QIAGEN (2023). DNeasy Blood & Tissue Handbook. Available at [qiagen.com/handbooks](https://www.qiagen.com/handbooks).</sub>
-* <sub>Dabney, J., et al. (2013). Complete mitochondrial genome sequence of a Middle Pleistocene cave bear reconstructed from ultrashort DNA fragments. [PNAS, 110(39), 15758–15763](https://doi.org/10.1073/pnas.1314445110).</sub>
 * <sub>Taberlet, P., Bonin, A., Zinger, L., & Coissac, E. (2018). [*Environmental DNA: For Biodiversity Research and Monitoring*](https://doi.org/10.1093/oso/9780198767220.001.0001). Oxford University Press.</sub>
 
 ### Continue the workshop
