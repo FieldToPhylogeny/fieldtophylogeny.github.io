@@ -107,18 +107,16 @@ Many tree programs, including RAxML, treat `-` and `N` the same way (as missing 
 
 | Option | Choices | When to change it |
 |---|---|---|
-| **Strategy** | **FFT-NS-1, FFT-NS-2** (fast), **FFT-NS-i** (iterative), **L-INS-i, G-INS-i, E-INS-i** (slow, accurate) | Fast methods are for hundreds or thousands of sequences. **L-INS-i** is best for a few hundred sequences or fewer. **G-INS-i** assumes the sequences are similar along their whole length. **E-INS-i** is for sequences with long unalignable regions (rare for COI). |
+| **Strategy** | **FFT-NS-1, FFT-NS-2** (fast), **FFT-NS-i** (iterative), **L-INS-i, G-INS-i, E-INS-i** (slow, accurate) | Fast methods are for hundreds or thousands of sequences. **L-INS-i** is best for a few hundred sequences or fewer. **G-INS-i** assumes the sequences are similar along their whole length. |
 | **Output order** | Same as input / Aligned | "Aligned" groups similar sequences together. This looks nice, but makes your own sample harder to find. |
-| **Scoring matrix** (nucleotides) | 1PAM, 20PAM, 200PAM | Only change it for sequences that are almost identical (1PAM or 20PAM). |
-| **Gap opening penalty** | 1.53 | Higher means fewer, longer gaps. COI has almost no real indels, so leave it. |
 | **Output format** | Clustal / FASTA | Always save **FASTA** for AlignLab, RAxML and IQ-TREE. |
-| **Add to an existing alignment** | `--add`, `--addfragments` | Adds new sequences (for example a mystery sample) **without changing** an alignment you already have. |
+
 
 </details>
 
 > <small>*If a file came from a BLAST or BOLD "aligned sequences" download, it already contains gaps from **pairwise** alignments. Remove them (Find `-`, Replace with nothing) before you paste the sequences into MAFFT.*</small>
 
-> <small>***No internet?** MEGA (free, Windows) aligns offline with MUSCLE: Alignment → Alignment Explorer → open your FASTA → Alignment → Align by MUSCLE → export as FASTA. Your instructor also has an aligned backup file.*</small>
+> <small>***Not working internet? Your instructor also has an aligned backup file.*</small>
 
 ## Exercise 2: Find and fix errors in the example alignment
 
@@ -206,18 +204,6 @@ Choose A or B first (alone or with your partner), then click to check.
 
 </details>
 
-**2. In Amino acids view, one sequence has several stop codons, all after one point. The other sequences have none. What should you do?**
-
-* **A)** Delete all the bases after the first stop codon.
-* **B)** Look just before the first stop codon for a missing or extra base, and check that position in the chromatogram.
-
-<details markdown="1">
-<summary><b>Answer</b> <i>(click to check)</i></summary>
-
-**B.** Stop codons that start at one point and continue to the end are the sign of a **frameshift**: one base is missing or extra. Find where the sequence stops matching the others, check the chromatogram, then insert a gap (or N) or delete the extra base.
-
-</details>
-
 **3. One sequence has 3 extra bases that no other sequence has. There are no stop codons. What should you do?**
 
 * **A)** Keep the 3 bases and add a gap of 3 to the other sequences. Check the chromatogram to make sure the bases are real.
@@ -242,18 +228,6 @@ Choose A or B first (alone or with your partner), then click to check.
 
 </details>
 
-**5. You translate your COI alignment and see stop codons in every sequence, in every reading frame. What should you check first?**
-
-* **A)** The genetic code: it should be Vertebrate mitochondrial, not Standard.
-* **B)** Nothing: COI always has stop codons. Go on to estimate your tree.
-
-<details markdown="1">
-<summary><b>Answer</b> <i>(click to check)</i></summary>
-
-**A.** With the **Standard** code, TGA is read as a stop codon. In vertebrate mitochondria TGA codes for tryptophan (W). With the right code, one frame should have no stop codons. (If every frame *still* has stops, look for a backwards sequence.)
-
-</details>
-
 ## Exercise 3: Check your own alignment
 
 Open your `GroupA_COI_aligned.fasta` from Exercise 1 in AlignLab and repeat the checks from Exercise 2:
@@ -261,8 +235,7 @@ Open your `GroupA_COI_aligned.fasta` from Exercise 1 in AlignLab and repeat the 
 1. Any backwards sequences?
 2. Which frame has no stop codons?
 3. Any single-base gaps or extra bases? Check them against your chromatogram in TraceLab.
-4. Fill end gaps with N.
-5. Save as `GroupA_COI_aligned_edited.fasta`. This is the input for **Module 4: Estimating phylogenetic trees**.
+4. Save as `GroupA_COI_aligned_edited.fasta`. This is the input for **Module 4: Estimating phylogenetic trees**.
 
 ## Discussion Questions
 
@@ -274,7 +247,7 @@ Open your `GroupA_COI_aligned.fasta` from Exercise 1 in AlignLab and repeat the 
 
 ### Record your analysis
 
-> For PUblication: *Sequences were aligned with MAFFT v[version] (online server, Auto strategy, direction adjusted to the first sequence; accessed [date]). The alignment was checked by eye in AlignLab. Sequencing errors were corrected against chromatograms, and terminal gaps were coded as missing data (N). The final alignment contained [number] sequences and [number] bp, with [number] variable and [number] parsimony-informative sites. Translation with the vertebrate mitochondrial code showed no stop codons.
+> For Publication: *Sequences were aligned with MAFFT v[version] (online server, Auto strategy, direction adjusted to the first sequence; accessed [date]). The alignment was checked by eye in AlignLab. Sequencing errors were corrected against chromatograms, and terminal gaps were coded as missing data (N). The final alignment contained [number] sequences and [number] bp, with [number] variable and [number] parsimony-informative sites. Translation with the vertebrate mitochondrial code showed no stop codons.
 
 
 ## References
