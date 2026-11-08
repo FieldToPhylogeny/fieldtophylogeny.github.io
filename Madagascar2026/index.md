@@ -1,9 +1,9 @@
 # Welcome to Field-to-Phylogeny 2026 - The Madagascar Edition
 
 November 11-12, 2026   
-Antananarivo, Madagascar 
-**Day 1:** [Mahaliana](https://www.mahaliana.org/) 
-**Day 2:** [Association Vahatra](https://www.vahatra.mg/en/) 
+Antananarivo, Madagascar   
+**Day 1:** [Mahaliana](https://www.mahaliana.org/)   
+**Day 2:** [Association Vahatra](https://www.vahatra.mg/en/)   
 
 
 ## Overview
