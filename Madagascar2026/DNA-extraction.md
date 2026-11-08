@@ -1,7 +1,7 @@
 <img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
 
 ---
-title: Pipetting and DNA Extraction
+Pipetting and DNA Extraction
 ---
 
 ![Field2Phylogeny](images/Field2Phylogeny-logo.png)
