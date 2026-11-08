@@ -20,16 +20,16 @@ Every silica-column kit does the same four jobs: **lyse** the cells, **bind** th
 
 | Section | What it does | Buffer |
 |---|---|---|
-| Sample and tube prep | Label tubes, cut the tissue, start the digestion | ATL + proteinase K |
+| Sample and tube prep | Label tubes, cut tissue, start the digestion | ATL + proteinase K |
 | Incubation | Digest the tissue completely | |
-| Post-incubation tube prep | Label the final tubes and the spin columns | |
+| Tube prep | Label the final extraction tubes and spin columns | |
 | Cell lysis and denaturation | Finish lysis and switch off enzymes | AL |
-| Precipitation | Make the DNA ready to stick to silica | Ethanol |
-| Bind DNA to the filter | DNA sticks to the silica membrane | |
+| Precipitation | Make the DNA ready to stick to the filter | Ethanol |
+| Bind DNA to the filter | DNA sticks to the filter membrane | |
 | Washing and purifying I | Remove proteins, enzymes and pigments | AW1 |
 | Washing and purifying II | Remove salts | AW2 |
-| Elution | Release clean DNA | AE |
-| Hooray! | Store your DNA | |
+| Elution | Release clean DNA from filter | AE |
+| **Hooray!** | Store your DNA | |
 
 ### Before you start
 
