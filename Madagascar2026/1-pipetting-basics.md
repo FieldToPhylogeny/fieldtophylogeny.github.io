@@ -1,7 +1,7 @@
 <img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
 
 ---
-# MOlecular Lab Basics
+# Molecular Lab Basics
 
 Today you will extract DNA from reptile and amphibian tissue using the **Qiagen DNeasy Blood & Tissue Kit**. Before you start, you will practise using a **micropipette**, because almost every step of the extraction depends on measuring small volumes accurately.
 
