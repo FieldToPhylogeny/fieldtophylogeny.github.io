@@ -234,7 +234,7 @@ The DNeasy Blood & Tissue Kit works well for fresh or ethanol-preserved animal t
 
 ### Continue the workshop
 
-* Next: [Module 1: Sequence editing](Module1-sequence-editing-lab.md)
+* Next: [DNA Quantification](DNA-quantification.md)
 * [Madagascar 2026 workshop home](https://fieldtophylogeny.github.io/Madagascar2026/)
 
 
