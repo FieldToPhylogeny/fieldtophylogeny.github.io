@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlignLab Alignments</title>
+<style>
+/* Same visual language as TraceLab: toolbar band, step card, full-width alignment canvas, detail strip. */
+:root{
+  --bg:#f6f7f5; --panel:#ffffff; --fg:#1d2420; --muted:#5f6b64; --line:#d9ddd8; --accent:#1f6f5c; --accent-ink:#ffffff;
+  --sel:#f3c84b; --flag:#fbe7a6; --names:#eef0fa; --namesline:#c9cdf0; --cons:#8c8c8c;
+  --id1:#5aa84f; --id2:#d6c95a; --id3:#d9603f; --dim:#e8eaec; --dimink:#9aa29e;
+  --xA:#4fc35a; --xC:#4a7df0; --xG:#f2c230; --xT:#e2483d; --xN:#c9cecb; --xAmb:#c9a0e8; --xInk:#10140f; --gap:#ffffff;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151a18; --panel:#1c2220; --fg:#e4e9e6; --muted:#9aa5a0; --line:#2f3834; --accent:#5cc2a6; --accent-ink:#0f1513;
+  --sel:#c9a43a; --flag:#5a4b1c; --names:#232838; --namesline:#3a4060; --cons:#9a9a9a; --dim:#2a302d; --dimink:#6f7974; --gap:#1c2220; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151a18; --panel:#1c2220; --fg:#e4e9e6; --muted:#9aa5a0; --line:#2f3834; --accent:#5cc2a6; --accent-ink:#0f1513;
+  --sel:#c9a43a; --flag:#5a4b1c; --names:#232838; --namesline:#3a4060; --cons:#9a9a9a; --dim:#2a302d; --dimink:#6f7974; --gap:#1c2220; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--sans);margin:0}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 28px;max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;justify-content:space-between}
+h1{font-size:20px;margin:0}
+h1 span{color:var(--muted);font-weight:500;font-size:14px;margin-left:8px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px}
+button:hover,.btn:hover{border-color:var(--accent)}
+button:focus-visible,.btn:focus-within,select:focus-visible,#scroller:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.primary,.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button[disabled]{opacity:.45;cursor:default}
+.btn input{display:none}
+select{font:inherit;font-size:13px;padding:4px 8px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px 16px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;color:var(--muted);font-size:13px}
+.steps li::before{content:counter(s);display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700;margin-right:6px}
+.steps b{color:var(--fg)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:3px 9px;font-size:12px}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.hint{font-size:12px;color:var(--muted)}
+.group{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-right:10px;border-right:1px solid var(--line)}
+.group:last-child{border-right:0}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.stats b{color:var(--fg);font-variant-numeric:tabular-nums}
+.viewer{position:relative;border:1px solid var(--line);border-radius:8px;background:var(--panel);overflow:hidden}
+#scroller{overflow:auto;height:min(64vh,640px);position:relative}
+#spacer{position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none}
+canvas{display:block;position:sticky;top:0;left:0}
+.detail{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;font-size:13px;min-height:28px}
+.mono{font-family:var(--mono)}
+textarea{width:100%;min-height:90px;font:12px/1.4 var(--mono);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);padding:8px;resize:vertical}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px}
+.empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);text-align:center;padding:20px;pointer-events:none}
+.err{color:#c9503a;font-size:13px}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;background:var(--flag)}
+.pill.ok{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
+kbd{font:11px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:var(--bg)}
+details summary{cursor:pointer;color:var(--muted);font-size:13px}
+#ex[hidden]{display:none!important}
+.exlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.exlist li{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px}
+.exlist .st{display:inline-block;min-width:92px;font-weight:700}
+.exlist .ok{color:var(--accent)}.exlist .no{color:#c9503a}.exlist .na{color:var(--muted)}
+.exlist .ans{margin-top:6px;padding:8px 10px;border-radius:6px;background:color-mix(in srgb,var(--flag) 55%,transparent);font-size:13px;line-height:1.5}
+.exlist button{margin-left:8px;font-size:12px;padding:2px 8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>AlignLab <span data-i18n="subtitle">DNA alignment viewer and editor · offline</span></h1>
+    <div class="seg" role="group" aria-label="Language"><button id="lang-en" class="on" type="button">EN</button><button id="lang-fr" type="button">FR</button></div>
+  </header>
+
+  <section class="card">
+    <ol class="steps">
+      <li data-i18n-html="s1"><b>Load</b> an aligned FASTA file (or the example).</li>
+      <li data-i18n-html="s2"><b>Scan</b> the identity bar: dips mark variable sites, gaps and errors.</li>
+      <li data-i18n-html="s3"><b>Translate</b> in frames 1–3: the right frame has no stop codons.</li>
+      <li data-i18n-html="s4"><b>Fix</b> errors: click a base, then type, delete or add gaps.</li>
+      <li data-i18n-html="s5"><b>Export</b> the edited alignment as FASTA.</li>
+    </ol>
+  </section>
+
+  <section class="card" style="display:flex;flex-direction:column;gap:10px">
+    <div class="bar">
+      <label class="btn primary"><span data-i18n="open">Open FASTA</span><input id="file" type="file" accept=".fasta,.fas,.fa,.txt,.aln"></label>
+      <button id="demo" type="button" data-i18n="demo">Load example alignment</button>
+      <button id="pastebtn" type="button" data-i18n="paste">Paste text</button>
+      <span class="hint" data-i18n="drop">or drop a file anywhere on the page</span>
+      <span id="err" class="err"></span>
+    </div>
+    <div id="pastebox" hidden>
+      <textarea id="pastetxt" aria-label="FASTA text" placeholder=">name&#10;ACGT..."></textarea>
+      <button id="pasteok" type="button" class="primary" data-i18n="load">Load</button>
+    </div>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section class="card" style="display:flex;flex-direction:column;gap:10px">
+    <div class="bar" style="gap:8px 10px">
+      <div class="group"><span class="hint" data-i18n="colour">Colour</span>
+        <span class="seg" role="group" aria-label="Colour mode"><button data-m="bases" class="on" type="button" data-i18n="m-bases">Bases</button><button data-m="dis" type="button" data-i18n="m-dis">Differences only</button><button data-m="aa" type="button" data-i18n="m-aa">Amino acids</button></span></div>
+      <div class="group"><span class="hint" data-i18n="frame">Frame</span>
+        <span class="seg" role="group" aria-label="Reading frame" id="frames"><button data-f="1" class="on" type="button">1</button><button data-f="2" type="button">2</button><button data-f="3" type="button">3</button></span>
+        <select id="gcode" aria-label="Genetic code"><option value="2" data-i18n="code-mt">Vertebrate mitochondrial</option><option value="1" data-i18n="code-std">Standard</option></select></div>
+      <div class="group"><span class="hint" data-i18n="zoom">Zoom</span><button id="zout" type="button" aria-label="Zoom out">−</button><button id="zin" type="button" aria-label="Zoom in">+</button></div>
+      <div class="group"><span class="hint" data-i18n="jump">Next</span>
+        <button id="nvar" type="button" data-i18n="n-var">Variable site</button><button id="ngap" type="button" data-i18n="n-gap">Gap</button><button id="nstop" type="button" data-i18n="n-stop">Stop codon</button><button id="namb" type="button" data-i18n="n-amb">Ambiguity</button></div>
+    </div>
+    <div class="bar" style="gap:8px 10px">
+      <div class="group"><span class="hint" data-i18n="edit">Edit</span>
+        <button id="bgap" type="button" data-i18n="b-gap">Insert gap</button>
+        <button id="bgapo" type="button" data-i18n="b-gapo">Insert gap in other rows</button>
+        <button id="bdel" type="button" data-i18n="b-del">Delete base</button>
+        <button id="bn" type="button" data-i18n="b-n">Set to N</button>
+        <button id="bdelcol" type="button" data-i18n="b-delcol">Delete column(s)</button>
+        <button id="brc" type="button" data-i18n="b-rc">Reverse-complement row</button>
+        <button id="bdelrow" type="button" data-i18n="b-delrow">Remove row</button></div>
+      <div class="group"><span class="hint" data-i18n="whole">Whole alignment</span>
+        <button id="bpad" type="button" data-i18n="b-pad">Fill end gaps with N</button>
+        <button id="bclean" type="button" data-i18n="b-clean">Remove empty columns</button>
+        <button id="bundo" type="button" data-i18n="b-undo">Undo</button></div>
+    </div>
+    <div class="viewer">
+      <div id="scroller" tabindex="0" aria-label="Alignment. Click a base, then use the keyboard to edit."><div id="spacer"></div><canvas id="cv"></canvas></div>
+      <div class="empty" id="empty" data-i18n="empty">Open an aligned FASTA file, or load the example alignment.</div>
+    </div>
+    <div class="detail" id="detail"><span class="hint" data-i18n="clickhint">Click a base to select it. Shift-click to select a block. Click a name to select the whole row; click the ruler to select a column.</span></div>
+    <div class="legend" id="legend"></div>
+    <details>
+      <summary data-i18n="keys-t">Keyboard shortcuts</summary>
+      <p class="hint" data-i18n-html="keys"><kbd>A</kbd> <kbd>C</kbd> <kbd>G</kbd> <kbd>T</kbd> <kbd>N</kbd> replace the selected base(s) · <kbd>-</kbd> or <kbd>Space</kbd> insert a gap (bases shift right) · <kbd>Delete</kbd> / <kbd>Backspace</kbd> delete base(s) (bases shift left) · arrow keys move · <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo</p>
+    </details>
+  </section>
+
+  <section class="card" id="ex" hidden style="display:flex;flex-direction:column;gap:8px">
+    <div class="bar"><b data-i18n="ex-t">Exercise: fix the example alignment</b><span class="hint" data-i18n="ex-h">There are 4 problems. Fix them, then check your work.</span></div>
+    <ul class="exlist" id="exlist"></ul>
+    <div class="bar"><button id="excheck" type="button" class="primary" data-i18n="ex-check">Check my alignment</button>
+      <button id="exall" type="button" hidden data-i18n="ex-all">Show all answers</button>
+      <button id="exreset" type="button" data-i18n="ex-reset">Start the exercise again</button>
+      <span class="hint" id="exmsg"></span></div>
+  </section>
+
+  <section class="card" style="display:flex;flex-direction:column;gap:8px">
+    <div class="bar"><b data-i18n="export">Export</b>
+      <button id="dl" type="button" class="primary" data-i18n="dl">Save FASTA</button>
+      <button id="copy" type="button" data-i18n="copy">Copy FASTA</button>
+      <span class="hint" id="copied"></span></div>
+    <textarea id="out" readonly aria-label="Edited alignment as FASTA"></textarea>
+  </section>
+</div>
+
+<script>
+'use strict';
+/* ---------- i18n ---------- */
+const I18N = {
+  en: {},
+  fr: {
+    subtitle:'Visualiseur et éditeur d’alignements ADN · hors ligne',
+    s1:'<b>Ouvrir</b> un fichier FASTA aligné (ou l’exemple).', s2:'<b>Parcourir</b> la barre d’identité : les creux montrent sites variables, gaps et erreurs.',
+    s3:'<b>Traduire</b> dans les cadres 1–3 : le bon cadre n’a pas de codon stop.', s4:'<b>Corriger</b> : cliquer sur une base, puis taper, supprimer ou ajouter des gaps.',
+    s5:'<b>Exporter</b> l’alignement corrigé en FASTA.',
+    open:'Ouvrir FASTA', demo:'Charger l’alignement exemple', paste:'Coller du texte', drop:'ou déposer un fichier sur la page', load:'Charger',
+    colour:'Couleur', 'm-bases':'Bases', 'm-dis':'Différences seulement', 'm-aa':'Acides aminés', frame:'Cadre',
+    'code-mt':'Mitochondrial des vertébrés', 'code-std':'Standard', zoom:'Zoom', jump:'Suivant',
+    'n-var':'Site variable', 'n-gap':'Gap', 'n-stop':'Codon stop', 'n-amb':'Ambiguïté',
+    edit:'Modifier', 'b-gap':'Insérer un gap', 'b-del':'Supprimer la base', 'b-n':'Mettre N', 'b-delcol':'Supprimer colonne(s)',
+    'b-gapo':'Insérer un gap dans les autres lignes', 'b-rc':'Complément inverse de la ligne', 'b-delrow':'Retirer la ligne', whole:'Alignement entier',
+    'b-pad':'Remplir les gaps des extrémités avec N', 'b-clean':'Retirer les colonnes vides', 'b-undo':'Annuler',
+    empty:'Ouvrez un fichier FASTA aligné, ou chargez l’alignement exemple.',
+    clickhint:'Cliquer sur une base pour la sélectionner. Maj-clic pour un bloc. Cliquer sur un nom pour la ligne entière ; sur la règle pour une colonne.',
+    'keys-t':'Raccourcis clavier',
+    keys:'<kbd>A</kbd> <kbd>C</kbd> <kbd>G</kbd> <kbd>T</kbd> <kbd>N</kbd> remplacent la/les base(s) · <kbd>-</kbd> ou <kbd>Espace</kbd> insèrent un gap (décalage à droite) · <kbd>Suppr</kbd> / <kbd>Retour</kbd> suppriment (décalage à gauche) · flèches pour se déplacer · <kbd>Ctrl</kbd>+<kbd>Z</kbd> annuler',
+    export:'Exporter', dl:'Enregistrer FASTA', copy:'Copier FASTA', copied:'Copié.',
+    seqs:'séquences', len:'colonnes', variable:'sites variables', pi:'informatifs (parcimonie)', gapcols:'colonnes avec gaps', stops:'codons stop (cadre {f})',
+    consensus:'Consensus', identity:'Identité', row:'Ligne', col:'Colonne', codonpos:'position dans le codon', aa:'acide aminé',
+    lg_bases:'Bases', lg_amb:'ambiguïté (R, Y…)', lg_n:'N / donnée manquante', lg_gap:'gap (-)', lg_id:'Identité : verte = 100 %, jaune = variable, rouge = <30 %',
+    lg_stop:'* = codon stop', nomore:'Aucun autre trouvé.', badfasta:'Ce fichier ne ressemble pas à un FASTA.', unequal:'Les séquences n’ont pas toutes la même longueur : complété avec des gaps. Ce fichier est-il aligné ?',
+    'ex-t':'Exercice : corriger l’alignement exemple', 'ex-h':'Il y a 4 problèmes. Corrigez-les, puis vérifiez votre travail.',
+    'ex-check':'Vérifier mon alignement', 'ex-all':'Afficher toutes les réponses', 'ex-reset':'Recommencer l’exercice',
+    selbases:'Sélectionnez d’abord les bases dans une ligne (cliquez la première, Maj-clic la dernière).',
+    selrow:'Sélectionnez d’abord une base ou une ligne.', selcol:'Sélectionnez d’abord une ou plusieurs colonnes (cliquez sur la règle).'
+  }
+};
+const EN = {
+  seqs:'sequences', len:'columns', variable:'variable sites', pi:'parsimony-informative', gapcols:'columns with gaps', stops:'stop codons (frame {f})',
+  consensus:'Consensus', identity:'Identity', row:'Row', col:'Column', codonpos:'codon position', aa:'amino acid',
+  lg_bases:'Bases', lg_amb:'ambiguity (R, Y…)', lg_n:'N / missing data', lg_gap:'gap (-)', lg_id:'Identity: green = 100%, yellow = variable, red = <30%',
+  lg_stop:'* = stop codon', nomore:'No more found.', badfasta:'This does not look like a FASTA file.', unequal:'Sequences had different lengths and were padded with gaps. Is this file aligned?',
+  selrow:'Select a base or a row first.', selbases:'Select the bases in one row first (click the first, Shift-click the last).', selcol:'Select one or more columns first (click the ruler).', copied:'Copied.'
+};
+let lang = 'en';
+const t = k => (lang==='fr' && I18N.fr[k]) || EN[k] || k;
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ if(!el.dataset.en) el.dataset.en=el.textContent; el.textContent = lang==='fr' && I18N.fr[el.dataset.i18n] ? I18N.fr[el.dataset.i18n] : el.dataset.en; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{ if(!el.dataset.en) el.dataset.en=el.innerHTML; el.innerHTML = lang==='fr' && I18N.fr[el.dataset.i18nHtml] ? I18N.fr[el.dataset.i18nHtml] : el.dataset.en; });
+  document.documentElement.lang = lang; $('#lang-en').classList.toggle('on',lang==='en'); $('#lang-fr').classList.toggle('on',lang==='fr');
+  renderStats(); renderLegend(); draw(); if(typeof renderEx==='function' && state.seqs.length) renderEx();
+}
+const $ = s => document.querySelector(s);
+
+/* ---------- genetics ---------- */
+const B4='TCAG';
+const AA1='FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG';
+const AA2='FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSS**VVVVAAAADDEEGGGG';
+const COMP={A:'T',C:'G',G:'C',T:'A',R:'Y',Y:'R',K:'M',M:'K',S:'S',W:'W',B:'V',V:'B',D:'H',H:'D',N:'N','-':'-','?':'?'};
+const AACOL={A:'#c8c8c8',R:'#9fdde3',N:'#6ff5f5',D:'#f07f6e',C:'#f0e68c',Q:'#7fb0f2',E:'#ee3cee',G:'#a6c95a',H:'#f0923e',I:'#6cc47a',L:'#e9527c',K:'#9cc8fa',M:'#79e0a6',F:'#c79cf0',P:'#f8f354',S:'#f6b9a2',T:'#f8e79a',W:'#f2b0b6',Y:'#c3ef6c',V:'#6df06d',X:'#e2e5e3','*':'#000000'};
+const isBase = c => c==='A'||c==='C'||c==='G'||c==='T';
+const isMissing = c => c==='N'||c==='?';
+function codon(c){ const i=B4.indexOf(c[0]),j=B4.indexOf(c[1]),k=B4.indexOf(c[2]); if(i<0||j<0||k<0) return 'X'; return (state.code===2?AA2:AA1)[i*16+j*4+k]; }
+
+/* ---------- state ---------- */
+const state = { names:[], seqs:[], L:0, sel:null, mode:'bases', frame:1, code:2, cw:12, undo:[], cache:null, demo:false, edits:0, checked:false, shown:{} };
+// sel = {r0,r1,c0,c1} inclusive; cursor = {r,c}
+let cursor = null;
+
+function parseFasta(txt){
+  const names=[], seqs=[]; let cur=null;
+  for (const raw of txt.replace(/\r/g,'').split('\n')){
+    const line = raw.trim(); if(!line) continue;
+    if (line[0]==='>'){ names.push(line.slice(1).trim() || ('seq'+(names.length+1))); seqs.push([]); cur=seqs[seqs.length-1]; }
+    else if (cur) cur.push(line.replace(/\s+/g,'').toUpperCase().replace(/\./g,'-').replace(/U/g,'T'));
+  }
+  return { names, seqs: seqs.map(a=>a.join('')) };
+}
+function load(txt, isDemo){
+  state.demo=!!isDemo; state.edits=0; state.checked=false; state.shown={};
+  const p = parseFasta(txt); $('#err').textContent='';
+  if (!p.names.length || !p.seqs.some(s=>s.length)) { $('#err').textContent=t('badfasta'); return; }
+  const L = Math.max(...p.seqs.map(s=>s.length));
+  if (p.seqs.some(s=>s.length!==L)) $('#err').textContent=t('unequal');
+  state.names = p.names; state.seqs = p.seqs.map(s=>s.padEnd(L,'-').split('')); state.L=L;
+  state.undo=[]; state.sel=null; cursor=null; invalidate();
+  $('#empty').hidden = true; layout(); renderStats(); draw(); exportText(); renderEx();
+}
+function snapshot(){ state.edits++; state.undo.push({names:state.names.slice(), seqs:state.seqs.map(r=>r.slice()), L:state.L}); if(state.undo.length>60) state.undo.shift(); }
+function undo(){ const s=state.undo.pop(); if(!s) return; state.names=s.names; state.seqs=s.seqs; state.L=s.L; clampSel(); changed(); }
+function changed(){ invalidate(); layout(); renderStats(); draw(); exportText(); if(state.checked) renderEx(); }
+function invalidate(){ state.cache=null; }
+
+/* ---------- column statistics ---------- */
+// end gaps (before the first base / after the last base of a row) are missing data, not real gaps
+function ends(r){ const s=state.seqs[r]; let a=0,b=s.length-1; while(a<s.length && (s[a]==='-'||isMissing(s[a]))) a++; while(b>=0 && (s[b]==='-'||isMissing(s[b]))) b--; return [a,b]; }
+function stats(){
+  if (state.cache) return state.cache;
+  const N=state.seqs.length, L=state.L, E=state.seqs.map((_,r)=>ends(r));
+  const cons=new Array(L), ident=new Float32Array(L), variable=new Uint8Array(L), pi=new Uint8Array(L), gap=new Uint8Array(L), amb=new Uint8Array(L);
+  for (let c=0;c<L;c++){
+    const cnt={A:0,C:0,G:0,T:0}; let data=0, inner=0, a=0, endg=0;
+    for (let r=0;r<N;r++){ const b=state.seqs[r][c];
+      if (isBase(b)){ cnt[b]++; data++; }
+      else if (b==='-'){ if (c>E[r][0] && c<E[r][1]) inner++; else endg++; }
+      else if (!isMissing(b)) a++; }
+    let best='-', bn=0, states=0, inf=0; for (const k of 'ACGT'){ if(cnt[k]>bn){bn=cnt[k];best=k;} if(cnt[k]>0) states++; if(cnt[k]>1) inf++; }
+    cons[c] = data ? best : (inner||endg ? '-' : 'N');
+    const denom = data + a + inner;           // identity among sequences that have data here
+    ident[c] = denom ? bn/denom : 1;
+    variable[c] = states>1 ? 1:0; pi[c] = inf>1 ? 1:0; gap[c] = inner>0 ? 1:0; amb[c] = a>0 ? 1:0;
+  }
+  state.cache = {cons, ident, variable, pi, gap, amb, E, codons:new Map()};
+  state.cache.stopsPerRow = state.seqs.map((_,r)=>rowCodonsCached(r).filter(x=>x.aa==='*').length);
+  return state.cache;
+}
+// codons are read along alignment columns, starting at column = frame (1, 2 or 3)
+function rowCodons(r){
+  const s=state.seqs[r], out=[];
+  for (let c=state.frame-1; c+2<state.L; c+=3){
+    const tri=s[c]+s[c+1]+s[c+2]; let aa;
+    if (/^[-N?]{3}$/.test(tri)) aa='';                 // nothing here (end gaps or padding)
+    else if (tri.includes('-')) aa='~';                // a gap inside a codon: frame broken here
+    else aa=codon(tri);
+    out.push({c, aa});
+  }
+  return out;
+}
+function rowCodonsCached(r){ const st=state.cache; const key=r+':'+state.frame+':'+state.code; if(!st.codons.has(key)) st.codons.set(key,rowCodons(r)); return st.codons.get(key); }
+
+/* ---------- layout & drawing ---------- */
+const cv=$('#cv'), ctx=cv.getContext('2d'), sc=$('#scroller'), spacer=$('#spacer');
+const RH=17, RULER=20, CONS=16, IDH=22, HEAD=RULER+CONS+IDH+6;
+let NAMEW=220;
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function layout(){
+  ctx.font='12px '+css('--sans');
+  NAMEW = Math.min(300, Math.max(140, ...state.names.map(n=>ctx.measureText(n).width+46)));
+  if (innerWidth < 600) NAMEW = Math.min(NAMEW, 150);
+  spacer.style.width = (NAMEW + state.L*state.cw + 30)+'px';
+  spacer.style.height = (HEAD + state.seqs.length*RH + 20)+'px';
+  sc.style.height = Math.max(220, Math.min(innerHeight*0.66, HEAD + state.seqs.length*RH + 36))+'px';
+  resize();
+}
+function resize(){
+  const w=sc.clientWidth, h=sc.clientHeight, d=devicePixelRatio||1;
+  cv.width=w*d; cv.height=h*d; cv.style.width=w+'px'; cv.style.height=h+'px'; ctx.setTransform(d,0,0,d,0,0);
+  draw();
+}
+function draw(){
+  const w=sc.clientWidth, h=sc.clientHeight;
+  ctx.clearRect(0,0,w,h); ctx.fillStyle=css('--panel'); ctx.fillRect(0,0,w,h);
+  if (!state.seqs.length) return;
+  const st=stats(), cw=state.cw, sx=sc.scrollLeft, sy=sc.scrollTop;
+  const c0=Math.max(0,Math.floor(sx/cw)), c1=Math.min(state.L, Math.ceil((sx+w-NAMEW)/cw)+1);
+  const r0=Math.max(0,Math.floor(sy/RH)), r1=Math.min(state.seqs.length, Math.ceil((sy+h-HEAD)/RH)+1);
+  const X = c => NAMEW + c*cw - sx, Y = r => HEAD + r*RH - sy;
+  const XB={A:css('--xA'),C:css('--xC'),G:css('--xG'),T:css('--xT'),N:css('--xN')}, amb=css('--xAmb'), ink=css('--xInk');
+  const showText = cw>=9;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  // ---- sequence rows ----
+  ctx.save(); ctx.beginPath(); ctx.rect(NAMEW,HEAD,w-NAMEW,h-HEAD); ctx.clip();
+  const dim=css('--dim'), dimink=css('--dimink'), gapc=css('--gap');
+  ctx.font = (cw>=11?'600 11px ':'600 9px ')+css('--mono');
+  for (let r=r0;r<r1;r++){
+    const y=Y(r), row=state.seqs[r];
+    if (state.mode==='aa'){
+      for (const cd of rowCodonsCached(r)){
+        if (cd.c+2<c0 || cd.c>c1) continue;
+        const x=X(cd.c)+1, ww=cw*3-2;
+        if (!cd.aa){ continue; }
+        ctx.fillStyle = cd.aa==='~' ? dim : (AACOL[cd.aa]||AACOL.X); ctx.fillRect(x,y+1,ww,RH-2);
+        if (showText || cw>=6){ ctx.fillStyle = cd.aa==='*' ? '#fff' : ink; ctx.fillText(cd.aa==='~'?'·':cd.aa, x+ww/2, y+RH/2+.5); }
+      }
+      continue;
+    }
+    for (let c=c0;c<c1;c++){
+      const b=row[c], x=X(c);
+      if (b==='-'){ ctx.fillStyle=gapc; ctx.fillRect(x,y+1,cw,RH-2); if(showText){ctx.fillStyle=dimink; ctx.fillText('-',x+cw/2,y+RH/2);} continue; }
+      let fill, txt=b, txtc=ink;
+      if (state.mode==='dis' && isBase(b) && b===st.cons[c]){ fill=dim; txt='·'; txtc=dimink; }
+      else fill = XB[b] || (isMissing(b)? XB.N : amb);
+      ctx.fillStyle=fill; ctx.fillRect(x,y+1,cw-(cw>6?1:0),RH-2);
+      if (showText){ ctx.fillStyle=txtc; ctx.fillText(txt,x+cw/2,y+RH/2+.5); }
+    }
+  }
+  // selection
+  if (state.sel){
+    const s=state.sel, x=X(s.c0), y=Y(s.r0);
+    ctx.strokeStyle=css('--fg'); ctx.lineWidth=2; ctx.strokeRect(x+1,y+1,(s.c1-s.c0+1)*cw-2,(s.r1-s.r0+1)*RH-2);
+    ctx.fillStyle='rgba(243,200,75,.28)'; ctx.fillRect(x,y,(s.c1-s.c0+1)*cw,(s.r1-s.r0+1)*RH);
+  }
+  ctx.restore();
+  // ---- header: ruler, consensus, identity ----
+  ctx.save(); ctx.beginPath(); ctx.rect(NAMEW,0,w-NAMEW,HEAD); ctx.clip();
+  ctx.fillStyle=css('--panel'); ctx.fillRect(NAMEW,0,w,HEAD);
+  ctx.fillStyle=css('--muted'); ctx.font='10px '+css('--sans'); ctx.textBaseline='alphabetic';
+  const step = cw>=10?10: cw>=6?20:50;
+  for (let c=c0;c<c1;c++){ const n=c+1, x=X(c);
+    if (n===1 || n%step===0){ ctx.fillRect(x+cw/2,RULER-6,1,5); ctx.fillText(String(n),x+cw/2,RULER-8); }
+    else if (cw>=6){ ctx.fillRect(x+cw/2,RULER-3,1,2); }
+    if (state.mode==='aa' && (c-(state.frame-1))%3===0 && cw>=8){ ctx.fillStyle=css('--line'); ctx.fillRect(x,RULER,1,CONS); ctx.fillStyle=css('--muted'); }
+  }
+  ctx.textBaseline='middle'; ctx.font='600 10px '+css('--mono');
+  const consc=css('--cons');
+  for (let c=c0;c<c1;c++){ const x=X(c); ctx.fillStyle=consc; ctx.fillRect(x,RULER+2,cw,CONS-6);
+    if (cw>=9){ ctx.fillStyle='#fff'; ctx.fillText(st.cons[c],x+cw/2,RULER+2+(CONS-6)/2+.5); } }
+  const iy=RULER+CONS, i1=css('--id1'), i2=css('--id2'), i3=css('--id3');
+  for (let c=c0;c<c1;c++){ const v=st.ident[c], x=X(c), hh=Math.max(1,v*IDH);
+    ctx.fillStyle = v>=0.999? i1 : v<0.3 ? i3 : i2; ctx.fillRect(x,iy+IDH-hh,cw,hh); }
+  if (state.sel && state.sel.cols){ ctx.fillStyle='rgba(243,200,75,.45)'; ctx.fillRect(X(state.sel.c0),0,(state.sel.c1-state.sel.c0+1)*cw,RULER); }
+  ctx.fillStyle=css('--namesline'); ctx.fillRect(NAMEW,HEAD-3,w,2);
+  ctx.restore();
+  // ---- names column ----
+  ctx.fillStyle=css('--names'); ctx.fillRect(0,0,NAMEW,h);
+  ctx.fillStyle=css('--muted'); ctx.font='600 11px '+css('--sans'); ctx.textAlign='left';
+  ctx.fillText(t('consensus'),10,RULER+CONS/2); ctx.fillText(t('identity'),10,RULER+CONS+IDH/2);
+  ctx.fillStyle=css('--namesline'); ctx.fillRect(0,HEAD-3,NAMEW,2);
+  ctx.save(); ctx.beginPath(); ctx.rect(0,HEAD,NAMEW,h-HEAD); ctx.clip();
+  ctx.font='12px '+css('--sans');
+  for (let r=r0;r<r1;r++){
+    const y=Y(r), inSel = state.sel && r>=state.sel.r0 && r<=state.sel.r1;
+    if (inSel){ ctx.fillStyle='rgba(243,200,75,.35)'; ctx.fillRect(0,y,NAMEW,RH); }
+    ctx.fillStyle=css('--muted'); ctx.textAlign='right'; ctx.font='10px '+css('--sans'); ctx.fillText(String(r+1),24,y+RH/2+.5);
+    ctx.textAlign='left'; ctx.font='12px '+css('--sans'); ctx.fillStyle=css('--fg');
+    const n=st.stopsPerRow[r], badge = n ? 22 : 0;
+    ctx.fillText(fit(state.names[r], NAMEW-38-badge), 30, y+RH/2+.5);
+    if (n){ ctx.fillStyle='#000'; ctx.fillRect(NAMEW-badge-6,y+2,badge,RH-4); ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.font='600 10px '+css('--sans'); ctx.fillText('*'+n,NAMEW-6-badge/2,y+RH/2+.5); }
+  }
+  ctx.restore();
+  ctx.fillStyle=css('--line'); ctx.fillRect(NAMEW-1,0,1,h);
+}
+function fit(s, max){ if (ctx.measureText(s).width<=max) return s; while (s.length>3 && ctx.measureText(s+'…').width>max) s=s.slice(0,-1); return s+'…'; }
+
+/* ---------- stats, legend, detail ---------- */
+function renderStats(){
+  if (!state.seqs.length){ $('#stats').innerHTML=''; return; }
+  const st=stats(); const sum=a=>a.reduce((x,y)=>x+y,0);
+  const stops=sum(st.stopsPerRow);
+  $('#stats').innerHTML = `<span><b>${state.seqs.length}</b> ${t('seqs')}</span><span><b>${state.L}</b> ${t('len')}</span>`+
+    `<span><b>${sum(st.variable)}</b> ${t('variable')}</span><span><b>${sum(st.pi)}</b> ${t('pi')}</span><span><b>${sum(st.gap)}</b> ${t('gapcols')}</span>`+
+    `<span class="pill ${stops?'':'ok'}">${stops} ${t('stops').replace('{f}',state.frame)}</span>`;
+}
+function renderLegend(){
+  const sw=(c,l,o='')=>`<span><i class="sw" style="background:${c};${o}"></i>${l}</span>`;
+  let h='';
+  if (state.mode==='aa') h = sw('#000',t('lg_stop')) + sw('var(--dim)','~ = '+(lang==='fr'?'codon incomplet (gap ou N)':'incomplete codon (gap or N)'));
+  else h = `<span>${t('lg_bases')}:</span>`+sw('var(--xA)','A')+sw('var(--xC)','C')+sw('var(--xG)','G')+sw('var(--xT)','T')+sw('var(--xAmb)',t('lg_amb'))+sw('var(--xN)',t('lg_n'))+sw('var(--gap)',t('lg_gap'),'outline:1px solid var(--line)');
+  $('#legend').innerHTML = h + `<span>${t('lg_id')}</span>`;
+}
+function renderDetail(){
+  const d=$('#detail');
+  if (!cursor){ return; }
+  const {r,c}=cursor, b=state.seqs[r][c], st=stats();
+  const cp = ((c-(state.frame-1))%3+3)%3+1;
+  const cd = rowCodonsCached(r).find(x=>c>=x.c && c<x.c+3);
+  const colBases = {}; state.seqs.forEach(s=>{ const x=s[c]; colBases[x]=(colBases[x]||0)+1; });
+  const mix = Object.entries(colBases).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}×${v}`).join(' ');
+  d.innerHTML = `<span><b>${esc(state.names[r])}</b></span><span>${t('col')} <b>${c+1}</b></span><span class="mono">${t('row')} ${r+1}: <b>${b}</b></span>`+
+    `<span>${t('codonpos')}: <b>${cp}</b>${cd&&cd.aa?` · ${t('aa')}: <b>${cd.aa==='~'?'?':cd.aa}</b>`:''}</span><span class="mono hint">${mix}</span>`;
+}
+const esc = s => s.replace(/[&<>"]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+
+/* ---------- selection ---------- */
+function hit(ev){
+  const rect=cv.getBoundingClientRect(), x=ev.clientX-rect.left, y=ev.clientY-rect.top;
+  const c = Math.floor((x-NAMEW+sc.scrollLeft)/state.cw), r = Math.floor((y-HEAD+sc.scrollTop)/RH);
+  return { x, y, c, r, inNames: x<NAMEW, inHead: y<HEAD };
+}
+let anchor=null;
+cv.addEventListener('mousedown', ev=>{
+  if (!state.seqs.length) return; sc.focus({preventScroll:true});
+  const h=hit(ev);
+  if (h.inHead && !h.inNames){ if(h.c<0||h.c>=state.L) return; const a = ev.shiftKey && state.sel && state.sel.cols ? state.sel.a : h.c;
+    state.sel={r0:0,r1:state.seqs.length-1,c0:Math.min(a,h.c),c1:Math.max(a,h.c),cols:true,a}; cursor={r:0,c:h.c}; draw(); renderDetail(); return; }
+  if (h.r<0||h.r>=state.seqs.length) return;
+  if (h.inNames){ state.sel={r0:h.r,r1:h.r,c0:0,c1:state.L-1,row:true}; cursor={r:h.r,c:Math.max(0,Math.floor(sc.scrollLeft/state.cw))}; draw(); renderDetail(); return; }
+  if (h.c<0||h.c>=state.L) return;
+  if (ev.shiftKey && anchor){ state.sel={r0:Math.min(anchor.r,h.r),r1:Math.max(anchor.r,h.r),c0:Math.min(anchor.c,h.c),c1:Math.max(anchor.c,h.c)}; }
+  else { anchor={r:h.r,c:h.c}; state.sel={r0:h.r,r1:h.r,c0:h.c,c1:h.c}; }
+  cursor={r:h.r,c:h.c}; draw(); renderDetail();
+});
+function clampSel(){ if(!state.sel) return; const R=state.seqs.length-1, C=state.L-1; if (R<0||C<0){state.sel=null;cursor=null;return;}
+  for (const k of ['r0','r1']) state.sel[k]=Math.min(Math.max(0,state.sel[k]),R); for (const k of ['c0','c1']) state.sel[k]=Math.min(Math.max(0,state.sel[k]),C);
+  if (cursor){ cursor.r=Math.min(cursor.r,R); cursor.c=Math.min(cursor.c,C); } }
+function scrollTo(r,c){
+  const x=NAMEW+c*state.cw, y=HEAD+r*RH, w=sc.clientWidth, h=sc.clientHeight;
+  if (x - sc.scrollLeft < NAMEW+20 || x - sc.scrollLeft > w-40) sc.scrollLeft = Math.max(0, c*state.cw - (w-NAMEW)/2);
+  if (y - sc.scrollTop < HEAD || y - sc.scrollTop > h-RH*2) sc.scrollTop = Math.max(0, r*RH - (h-HEAD)/2);
+}
+function selectCell(r,c){ state.sel={r0:r,r1:r,c0:c,c1:c}; anchor={r,c}; cursor={r,c}; scrollTo(r,c); draw(); renderDetail(); }
+
+/* ---------- editing ---------- */
+const need = () => { if(!state.sel){ flash(t('selrow')); return false; } return true; };
+function flash(msg){ const d=$('#detail'); d.innerHTML=`<span class="pill">${esc(msg)}</span>`; }
+function setBases(ch){ if(!need()) return; snapshot(); const s=state.sel; for(let r=s.r0;r<=s.r1;r++) for(let c=s.c0;c<=s.c1;c++) state.seqs[r][c]=ch; changed(); renderDetail(); }
+function insertGap(){
+  if(!need()) return; snapshot(); const s=state.sel, n=s.c1-s.c0+1;
+  for (let r=s.r0;r<=s.r1;r++){ const row=state.seqs[r];
+    // shift right; if the row has room at its end (trailing gaps), absorb the shift there, else the alignment grows
+    for (let k=0;k<n;k++) row.splice(s.c0,0,'-'); }
+  // make every row the same length again
+  const L=Math.max(...state.seqs.map(r=>trimTrailingTo(r)));
+  state.seqs.forEach(r=>{ while(r.length<L) r.push('-'); while(r.length>L) r.pop(); }); state.L=L;
+  state.sel={...s,c0:s.c0+n,c1:s.c1+n}; cursor={r:s.r0,c:s.c0+n}; changed(); renderDetail();
+}
+function insertGapOthers(){
+  if(!need()) return; const s=state.sel;
+  if (s.cols){ flash(t('selbases')); return; }
+  snapshot(); const n=s.c1-s.c0+1;
+  state.seqs.forEach((row,r)=>{ if(r<s.r0||r>s.r1) for(let k=0;k<n;k++) row.splice(s.c0,0,'-'); else for(let k=0;k<n;k++) row.push('-'); });
+  // drop columns at the end that are now gaps in every row
+  let L=state.seqs[0].length; while(L>0 && state.seqs.every(r=>r[L-1]==='-')) L--;
+  state.seqs.forEach(r=>{ r.length=L; }); state.L=L; clampSel(); changed(); renderDetail();
+}
+// length a row needs: drop trailing gaps beyond the original alignment length if they were only padding
+function trimTrailingTo(r){ let L=r.length; while (L>state.L && r[L-1]==='-') L--; return L; }
+function deleteBases(){
+  if(!need()) return; snapshot(); const s=state.sel, n=s.c1-s.c0+1;
+  for (let r=s.r0;r<=s.r1;r++){ const row=state.seqs[r]; row.splice(s.c0,n); for(let k=0;k<n;k++) row.push('-'); }
+  state.sel={...s,c1:s.c0}; cursor={r:s.r0,c:s.c0}; changed(); renderDetail();
+}
+function deleteColumns(){
+  const s=state.sel; if(!s){ flash(t('selcol')); return; }
+  snapshot(); const n=s.c1-s.c0+1; state.seqs.forEach(r=>r.splice(s.c0,n)); state.L-=n;
+  state.sel=null; cursor=null; changed(); $('#detail').innerHTML='';
+}
+function revComp(){
+  if(!need()) return; snapshot(); const s=state.sel;
+  for (let r=s.r0;r<=s.r1;r++){ state.seqs[r]=state.seqs[r].slice().reverse().map(b=>COMP[b]||'N'); if(!/_RC$/.test(state.names[r])) state.names[r]+='_RC'; }
+  changed();
+}
+function removeRows(){ if(!need()) return; snapshot(); const s=state.sel; state.seqs.splice(s.r0,s.r1-s.r0+1); state.names.splice(s.r0,s.r1-s.r0+1); state.sel=null; cursor=null; changed(); }
+function padEnds(){
+  if(!state.seqs.length) return; snapshot();
+  const rows = state.sel && !state.sel.cols ? range(state.sel.r0,state.sel.r1) : range(0,state.seqs.length-1);
+  for (const r of rows){ const row=state.seqs[r]; for(let i=0;i<row.length && (row[i]==='-'||isMissing(row[i]));i++) row[i]='N'; for(let i=row.length-1;i>=0 && (row[i]==='-'||isMissing(row[i]));i--) row[i]='N'; }
+  changed();
+}
+function cleanCols(){
+  if(!state.seqs.length) return; snapshot(); const keep=[];
+  for (let c=0;c<state.L;c++){ if (state.seqs.some(r=>r[c]!=='-' && !isMissing(r[c]))) keep.push(c); }
+  state.seqs=state.seqs.map(r=>keep.map(c=>r[c])); state.L=keep.length; state.sel=null; cursor=null; changed();
+}
+const range=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+
+/* ---------- jump to next ---------- */
+function next(kind){
+  if (!state.seqs.length) return; const st=stats(); const start=cursor? cursor.c+1 : 0;
+  const test = { var:c=>st.variable[c], gap:c=>st.gap[c], amb:c=>st.amb[c] }[kind];
+  if (kind==='stop'){
+    const found=[]; state.seqs.forEach((_,r)=>rowCodonsCached(r).forEach(cd=>{ if(cd.aa==='*') found.push({r,c:cd.c}); }));
+    found.sort((a,b)=>a.c-b.c||a.r-b.r);
+    const cur = cursor? cursor : {r:-1,c:-1};
+    const n = found.find(f=> f.c>cur.c || (f.c===cur.c && f.r>cur.r)) || found[0];
+    if (!n) return flash(t('nomore'));
+    if (state.mode!=='aa') setMode('aa'); state.sel={r0:n.r,r1:n.r,c0:n.c,c1:n.c+2}; anchor={r:n.r,c:n.c}; cursor={r:n.r,c:n.c}; scrollTo(n.r,n.c); draw(); renderDetail(); return;
+  }
+  for (let k=0;k<state.L;k++){ const c=(start+k)%state.L; if (test(c)){
+    let r=0; if (kind==='gap'){ r=state.seqs.findIndex((row,i)=>{const [a,b]=stats().E[i]; return row[c]==='-'&&c>a&&c<b;}); }
+    else if (kind==='amb'){ r=state.seqs.findIndex(row=>!isBase(row[c])&&row[c]!=='-'&&!isMissing(row[c])); }
+    else { r=state.seqs.findIndex(row=>isBase(row[c]) && row[c]!==st.cons[c]); }
+    selectCell(Math.max(0,r),c); return; } }
+  flash(t('nomore'));
+}
+
+/* ---------- export ---------- */
+function fastaText(){ return state.names.map((n,i)=>`>${n}\n${state.seqs[i].join('')}`).join('\n')+'\n'; }
+function exportText(){ $('#out').value = state.seqs.length ? fastaText() : ''; }
+$('#dl').onclick = ()=>{ if(!state.seqs.length) return; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([fastaText()],{type:'text/plain'})); a.download='alignment_edited.fasta'; document.body.appendChild(a); a.click(); a.remove(); };
+$('#copy').onclick = async ()=>{ const v=$('#out').value; try{ await navigator.clipboard.writeText(v); }catch(e){ $('#out').select(); document.execCommand && document.execCommand('copy'); } $('#copied').textContent=t('copied'); setTimeout(()=>$('#copied').textContent='',1500); };
+if (window.self !== window.top) $('#dl').hidden = true; // downloads are blocked inside embedded previews; copy still works
+
+/* ---------- controls ---------- */
+function setMode(m){ state.mode=m; document.querySelectorAll('[data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m===m)); renderLegend(); draw(); }
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+document.querySelectorAll('#frames button').forEach(b=>b.onclick=()=>{ state.frame=+b.dataset.f; document.querySelectorAll('#frames button').forEach(x=>x.classList.toggle('on',x===b)); invalidate(); renderStats(); draw(); renderDetail(); });
+$('#gcode').onchange=e=>{ state.code=+e.target.value; invalidate(); renderStats(); draw(); renderDetail(); };
+$('#zin').onclick=()=>{ zoom(+2); }; $('#zout').onclick=()=>{ zoom(-2); };
+function zoom(d){ const mid=(sc.scrollLeft + (sc.clientWidth-NAMEW)/2)/state.cw; state.cw=Math.max(4,Math.min(20,state.cw+d)); layout(); sc.scrollLeft=Math.max(0, mid*state.cw-(sc.clientWidth-NAMEW)/2); draw(); }
+$('#nvar').onclick=()=>next('var'); $('#ngap').onclick=()=>next('gap'); $('#nstop').onclick=()=>next('stop'); $('#namb').onclick=()=>next('amb');
+$('#bgap').onclick=insertGap; $('#bgapo').onclick=insertGapOthers; $('#bdel').onclick=deleteBases; $('#bn').onclick=()=>setBases('N'); $('#bdelcol').onclick=deleteColumns;
+$('#brc').onclick=revComp; $('#bdelrow').onclick=removeRows; $('#bpad').onclick=padEnds; $('#bclean').onclick=cleanCols; $('#bundo').onclick=undo;
+/* ---------- exercise: check against the answer key ---------- */
+const EXT = {
+ en:{ rc:'A sequence that is backwards', ins:'An insertion: the other sequences need gaps', end:'Low-quality bases at the end of a sequence', del:'A missing base (sequencing error)',
+      fixed:'✓ Fixed', notyet:'✗ Not yet', unchecked:'? Not checked', show:'Show answer',
+      tryfirst:'Try to fix something first, then check.', allok:'All 4 problems fixed. Well done! Now fill end gaps with N and save.', some:'{n} of 4 fixed. Keep going! Answers are now available.',
+      a_rc:'Row {r} <b>{name}</b> is backwards (it was not reverse-complemented). Click its <b>name</b>, then click <b>Reverse-complement row</b>.',
+      a_ins:'Row {r} <b>{name}</b> has 3 extra bases, <b>{codon}</b> (now at columns {c1}–{c2}). This is a <b>real insertion of one codon</b>: it does not cause stop codons. Click the first of these bases, Shift-click the third, then click <b>Insert gap in other rows</b>.',
+      a_end:'Row {r} <b>{name}</b>: the last {n} bases (columns {c1}–{c2}) do not match any other sequence. The end of the read was low quality. Select them (click the first, Shift-click the last) and click <b>Set to N</b>.',
+      a_del:'Row {r} <b>{name}</b> is missing one base: starting at column {c}, everything is shifted one place to the left, so the bases no longer line up and stop codons appear (frame 3). Click the base at column {c}, click <b>Insert gap</b>, then <b>Set to N</b> on the new gap.' },
+ fr:{ rc:'Une séquence à l’envers', ins:'Une insertion : les autres séquences ont besoin de gaps', end:'Des bases de mauvaise qualité à la fin d’une séquence', del:'Une base manquante (erreur de séquençage)',
+      fixed:'✓ Corrigé', notyet:'✗ Pas encore', unchecked:'? Non vérifié', show:'Voir la réponse',
+      tryfirst:'Essayez d’abord de corriger quelque chose, puis vérifiez.', allok:'Les 4 problèmes sont corrigés. Bravo ! Remplissez les gaps des extrémités avec N et enregistrez.', some:'{n} sur 4 corrigés. Continuez ! Les réponses sont maintenant disponibles.',
+      a_rc:'La ligne {r} <b>{name}</b> est à l’envers (pas de complément inverse). Cliquez sur son <b>nom</b>, puis sur <b>Complément inverse de la ligne</b>.',
+      a_ins:'La ligne {r} <b>{name}</b> a 3 bases en plus, <b>{codon}</b> (actuellement colonnes {c1}–{c2}). C’est une <b>vraie insertion d’un codon</b> : elle ne crée pas de codons stop. Cliquez la première de ces bases, Maj-clic la troisième, puis <b>Insérer un gap dans les autres lignes</b>.',
+      a_end:'Ligne {r} <b>{name}</b> : les {n} dernières bases (colonnes {c1}–{c2}) ne correspondent à aucune autre séquence. La fin de la lecture était de mauvaise qualité. Sélectionnez-les (clic sur la première, Maj-clic sur la dernière) et cliquez sur <b>Mettre N</b>.',
+      a_del:'La ligne {r} <b>{name}</b> a perdu une base : à partir de la colonne {c}, tout est décalé d’une position vers la gauche ; les bases ne sont plus alignées et des codons stop apparaissent (cadre 3). Cliquez sur la base de la colonne {c}, cliquez sur <b>Insérer un gap</b>, puis <b>Mettre N</b> sur le nouveau gap.' }
+};
+const et=(k,v={})=>{ let h=(EXT[lang]||EXT.en)[k]; for(const x in v) h=h.split('{'+x+'}').join(v[x]); return h; };
+const ung=(s,dropN)=>s.replace(/-/g,'').replace(dropN?/N/g:/$^/,'');
+function rowIdx(name){ return state.names.findIndex(n=>n===name||n===name+'_RC'); }
+function pairDiff(x,y){ let d=0; for(let i=0;i<x.length;i++){ const a=x[i],b=y[i]; if(isBase(a)&&isBase(b)&&a!==b) d++; } return d; }
+function checkOne(e){
+  const r=rowIdx(e.row); if(r<0) return false;
+  const cur=state.seqs.map(x=>x.join('')), me=cur[r], ans=KEY.answer[e.row];
+  if(ung(me,true)!==ung(ans,true)) return false;
+  const errRows=KEY.errors.map(x=>x.row), refs=KEY.rows.filter(n=>!errRows.includes(n));
+  let have=0, want=0;
+  for(const n of refs){ const j=rowIdx(n); if(j<0) return false; have+=pairDiff(me,cur[j]); want+=pairDiff(ans,KEY.answer[n]); }
+  return have <= want + 1.5*refs.length;
+}
+function ansHTML(e){
+  const r=rowIdx(e.row), row=state.seqs[r]||[], name=state.names[r]||e.row; const nb=[]; row.forEach((b,i)=>{ if(b!=='-') nb.push(i); });
+  if (e.id==='rc') return et('a_rc',{r:r+1,name});
+  if (e.id==='ins'){ const k=e.ug, c=nb[k]; return et('a_ins',{r:r+1,name,codon:e.codon,c1:c+1,c2:nb[k+2]+1}); }
+  if (e.id==='end'){ const bases=nb.filter(i=>row[i]!=='N'); const c1=bases[Math.max(0,bases.length-e.n)], c2=bases[bases.length-1]; return et('a_end',{r:r+1,name,n:e.n,c1:c1+1,c2:c2+1}); }
+  if (e.id==='del'){ const c=nb[e.ug]; return et('a_del',{r:r+1,name,c:c+1}); }
+}
+function renderEx(){
+  const box=$('#ex'); box.hidden=!(state.demo&&KEY); if(box.hidden) return;
+  const res=state.checked? KEY.errors.map(checkOne) : null;
+  $('#exlist').innerHTML = KEY.errors.map((e,i)=>{
+    const st=!res?`<span class="st na">${et('unchecked')}</span>`: res[i]?`<span class="st ok">${et('fixed')}</span>`:`<span class="st no">${et('notyet')}</span>`;
+    const btn= state.checked && !res[i] && !state.shown[e.id] ? `<button type="button" data-ans="${e.id}">${et('show')}</button>`:'';
+    const ans= state.shown[e.id] ? `<div class="ans">${ansHTML(e)}</div>`:'';
+    return `<li>${st} ${i+1}. ${et(e.id)}${btn}${ans}</li>`; }).join('');
+  $('#exlist').querySelectorAll('[data-ans]').forEach(b=>b.onclick=()=>{ state.shown[b.dataset.ans]=true; renderEx(); });
+  $('#exall').hidden=!state.checked || (res && res.every(Boolean));
+  if (state.checked){ const n=res.filter(Boolean).length; $('#exmsg').innerHTML= n===4? et('allok') : et('some',{n}); }
+  else $('#exmsg').textContent='';
+}
+$('#excheck').onclick=()=>{ if(!state.edits){ $('#exmsg').textContent=et('tryfirst'); return; } state.checked=true; renderEx(); };
+$('#exall').onclick=()=>{ KEY.errors.forEach(e=>state.shown[e.id]=true); renderEx(); };
+$('#exreset').onclick=()=>load(DEMO,true);
+$('#lang-en').onclick=()=>{lang='en';applyLang();}; $('#lang-fr').onclick=()=>{lang='fr';applyLang();};
+sc.addEventListener('scroll', ()=>requestAnimationFrame(draw), {passive:true});
+addEventListener('resize', ()=>{ if(state.seqs.length) layout(); else resize(); });
+sc.addEventListener('keydown', ev=>{
+  if (!state.seqs.length) return;
+  const k=ev.key;
+  if ((ev.ctrlKey||ev.metaKey) && k.toLowerCase()==='z'){ ev.preventDefault(); undo(); return; }
+  if (ev.ctrlKey||ev.metaKey||ev.altKey) return;
+  if (/^[acgtnrykmswbdhv]$/i.test(k)){ ev.preventDefault(); setBases(k.toUpperCase()); return; }
+  if (k==='-'||k===' '){ ev.preventDefault(); insertGap(); return; }
+  if (k==='Backspace'||k==='Delete'){ ev.preventDefault(); deleteBases(); return; }
+  const mv={ArrowLeft:[0,-1],ArrowRight:[0,1],ArrowUp:[-1,0],ArrowDown:[1,0]}[k];
+  if (mv && cursor){ ev.preventDefault(); const r=Math.min(Math.max(0,cursor.r+mv[0]),state.seqs.length-1), c=Math.min(Math.max(0,cursor.c+mv[1]),state.L-1); selectCell(r,c); }
+});
+$('#file').onchange = async e=>{ const f=e.target.files[0]; if(f) load(await f.text()); e.target.value=''; };
+$('#pastebtn').onclick=()=>{ $('#pastebox').hidden=!$('#pastebox').hidden; };
+$('#pasteok').onclick=()=>{ load($('#pastetxt').value); $('#pastebox').hidden=true; };
+addEventListener('dragover', e=>e.preventDefault());
+addEventListener('drop', async e=>{ e.preventDefault(); const f=e.dataTransfer.files[0]; if(f) load(await f.text()); });
+$('#demo').onclick=()=>load(DEMO,true);
+const DEMO = ">Compsophis_albiventris_RAN38173\nAAGATATCGGAACCCTATACTTATTATTCGGGGCCTGGTCGGGCCTAGTCGGAGCCAGCCTAAGCATACTAATACGAATAGAGCTGACCCAGCCCGGCACGTTATTTGGCAGTGACCAGATTTTTAATGTATTAGTAACCGCTCACGCATTTGTAATAATCTTTTTTATGGTTATACCCATTATAATCGGCGGCTTCGGCAACTGATTAATCCCTCTTATAATCGGAGCCCCAGACATAGCCTTCCCGCGAATAAACAACATAAGCTTCTGACTACTCCCACCAGCCCTCCTACTACTCCTAGCCTCTTCCTATGTAGAAGCCGGTGCCGGCACCGGTTGAACTGTCTATCCCCCACTATCAGGAAACCTTACCCACTCAGGACCATCAGTCGATCTAACAATCTTCTCCCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTCATTACTACATGCATCAACATGAAACCAAAACCCATACCAATATTTAACATCCCCTTATTCGTGTGATCTATTTTAATCACAGCCATCATACTCCTGCTAGCCCTACCCGTTTTAGCCGCCGCAATCACCATACTTCTAACCGACCGAAATCTTAACACATCTTTCTTCGACCCTTGCGGGGGAGGAGACCCGGTTCTATTCCAACACCTGTT---\n>Compsophis_boulengeri_RAN44850\n--------GGAACACTATACCTACTATTCGGGGCCTGATCGGGCCTAATCGGAGCCAGCCTAAGCATACTGATACGAATAGAACTAACCCAGCCCGGCTCACTATTTGGCAGCGATCAGATTTTTAATGTACTAGTAACCGCTCACGCATTCGTAATAATCTTCTTTATGGTCATACCAATTATGATCGGCGGCTTCGGCAACTGATTAATCCCTCTTATAATCGGAGCCCCGGATATAGCCTTCCCACGAATAAACAATATAAGCTTCTGACTACTCCCACCAGCCCTCCTCCTACTCCTAGCCTCCTCCTATGTGGAAGCCGGTGCCGGCACCGGCTGAACAGTCTACCCACCACTATCAGGAAACCTCACCCACTCAGGACCCTCAGTTGATCTAGTAATCTTCTCCCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTCATTACTACATGCATCAACATGAAACCTAAACCCATGCCAATATTCAACATTCCACTATTCGTATGATCTGTCTTAATCACAGCCGTTATACTCCTACTAGCCCTACCAGTCTTAGCCGCCGCAATCACCATACTTCTAACCGACCGAAATCTTAACACGTCTTTCTTCGACCCTTGCGGAGGAGGAGACCCTGTTCTATTCCAACACCTGTT---\n>Compsophis_boulengeri_RAX3461\n--------GGAACACTATACCTATTATTCGGGGCCTGGTCGGGCCTAATCGGAGCCAGCCTGAGCATACTAATACGAATAGAACTGACCCAGCCCGGCTCACTACTCGGTAGTGATCAGATCTTTAATGTACTAGTAACCGCTCACGCATTCGTAATAATCTTCTTTATGGTTATACCCATTATGATCGGCGGCTTCGGCAACTGATTAATCCCTCTTATAATTGGAGCCCCGGATATAGCCTTCCCACGAATAAACAATATAAGCTTCTGATTGCTCCCACCAGCTCTCCTCCTACTCCTAGCCTCCTCCTACGTAGAGGCCGGTGCCGGCACCGGCTGAACAGTCTACCCACCACTATCAGGAAACCTCACCCACTCAGGACCATCAGTTGATCTAGCAATCTTCTCCCTTCATCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATTAACTTCATTACTACATGCATCAACATGAAACCTAAACCCATACCAATATTCAACATTCCCCTATTCGTGTGATCTGTCTTAATCACAGCCATTATACTCCTACTAGCCCTGCCAGTTCTGGCAGCCGCAATCACCATACTTCTAACCGACCGAAACCTCAACACGTCTTTCTTCGACCCTTGCGGAGGAGGAGACCCTGTTCTATTCCAACACTTATT---\n>Compsophis_infralineatus_JEC18238\n----------------------ATTATTTGGGGCCTGGGCCGGCCTAATTGGGGCCAGCCTAAGCATACTGATACGAATAGAGCTAACCCAACCCGGCTCGTTATTTGGCAGCGACCAAATTTTTAATGTGTTAGTAACCGCCCACGCATTCGTGATAATCTTCTTTATAGTCATACCCATTATAATCGGCGGTTTCGGTAACTGACTAATCCCTCTTATAATCGGGGCCCCAGATATGGCCTTCCCACGAATAAACAACATGAGCTTTTGATTACTCCCGCCAGCACTCCTTCTACTTCTAGCCTCATCATATGTAGAAGCCGGTGCCGGCACCGGCTGAACCGTGTACCCTCCACTATCAGGAAACCTAACCCACTCGGGACCATCAGTCGACCTGGCAATCTTCTCCCTCCACCTGGCGGGGGCCTCCTCCATCCTGGGAGCAATCAACTTTATTACTACATGCATTAACATAAAACCCAAACCCATACCAATATTCAACATCCCCCTATTCGTATGATCTGTCTTAATCACAGCCATCATACTTCTGCTAGCCCTGCCAGTCCTAGCGGCCGCAATCACCATACTCCTGACTGAC-----------------------------------------------------------------------\n>Compsophis_infralineatus_RAN44845\n--------GGAACACTATACCTATTATTTGGGGCCTGGGCCGGCCTAATTGGGGCCAGCCTAAGCATACTGATACGAATAGAGCTAACCCAACCCGGCTCGTTATTTGGCAGCGACCAAATTTTTAATGTGTTAGTAACCGCCCACGCATTCGTGATAATCTTCTTTATAGTCATACCCATTATAATCGGCGGTTTCGGTAACTGACTAATCCCTCTTATAATCGGGGCCCCAGATATGGCCTTCCCACGAATAAACAACATGAGCTTTTGATTACTCCCGCCAGCACTCCTTCTACTTCTAGCCTCATCATATGTAGAAGCCGGTGCCGGCACCGGCTGAACCGTGTACCCTCCACTATCAGGAAACCTAACCCACTCGGGACCATCAGTCGACCTGGCAATCTTCTCCCTCCACCTGGCGGGGGCCTCCTCCATCCTGGGAGCAATCAACTTTATTACTACATGCATTAACATAAAACCCAAACCCATACCAATATTCAACATCCCCCTATTCGTATGATCTGTCTTAATCACAGCCATCATACTTCTGTTAGCCCTGCCAGTCCTAGCGGCCGCAATCACCATACTCCTGACTGACCGAAACCTTAATACATCTTTCTTCGACCCTTGCGGAGGAGGTGACCCAGTCCTATTCCAACACCTGTT---\n>Compsophis_laphystius_RAN39677\n----TATCGGAACACTATACCTATTATTCGGAGCCTGAGCCGGCCTAATCGGGGCTAGCCTAAGCGTACTAATACGAATAGAACTAACCCAACCCGGCTCACTATTTGGCAATGACCAAATTTTTAATGTGTTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATGGTCATACCCATTATAATCGGCGGCTTCGGTAACTGATTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAACAACATAAGCTTCTGACTGCTTCCACCAGCCCTCCTATTACTTCTAGCTTCCTCATATGTAGAAGCCGGCGCCGGCACGGGCTGAACCGTTTACCCACCACTATCAGGAAATCTAACCCACTCAGGACCATCAGTTGATCTAGCGATCTTCTCTCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTTATTACTACATGTATCAACATAAAACCTAAACCTATACCAATATTCAACATTCCACTATTCGTATGGTCTGTCCTAATTACAGCCATCATACTCCTATTAGCCTTACCAGTTCTGGCAGCCGCAATTACCATACTCCTAACTGATCGAAATCTTAACACATCTTTCTTTGACCCCTGCGGGGGAGGGGACCCAGTTCTAAATTTGATTAGACA---\n>Compsophis_laphystius_RAX3459\n---------------------------------------CCGGCCTAATCGGGGCTAGCCTAAGCGTACTAATACGAATAGAACTAACCCAACCCGGCTCACTATTTGGCAATGACCAAATTTTTAATGTGTTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATGGTCATACCCATTATAATCGGCGGCTTCGGTAACTGATTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAACAACATAAGCTTCTGACTGCTTCCACCAGCCCTCCTATTACTTCTAGCTTCCTCATATGTAGAAGCCGGCGCCGGCACGGGCTGAACCGTTTACCCACCACTATCAGGAAATCTAACCCACTCAGGACCATCAGTTGATCTAGCGATCTTCTCTCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTTATTACTACATGTATCAACATAAAACCTAAACCTATACCAATATTCAACATTCCACTATTCGTATGGTCTGTCCTAATTACAGCCATCATACTCCTATTAGCCTTACCAGTTCTGGCAGCCGCAATTACCATACTCCTAACTGATCGAAATCTTAACACATCTTTCTTTGACCCCTGCGGGGGGGGGGACCCAGTTCTATTCCAACACCTATT---\n>Compsophis_vinckei_RAN37978\n------------------------TATTCGGGGCCTGATCAGGCCTAGTCGGAGCCAGCCTAAGCATACTAATACGAATAGAGCTAACCCAGCCCGGCACGTTGTTTGGCAGTGACCAGATTTTTAATGTGTTAGTAACCGCTCACGCATTTGTAATAATCTTTTTTATGGTTATACCCATTATAATCGGCGGTTTCGGCAACTGGTTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAATAATATAAGCTTCTGACTGCTCCCACCAGCCCTCCTACTACTCCTAGCCTCTTCCTATGTAGAAGCCGGTGCCGGCACCGGCTGAACTGTCTATCCCCCCCTATCAGGAAATCTTACCCATTCAGGACCATCAGTCGATCTAACAATCTTTTCCCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTCATTACTACATGCATCAACATGAAACCAAAACCCATACCAATATTCAACATCCCCTTATTCGTGTGATCTGTCTTAATCACAGCCATCATGCTCCTGCTAGCCCTACCCGTTTTAGCCGCCGCAATCACCATACTTCTTACCGACCGAAATCTTAACACATCTTTCTTCGACCCTTGCGGAGGAGGAGACCCCAT---------------------\n>Compsophis_vinckei_RAX3779\n----TATCGGAACCCTATACTTATTATTCGGGGCCTGATCAGGCCTAGTCGGAGCCAGCCTAAGCATACTAATACGAATAGAGCTAACCCAGCCCGGCACGTTGTTTGGCAGTGACCAGATTTTTAATGTGTTAGTAACCGCTCACGCATTTGTAATAATCTTTTTTATGGTTATACCCATTATAATCGGCGGTTTCGGCAACTGGTTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAATAATATAAGCTTCTGACTGCTCCCACCAGCCCTCCTACTACTCCTAGCCTCTTCCTATGTAGAAGCCGGTGCCGGCACCGGCTGAACTGTCTATCCCCCCCTATCAGGAAATCTTACCCATTCAGGACCATCAGTCGATCTAACAATCTTTTCCCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTCATTACTACATGCATCAACATGAACCAAAACCCATACCAATATTCAACATCCCCTTATTCGTGTGATCTGTCTTAATCACAGCCATCATGCTCCTGCTAGCCCTACCCGTTTTAGCCGCCGCAATCACCATACTTCTTACCGACCGAAATCTTAACACATCTTTCTTCGACCCTTGCGGAGGAGGAGACCCCATTCTATTCCAACACCTGTT----\n>Compsophis_zeny_JEC17025\n---------TGTTGGAATAGGACGGGGTCGCCCCCTCCGCAAGGGTCAAAGAAAGATGTATTAAGGTTTCGGTCAGTTAGTAGTATGGTGATTGCGGCTGCCAGGACTGGTAGGGCTAACAGGAGTATGATGGCTGTAATTAGAACAGATCATACGAATAAGGGGATGTTGAATATTGGTATGGGTTTAGGTTTTATGTTGATGCATGTTGTAATGAAATTGATTGCTCCCAGGATGGAGGAGGCTCCTGCCAGGTGAAGGGAGAAGATTGCTAGGTCGACTGATGGTCCAGAGTGGGTTAGATTTCCTGATAGGGGGGGGTAGACGGTTCAGCCGGTGCCGGCACCAGCTTCTACATATGAGGAGGCTAGAAGTAGAAGGAGGGCTGGTGGGAGCAATCAGAAGCTTATGTTGTTTATTCGTGGGAAGGCCATATCTGGGGCTCCGATTATAAGAGGGATCAGTCAGTTACCGAAACCGCCAATTATAATGGGTATGACCATAAAGAAGATTATCACGAATGCGTGAGCGGTTACTAATACATTAAAAATTTGGTCACTTCCAAATAATGACCCGGGTTGGGTCAGTTCTATTCGTATTAACATGCTTAGGCTGGCTCCGATTAGGCCGGCCCA-----------------------------------\n>Compsophis_zeny_RAN44452\n----TATCGGAACACTATACCTATTATTCGGGGCCTGGGCCGGCCTAATCGGAGCCAGCCTAAGCATGTTAATACGAATAGAACTGACCCAACCCGGGTCATTATTTGGAAGTGACCAAATTTTTAATGTATTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATGGTCATACCCATTATAATTGGCGGTTTCGGTAACTGACTGATCCCTCTTATAATCGGAGCCCCAGATATGGCCTTCCCACGAATAAACAACATAAGCTTCTGATTGCTCCCACCAGCCCTCCTTCTACTTCTAGCCTCCTCATATGTAGAAGCTGGTGCCGGCACCGGCTGAACCGTCTACCCCCCCCTATCAGGAAATCTAACCCACTCTGGACCATCAGTCGACCTAGCAATCTTCTCCCTTCACCTGGCAGGAGCCTCCTCCATCCTGGGAGCAATCAATTTCATTACAACATGCATCAACATAAAACCTAAACCCATACCAATATTCAACATCCCCTTATTCGTATGATCTGTTCTAATTACAGCCATCATACTCCTGTTAGCCCTACCAGTCCTGGCAGCCGCAATCACCATACTACTAACTGACCGAAACCTTAATACATCTTTCTTTGACCCTTGCGGAGGGGGCGACCCCGTCCTATTCCAACATCTATT---\n>Brygophis_APR13404\n-----------------------------------------------------GCCAGCCTAAGCATACTAATACGAATAGAGCTGACACAACCCGGCTCACTATTTGGCAGCGACCAAATTTTTAATGTACTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATAGTCATACCCATTATAATCGGCGGTTTCGGTAACTGACTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAACAACATGAGCTTTTGATTACTCCCACCAGCCCTCCTTCTACTCCTAGCCTCCTCATATGTAGAAGCCGGTGCCGGCACCGGCTGAACCATTTACCCCCCACTATCAGGAAACCTAACCCACTCAGGACCATCAGTGGACCTGGCCATCTTCTCCCTTCACCTGGCAGGTGCCTCCTCCATCCTGGGAGCAATCAATTTTATTACTACATGCATTAACATAAAACCTAAACCGATACCAATATTCAACATCCCCTTATTCGTATGATCTGTCTTAATCACAGCCATCATACTTCTATTAGCCTTACCAGTCCTAGCCGCCGCAATCACTATGCTCCTGACCGACCGAAACCTTAACACATCTTTCTTCGACCCTTGCGGAGGGGGAGACCCCGTCCTGTTCCAACACTTGTT---\n>MYSTERY_sample_A\n--------GGAACACTATACCTATTATTNGGGGCCTGGGCCGGCCTAATTGGGGCCAGCCTAAGCATACTAATACGAATAGAGCTGACACAACCCGGCTCACTATTTGGCAGCGACCAAATTTTTAATGTACTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATAGTCATACCCATTATAATCGGCGGTTTCGGTAACTGACTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAACAACATGAGCTTTTGATTACTCCCACCAGCCCTCCTTCTACTCCTAGCCTCCTCATATGTAGAAGCCGGTGCCGGCACCGGCTGAACCATTTACCCCCCACTATCAGGAAACCTAACCCACTCAGGACCATCAGTGGACCTGGCCATCTTCTCCCTTCACCTGGCAGGTGCCTCCTCCATCCTGGGAGCAATCAATTTTATTACTACATGCATTAACATAAAACCTAAACCGATACCAATATTCAACATCCCCTTATTCGTATGATCTGTCTTAATCACAGCCATCATACTTCTATTAGCCTTACCAGTCCTAGCCGCCGCAATCACTATGCTCCTGACCGACCGAAACCTTAACACATCTTTCTTCGACCCTTGCGGAGGGGGAGACCCCGTCCTGTTCCAACACTTGTT---\n>Lycodryas_inopinae_RAX12426\n---------------------------TTTGGATGTGGTCCGGTTTNATCGGGGCATGTCTAAGCATTCTAATGCGAATAGAACTGACCCAGCCCGGCTCCCTACTAGGCAGCGACCAGGTCTTTAACGTCTTAGTAACCGCTCATGCTTTTATAATAATCTTCTTTATAGTTATACCTATTATAATTGGCGGATTTGGCAACTGATTAATCCCACTTATAATTGGAGCCCCAGACATAGCCTTTCCTCGGATAAATAATATAAGCTTCTGGCTTCTACCGCCAGCCCTACTATTACTACTATCATCTTCATACGTAGAAGCTGGTGCAGGTACGGGCTGAACTGTTTACCCCCCCCTATCAGGAAACCTGGTTCACTCGGGCCCATCCGTGGACCTTGCAATTTTCTCACTTCATCTAGCAGGAGCCTCATCAATCTTAGGGGCAATTAACTTTATCACCACATGTATTAACATAAAACCAAAATCAATACCAATATTCAATATCCCACTATTTGTCTGATCCGTACTAATTACAGCCATTATATTACTTCTAGCTCTACCAGTATTAGCAGCTGCAATTACCATACTATTAACTGATCGAAACTTAAACACATCATTCTTTGACCCTTGCGGGGGTGGTGACCCTGTCCTATTTCAACACCTATT---\n>Madagascarophis_sp2_RAX12582\n-------------------------ATTTGGAGCGTGATCCGGCCTTATTGGAGCCTGCCTAAGTATACTAATGCGGATAGAATTAACCCAGCCCGGCTCGCTGTTCGGAAGCGACCAGATTTTTAATGTCTTAGTAACCGCCCACGCATTCGTAATAATCTTTTTTATGGTAATACCAATTATGATTGGCGGGTTCGGTAACTGACTGATCCCCCTTATAATCGGGGCCCCAGACATAGCCTTTCCCCGAATAAACAATATAAGTTTTTGACTGCTACCACCAGCACTCACACTCCTCCTATCCGACTCTTCGTACGTAGAGGCCGGCGCCGGCACAGGGTGAACTGTCTACCCGCCCCTGTCCGGAAACCTAGTCCACTCTGGCCCATCAGTAGACCTTGCAATCTTCTCTCTACACCTTGCCGGCGCCTCTTCGATCCTTGGGGCAATCAATTTTATCACTACTTGTATTAACATAAAACCAAAATCCATACCAATATTCAACATCCCCTTGTTCGTGTGGTCCGTCTTAATCACAGCCATTATACTACTCCTAGCACTGCCGGTGCTGGCCGCTGCAATCACAATACTTCTAACCGATCGAAACCTGAATACCACATTCTTCGACCCTTGTGGAGGCGGCGACCCGGTCCTATTCCAACACCTATT\n";
+const KEY = {"rows":["Compsophis_albiventris_RAN38173","Compsophis_boulengeri_RAN44850","Compsophis_boulengeri_RAX3461","Compsophis_infralineatus_JEC18238","Compsophis_infralineatus_RAN44845","Compsophis_laphystius_RAN39677","Compsophis_laphystius_RAX3459","Compsophis_vinckei_RAN37978","Compsophis_vinckei_RAX3779","Compsophis_zeny_JEC17025","Compsophis_zeny_RAN44452","Brygophis_APR13404","MYSTERY_sample_A","Lycodryas_inopinae_RAX12426","Madagascarophis_sp2_RAX12582"],"answer":{"Compsophis_albiventris_RAN38173":"AAGATATCGGAACCCTATACTTATTATTCGGGGCCTGGTCGGGCCTAGTCGGAGCCAGCCTAAGCATACTAATACGAATAGAGCTGACCCAGCCCGGCACGTTATTTGGCAGTGACCAGATTTTTAATGTATTAGTAACCGCTCACGCATTTGTAATAATCTTTTTTATGGTTATACCCATTATAATCGGCGGCTTCGGCAACTGATTAATCCCTCTTATAATCGGAGCCCCAGACATAGCCTTCCCGCGAATAAACAACATAAGCTTCTGACTACTCCCACCAGCCCTCCTACTACTCCTAGCC---TCTTCCTATGTAGAAGCCGGTGCCGGCACCGGTTGAACTGTCTATCCCCCACTATCAGGAAACCTTACCCACTCAGGACCATCAGTCGATCTAACAATCTTCTCCCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTCATTACTACATGCATCAACATGAAACCAAAACCCATACCAATATTTAACATCCCCTTATTCGTGTGATCTATTTTAATCACAGCCATCATACTCCTGCTAGCCCTACCCGTTTTAGCCGCCGCAATCACCATACTTCTAACCGACCGAAATCTTAACACATCTTTCTTCGACCCTTGCGGGGGAGGAGACCCGGTTCTATTCCAACACCTGTT","Compsophis_boulengeri_RAN44850":"--------GGAACACTATACCTACTATTCGGGGCCTGATCGGGCCTAATCGGAGCCAGCCTAAGCATACTGATACGAATAGAACTAACCCAGCCCGGCTCACTATTTGGCAGCGATCAGATTTTTAATGTACTAGTAACCGCTCACGCATTCGTAATAATCTTCTTTATGGTCATACCAATTATGATCGGCGGCTTCGGCAACTGATTAATCCCTCTTATAATCGGAGCCCCGGATATAGCCTTCCCACGAATAAACAATATAAGCTTCTGACTACTCCCACCAGCCCTCCTCCTACTCCTAGCC---TCCTCCTATGTGGAAGCCGGTGCCGGCACCGGCTGAACAGTCTACCCACCACTATCAGGAAACCTCACCCACTCAGGACCCTCAGTTGATCTAGTAATCTTCTCCCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTCATTACTACATGCATCAACATGAAACCTAAACCCATGCCAATATTCAACATTCCACTATTCGTATGATCTGTCTTAATCACAGCCGTTATACTCCTACTAGCCCTACCAGTCTTAGCCGCCGCAATCACCATACTTCTAACCGACCGAAATCTTAACACGTCTTTCTTCGACCCTTGCGGAGGAGGAGACCCTGTTCTATTCCAACACCTGTT","Compsophis_boulengeri_RAX3461":"--------GGAACACTATACCTATTATTCGGGGCCTGGTCGGGCCTAATCGGAGCCAGCCTGAGCATACTAATACGAATAGAACTGACCCAGCCCGGCTCACTACTCGGTAGTGATCAGATCTTTAATGTACTAGTAACCGCTCACGCATTCGTAATAATCTTCTTTATGGTTATACCCATTATGATCGGCGGCTTCGGCAACTGATTAATCCCTCTTATAATTGGAGCCCCGGATATAGCCTTCCCACGAATAAACAATATAAGCTTCTGATTGCTCCCACCAGCTCTCCTCCTACTCCTAGCC---TCCTCCTACGTAGAGGCCGGTGCCGGCACCGGCTGAACAGTCTACCCACCACTATCAGGAAACCTCACCCACTCAGGACCATCAGTTGATCTAGCAATCTTCTCCCTTCATCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATTAACTTCATTACTACATGCATCAACATGAAACCTAAACCCATACCAATATTCAACATTCCCCTATTCGTGTGATCTGTCTTAATCACAGCCATTATACTCCTACTAGCCCTGCCAGTTCTGGCAGCCGCAATCACCATACTTCTAACCGACCGAAACCTCAACACGTCTTTCTTCGACCCTTGCGGAGGAGGAGACCCTGTTCTATTCCAACACTTATT","Compsophis_infralineatus_JEC18238":"----------------------ATTATTTGGGGCCTGGGCCGGCCTAATTGGGGCCAGCCTAAGCATACTGATACGAATAGAGCTAACCCAACCCGGCTCGTTATTTGGCAGCGACCAAATTTTTAATGTGTTAGTAACCGCCCACGCATTCGTGATAATCTTCTTTATAGTCATACCCATTATAATCGGCGGTTTCGGTAACTGACTAATCCCTCTTATAATCGGGGCCCCAGATATGGCCTTCCCACGAATAAACAACATGAGCTTTTGATTACTCCCGCCAGCACTCCTTCTACTTCTAGCC---TCATCATATGTAGAAGCCGGTGCCGGCACCGGCTGAACCGTGTACCCTCCACTATCAGGAAACCTAACCCACTCGGGACCATCAGTCGACCTGGCAATCTTCTCCCTCCACCTGGCGGGGGCCTCCTCCATCCTGGGAGCAATCAACTTTATTACTACATGCATTAACATAAAACCCAAACCCATACCAATATTCAACATCCCCCTATTCGTATGATCTGTCTTAATCACAGCCATCATACTTCTGCTAGCCCTGCCAGTCCTAGCGGCCGCAATCACCATACTCCTGACTGAC--------------------------------------------------------------------","Compsophis_infralineatus_RAN44845":"--------GGAACACTATACCTATTATTTGGGGCCTGGGCCGGCCTAATTGGGGCCAGCCTAAGCATACTGATACGAATAGAGCTAACCCAACCCGGCTCGTTATTTGGCAGCGACCAAATTTTTAATGTGTTAGTAACCGCCCACGCATTCGTGATAATCTTCTTTATAGTCATACCCATTATAATCGGCGGTTTCGGTAACTGACTAATCCCTCTTATAATCGGGGCCCCAGATATGGCCTTCCCACGAATAAACAACATGAGCTTTTGATTACTCCCGCCAGCACTCCTTCTACTTCTAGCC---TCATCATATGTAGAAGCCGGTGCCGGCACCGGCTGAACCGTGTACCCTCCACTATCAGGAAACCTAACCCACTCGGGACCATCAGTCGACCTGGCAATCTTCTCCCTCCACCTGGCGGGGGCCTCCTCCATCCTGGGAGCAATCAACTTTATTACTACATGCATTAACATAAAACCCAAACCCATACCAATATTCAACATCCCCCTATTCGTATGATCTGTCTTAATCACAGCCATCATACTTCTGTTAGCCCTGCCAGTCCTAGCGGCCGCAATCACCATACTCCTGACTGACCGAAACCTTAATACATCTTTCTTCGACCCTTGCGGAGGAGGTGACCCAGTCCTATTCCAACACCTGTT","Compsophis_laphystius_RAN39677":"----TATCGGAACACTATACCTATTATTCGGAGCCTGAGCCGGCCTAATCGGGGCTAGCCTAAGCGTACTAATACGAATAGAACTAACCCAACCCGGCTCACTATTTGGCAATGACCAAATTTTTAATGTGTTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATGGTCATACCCATTATAATCGGCGGCTTCGGTAACTGATTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAACAACATAAGCTTCTGACTGCTTCCACCAGCCCTCCTATTACTTCTAGCT---TCCTCATATGTAGAAGCCGGCGCCGGCACGGGCTGAACCGTTTACCCACCACTATCAGGAAATCTAACCCACTCAGGACCATCAGTTGATCTAGCGATCTTCTCTCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTTATTACTACATGTATCAACATAAAACCTAAACCTATACCAATATTCAACATTCCACTATTCGTATGGTCTGTCCTAATTACAGCCATCATACTCCTATTAGCCTTACCAGTTCTGGCAGCCGCAATTACCATACTCCTAACTGATCGAAATCTTAACACATCTTTCTTTGACCCCTGCGGGGGAGGGGACCCAGTTCTANNNNNNNNNNNNNN","Compsophis_laphystius_RAX3459":"---------------------------------------CCGGCCTAATCGGGGCTAGCCTAAGCGTACTAATACGAATAGAACTAACCCAACCCGGCTCACTATTTGGCAATGACCAAATTTTTAATGTGTTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATGGTCATACCCATTATAATCGGCGGCTTCGGTAACTGATTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAACAACATAAGCTTCTGACTGCTTCCACCAGCCCTCCTATTACTTCTAGCT---TCCTCATATGTAGAAGCCGGCGCCGGCACGGGCTGAACCGTTTACCCACCACTATCAGGAAATCTAACCCACTCAGGACCATCAGTTGATCTAGCGATCTTCTCTCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTTATTACTACATGTATCAACATAAAACCTAAACCTATACCAATATTCAACATTCCACTATTCGTATGGTCTGTCCTAATTACAGCCATCATACTCCTATTAGCCTTACCAGTTCTGGCAGCCGCAATTACCATACTCCTAACTGATCGAAATCTTAACACATCTTTCTTTGACCCCTGCGGGGGGGGGGACCCAGTTCTATTCCAACACCTATT","Compsophis_vinckei_RAN37978":"------------------------TATTCGGGGCCTGATCAGGCCTAGTCGGAGCCAGCCTAAGCATACTAATACGAATAGAGCTAACCCAGCCCGGCACGTTGTTTGGCAGTGACCAGATTTTTAATGTGTTAGTAACCGCTCACGCATTTGTAATAATCTTTTTTATGGTTATACCCATTATAATCGGCGGTTTCGGCAACTGGTTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAATAATATAAGCTTCTGACTGCTCCCACCAGCCCTCCTACTACTCCTAGCC---TCTTCCTATGTAGAAGCCGGTGCCGGCACCGGCTGAACTGTCTATCCCCCCCTATCAGGAAATCTTACCCATTCAGGACCATCAGTCGATCTAACAATCTTTTCCCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTCATTACTACATGCATCAACATGAAACCAAAACCCATACCAATATTCAACATCCCCTTATTCGTGTGATCTGTCTTAATCACAGCCATCATGCTCCTGCTAGCCCTACCCGTTTTAGCCGCCGCAATCACCATACTTCTTACCGACCGAAATCTTAACACATCTTTCTTCGACCCTTGCGGAGGAGGAGACCCCAT------------------","Compsophis_vinckei_RAX3779":"----TATCGGAACCCTATACTTATTATTCGGGGCCTGATCAGGCCTAGTCGGAGCCAGCCTAAGCATACTAATACGAATAGAGCTAACCCAGCCCGGCACGTTGTTTGGCAGTGACCAGATTTTTAATGTGTTAGTAACCGCTCACGCATTTGTAATAATCTTTTTTATGGTTATACCCATTATAATCGGCGGTTTCGGCAACTGGTTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAATAATATAAGCTTCTGACTGCTCCCACCAGCCCTCCTACTACTCCTAGCC---TCTTCCTATGTAGAAGCCGGTGCCGGCACCGGCTGAACTGTCTATCCCCCCCTATCAGGAAATCTTACCCATTCAGGACCATCAGTCGATCTAACAATCTTTTCCCTTCACCTGGCAGGGGCCTCCTCCATCCTGGGAGCAATCAACTTCATTACTACATGCATCAACATGAANCCAAAACCCATACCAATATTCAACATCCCCTTATTCGTGTGATCTGTCTTAATCACAGCCATCATGCTCCTGCTAGCCCTACCCGTTTTAGCCGCCGCAATCACCATACTTCTTACCGACCGAAATCTTAACACATCTTTCTTCGACCCTTGCGGAGGAGGAGACCCCATTCTATTCCAACACCTGTT","Compsophis_zeny_JEC17025":"-----------------------------------TGGGCCGGCCTAATCGGAGCCAGCCTAAGCATGTTAATACGAATAGAACTGACCCAACCCGGGTCATTATTTGGAAGTGACCAAATTTTTAATGTATTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATGGTCATACCCATTATAATTGGCGGTTTCGGTAACTGACTGATCCCTCTTATAATCGGAGCCCCAGATATGGCCTTCCCACGAATAAACAACATAAGCTTCTGATTGCTCCCACCAGCCCTCCTTCTACTTCTAGCC---TCCTCATATGTAGAAGCTGGTGCCGGCACCGGCTGAACCGTCTACCCCCCCCTATCAGGAAATCTAACCCACTCTGGACCATCAGTCGACCTAGCAATCTTCTCCCTTCACCTGGCAGGAGCCTCCTCCATCCTGGGAGCAATCAATTTCATTACAACATGCATCAACATAAAACCTAAACCCATACCAATATTCAACATCCCCTTATTCGTATGATCTGTTCTAATTACAGCCATCATACTCCTGTTAGCCCTACCAGTCCTGGCAGCCGCAATCACCATACTACTAACTGACCGAAACCTTAATACATCTTTCTTTGACCCTTGCGGAGGGGGCGACCCCGTCCTATTCCAACA------","Compsophis_zeny_RAN44452":"----TATCGGAACACTATACCTATTATTCGGGGCCTGGGCCGGCCTAATCGGAGCCAGCCTAAGCATGTTAATACGAATAGAACTGACCCAACCCGGGTCATTATTTGGAAGTGACCAAATTTTTAATGTATTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATGGTCATACCCATTATAATTGGCGGTTTCGGTAACTGACTGATCCCTCTTATAATCGGAGCCCCAGATATGGCCTTCCCACGAATAAACAACATAAGCTTCTGATTGCTCCCACCAGCCCTCCTTCTACTTCTAGCC---TCCTCATATGTAGAAGCTGGTGCCGGCACCGGCTGAACCGTCTACCCCCCCCTATCAGGAAATCTAACCCACTCTGGACCATCAGTCGACCTAGCAATCTTCTCCCTTCACCTGGCAGGAGCCTCCTCCATCCTGGGAGCAATCAATTTCATTACAACATGCATCAACATAAAACCTAAACCCATACCAATATTCAACATCCCCTTATTCGTATGATCTGTTCTAATTACAGCCATCATACTCCTGTTAGCCCTACCAGTCCTGGCAGCCGCAATCACCATACTACTAACTGACCGAAACCTTAATACATCTTTCTTTGACCCTTGCGGAGGGGGCGACCCCGTCCTATTCCAACATCTATT","Brygophis_APR13404":"-----------------------------------------------------GCCAGCCTAAGCATACTAATACGAATAGAGCTGACACAACCCGGCTCACTATTTGGCAGCGACCAAATTTTTAATGTACTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATAGTCATACCCATTATAATCGGCGGTTTCGGTAACTGACTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAACAACATGAGCTTTTGATTACTCCCACCAGCCCTCCTTCTACTCCTAGCC---TCCTCATATGTAGAAGCCGGTGCCGGCACCGGCTGAACCATTTACCCCCCACTATCAGGAAACCTAACCCACTCAGGACCATCAGTGGACCTGGCCATCTTCTCCCTTCACCTGGCAGGTGCCTCCTCCATCCTGGGAGCAATCAATTTTATTACTACATGCATTAACATAAAACCTAAACCGATACCAATATTCAACATCCCCTTATTCGTATGATCTGTCTTAATCACAGCCATCATACTTCTATTAGCCTTACCAGTCCTAGCCGCCGCAATCACTATGCTCCTGACCGACCGAAACCTTAACACATCTTTCTTCGACCCTTGCGGAGGGGGAGACCCCGTCCTGTTCCAACACTTGTT","MYSTERY_sample_A":"--------GGAACACTATACCTATTATTNGGGGCCTGGGCCGGCCTAATTGGGGCCAGCCTAAGCATACTAATACGAATAGAGCTGACACAACCCGGCTCACTATTTGGCAGCGACCAAATTTTTAATGTACTAGTAACCGCTCACGCATTCGTGATAATCTTCTTTATAGTCATACCCATTATAATCGGCGGTTTCGGTAACTGACTAATCCCTCTTATAATCGGAGCCCCAGACATGGCCTTCCCACGAATAAACAACATGAGCTTTTGATTACTCCCACCAGCCCTCCTTCTACTCCTAGCC---TCCTCATATGTAGAAGCCGGTGCCGGCACCGGCTGAACCATTTACCCCCCACTATCAGGAAACCTAACCCACTCAGGACCATCAGTGGACCTGGCCATCTTCTCCCTTCACCTGGCAGGTGCCTCCTCCATCCTGGGAGCAATCAATTTTATTACTACATGCATTAACATAAAACCTAAACCGATACCAATATTCAACATCCCCTTATTCGTATGATCTGTCTTAATCACAGCCATCATACTTCTATTAGCCTTACCAGTCCTAGCCGCCGCAATCACTATGCTCCTGACCGACCGAAACCTTAACACATCTTTCTTCGACCCTTGCGGAGGGGGAGACCCCGTCCTGTTCCAACACTTGTT","Lycodryas_inopinae_RAX12426":"---------------------------TTTGGATGTGGTCCGGTTTNATCGGGGCATGTCTAAGCATTCTAATGCGAATAGAACTGACCCAGCCCGGCTCCCTACTAGGCAGCGACCAGGTCTTTAACGTCTTAGTAACCGCTCATGCTTTTATAATAATCTTCTTTATAGTTATACCTATTATAATTGGCGGATTTGGCAACTGATTAATCCCACTTATAATTGGAGCCCCAGACATAGCCTTTCCTCGGATAAATAATATAAGCTTCTGGCTTCTACCGCCAGCCCTACTATTACTACTATCA---TCTTCATACGTAGAAGCTGGTGCAGGTACGGGCTGAACTGTTTACCCCCCCCTATCAGGAAACCTGGTTCACTCGGGCCCATCCGTGGACCTTGCAATTTTCTCACTTCATCTAGCAGGAGCCTCATCAATCTTAGGGGCAATTAACTTTATCACCACATGTATTAACATAAAACCAAAATCAATACCAATATTCAATATCCCACTATTTGTCTGATCCGTACTAATTACAGCCATTATATTACTTCTAGCTCTACCAGTATTAGCAGCTGCAATTACCATACTATTAACTGATCGAAACTTAAACACATCATTCTTTGACCCTTGCGGGGGTGGTGACCCTGTCCTATTTCAACACCTATT","Madagascarophis_sp2_RAX12582":"-------------------------ATTTGGAGCGTGATCCGGCCTTATTGGAGCCTGCCTAAGTATACTAATGCGGATAGAATTAACCCAGCCCGGCTCGCTGTTCGGAAGCGACCAGATTTTTAATGTCTTAGTAACCGCCCACGCATTCGTAATAATCTTTTTTATGGTAATACCAATTATGATTGGCGGGTTCGGTAACTGACTGATCCCCCTTATAATCGGGGCCCCAGACATAGCCTTTCCCCGAATAAACAATATAAGTTTTTGACTGCTACCACCAGCACTCACACTCCTCCTATCCGACTCTTCGTACGTAGAGGCCGGCGCCGGCACAGGGTGAACTGTCTACCCGCCCCTGTCCGGAAACCTAGTCCACTCTGGCCCATCAGTAGACCTTGCAATCTTCTCTCTACACCTTGCCGGCGCCTCTTCGATCCTTGGGGCAATCAATTTTATCACTACTTGTATTAACATAAAACCAAAATCCATACCAATATTCAACATCCCCTTGTTCGTGTGGTCCGTCTTAATCACAGCCATTATACTACTCCTAGCACTGCCGGTGCTGGCCGCTGCAATCACAATACTTCTAACCGATCGAAACCTGAATACCACATTCTTCGACCCTTGTGGAGGCGGCGACCCGGTCCTATTCCAACACCTATT"},"errors":[{"id":"rc","row":"Compsophis_zeny_JEC17025"},{"id":"ins","row":"Madagascarophis_sp2_RAX12582","codon":"GAC","ug":280},{"id":"end","row":"Compsophis_laphystius_RAN39677","n":14},{"id":"del","row":"Compsophis_vinckei_RAX3779","ug":474}]};
+if (!DEMO) $('#demo').hidden = true;
+renderLegend(); resize();
+</script>
+</body>
+</html>

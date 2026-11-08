@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QubitLab</title>
+<style>
+:root{--ink:#1e2b26;--muted:#5d6b66;--green:#1f5c45;--green2:#2f7d5f;--bg:#f6f7f5;--card:#ffffff;--line:#d7dcd9;--orange:#f08a24;--ok:#2f7d5f;--bad:#b8432f;--hl:#f5c542;--dye:#e9f7d6}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--green);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:20px;margin:0;font-weight:700}
+header .sub{opacity:.85;font-size:14px;flex:1}
+header button{background:#fff;color:var(--green);border:0;border-radius:6px;padding:6px 10px;font-weight:600;cursor:pointer}
+header button.on{background:var(--hl);color:#222}
+main{display:grid;grid-template-columns:minmax(300px,360px) 1fr;gap:16px;padding:16px;max-width:1150px;margin:0 auto}
+@media(max-width:820px){main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+h2{font-size:16px;margin:0 0 10px;color:var(--green)}
+/* steps */
+ol.steps{margin:0;padding-left:20px;font-size:14px;line-height:1.7}
+ol.steps li.done{color:var(--ok)}ol.steps li.done::marker{content:"✓  "}
+ol.steps li.now{font-weight:700}
+#msg{margin-top:12px;padding:10px 12px;border-radius:8px;font-size:14px;line-height:1.45;background:#eef3f0;border-left:5px solid var(--green2);min-height:48px}
+#msg.bad{background:#fbece8;border-color:var(--bad)}#msg.good{background:#e8f5ec;border-color:var(--ok)}
+/* prep */
+table.prep{border-collapse:collapse;width:100%;font-size:14px}
+table.prep td,table.prep th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}
+input[type=number]{width:70px;padding:5px;font-size:15px;border:1px solid #aab4b0;border-radius:5px}
+.btn{background:var(--green);color:#fff;border:0;border-radius:6px;padding:8px 14px;font-size:14px;font-weight:600;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+/* qubit */
+.stage{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+.qubit{position:relative;width:290px;height:440px;border-radius:50%;background:#c9cccb;border:3px solid #5d6663;flex:none}
+.qbody{position:absolute;inset:12px;border-radius:50%;background:#1f2426}
+.slot{position:absolute;left:50%;top:22px;width:58px;height:112px;margin-left:-29px;background:#0b0e0f;border:2px solid #4f5a56;border-radius:9px;cursor:pointer}
+.hole{position:absolute;left:50%;top:20px;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#000;border:2px solid #4f5a56}
+.hole .t{position:absolute;inset:3px;border-radius:50%;background:var(--dye);border:2px solid #cfd8d3;display:none}
+.hole .t i{position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px;border-radius:50%}
+.lid{position:absolute;left:50%;top:6px;width:88px;height:88px;margin-left:-44px;border-radius:50%;background:#2a3033;border:3px solid #6b7672;transition:top .35s;box-shadow:0 2px 6px #0008}
+.lid.open{top:62px}
+.screen{position:absolute;left:50%;top:150px;width:184px;height:232px;margin-left:-92px;background:#3f5f86;border:2px solid #9aa7a3;border-radius:5px;color:#fff;display:flex;flex-direction:column;overflow:hidden;font-size:13px}
+.screen.off{background:#11161a}
+.sbar{background:#24364d;font-size:10px;padding:2px 6px;display:flex;justify-content:space-between;opacity:.9}
+.sbody{flex:1;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.stitle{font-weight:700;text-align:center;font-size:13px}
+.opt{background:#5f86b5;border:1.5px solid #c7d6e8;border-radius:4px;padding:5px;text-align:center;cursor:pointer;font-size:13px}
+.opt.sel{background:var(--hl);color:#1c1c1c;border-color:#fff;font-weight:700}
+.big{font-size:24px;font-weight:700;text-align:center;margin-top:4px}
+.small{font-size:11px;text-align:center;opacity:.9}
+.ctrls{display:flex;gap:4px;padding:4px 6px;background:#2d4767}
+.ctrls button{flex:1;border:1px solid #9fb3c9;background:#4a6d97;color:#fff;border-radius:4px;font-size:14px;padding:4px 0;cursor:pointer;font-weight:700}
+.ctrls button.go{background:#2f9d63;border-color:#bfe8cf}
+.tabs{display:flex;background:#24364d;font-size:9px}
+.tabs span{flex:1;text-align:center;padding:3px 0;border-left:1px solid #7f8e99}
+.bar{height:10px;background:#24364d;border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:#6fd18c;transition:width 1.1s linear}
+/* rack */
+.rack{display:flex;flex-direction:column;gap:8px;width:230px;max-width:100%}
+.tube{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;font-size:13px}
+.tube:hover{border-color:var(--green2)}
+.tube.in{opacity:.35}.tube.used{opacity:.55}
+.tube svg{flex:none}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+#record td,#record th{padding:5px 6px;border-bottom:1px solid var(--line);font-size:14px}
+#record{border-collapse:collapse;width:100%}
+.tick{color:var(--ok);font-weight:700}.cross{color:var(--bad);font-weight:700}
+#info{display:none;border:2px solid var(--hl);background:#fffbea;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.45;position:relative}
+#info.show{display:block;animation:pop .35s ease-out}
+#info b.h{display:block;color:#8a6a00;margin-bottom:3px}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+footer{font-size:12px;color:var(--muted);text-align:center;padding:10px 16px 24px}
+</style>
+</head>
+<body>
+<header>
+  <h1>QubitLab</h1><div class="sub" id="subtitle"></div>
+  <button id="bEN" class="on">EN</button><button id="bFR">FR</button>
+  <button id="bReset"></button>
+</header>
+<main>
+  <section>
+    <div class="card"><h2 id="hSteps"></h2><ol class="steps" id="steps"></ol><div id="msg"></div></div>
+  </section>
+  <section style="display:flex;flex-direction:column;gap:16px">
+    <div class="card" id="prepCard">
+      <h2 id="hPrep"></h2>
+      <table class="prep">
+        <thead><tr><th id="thTube"></th><th id="thSol"></th><th id="thAdd"></th><th id="thTot"></th></tr></thead>
+        <tbody>
+          <tr><td id="lS1"></td><td><input type="number" id="s1a" min="0" max="200"> µL</td><td><input type="number" id="s1b" min="0" max="200"> µL</td><td id="s1t">–</td></tr>
+          <tr><td id="lS2"></td><td><input type="number" id="s2a" min="0" max="200"> µL</td><td><input type="number" id="s2b" min="0" max="200"> µL</td><td id="s2t">–</td></tr>
+          <tr><td id="lSm"></td><td><input type="number" id="sma" min="0" max="200"> µL</td><td><input type="number" id="smb" min="1" max="10" placeholder="1–10"> µL</td><td id="smt">–</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px"><button class="btn" id="bCheck"></button></div>
+    </div>
+    <div class="card">
+      <h2 id="hQubit"></h2>
+      <div class="stage">
+        <div class="qubit">
+          <div class="qbody"></div>
+          <div class="slot" id="slot"><div class="hole"><div class="t" id="tin"><i id="tdot"></i></div></div></div>
+          <div class="lid" id="lid" title="lid"></div>
+          <div class="screen" id="screen">
+            <div class="sbar"><span>Qubit® 2.0</span><span id="clock"></span></div>
+            <div class="sbody" id="sbody"></div>
+            <div class="ctrls"><button id="up">▲</button><button id="dn">▼</button><button id="go" class="go">GO</button></div>
+            <div class="tabs"><span>⌂</span><span>Standards</span><span>Sample</span><span>Data</span></div>
+          </div>
+        </div>
+        <div class="rack"><div id="info"></div><b id="hRack"></b><div id="rack"></div><div class="hint" id="rackHint"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 id="hRec"></h2>
+      <table id="record"><thead><tr><th id="thS"></th><th id="thC"></th><th></th><th id="thY"></th></tr></thead><tbody id="recBody"></tbody></table>
+    </div>
+  </section>
+</main>
+<footer id="foot"></footer>
+<script>
+const T={
+en:{subtitle:"Practice the Qubit dsDNA Broad Range assay",reset:"Start over",steps:"Steps",prep:"1 · Prepare your assay tubes",tube:"Tube",sol:"Quantification Solution",add:"Standard or DNA",tot:"Total",s1:"Standard #1",s2:"Standard #2",sm:"Each sample",check:"Check my tubes",qubit:"2 · Run the Qubit",rack:"Your tubes",rackHint:"Open the lid, click a tube to put it in. Click the chamber to take it out.",rec:"3 · Your results",thS:"Sample",thC:"Stock conc. (ng/µL)",thY:"Total DNA in 100 µL AE",
+ stepList:["Prepare the tubes","Choose what you are measuring","Choose the type of DNA","Choose the kit","Choose a calibration option","Read the first standard","Read the second standard","Read your samples and find their concentration","Write down all results"],
+ foot:"Field to Phylogeny · Madagascar 2026 · practice tool, values are simulated",
+ start:"Start by preparing your tubes. Type the volumes, then press <b>Check my tubes</b>.",
+ tot200:"Every tube must have a total of <b>200 µL</b>.",
+ stdWrong:"Standards: <b>190 µL</b> Quantification Solution + <b>10 µL</b> standard.",
+ smWrong:"Samples: use <b>1 to 10 µL</b> of DNA (we recommend <b>5 µL</b>), then add Quantification Solution to make <b>200 µL</b> in total.",
+ prepOK:"Tubes are ready ({sol} µL solution + {dna} µL DNA)! Mix, wait 2 minutes… done. Now use the Qubit: choose what you are measuring with ▲ ▼ and press <b>GO</b>.",
+ home:"Choose your assay",dnaMenu:"DNA assays",kitMenu:"dsDNA kit",calMenu:"Calibration",
+ runNew:"Run New Standard",useOld:"Use Existing Calibration",hs:"High Sensitivity",br:"Broad Range",
+ wrongHome:"We are measuring <b>DNA</b>.",wrongDna:"Our DNA is <b>double-stranded</b> (dsDNA).",wrongKit:"Our kit is <b>AccuGreen Broad Range</b> (orange tape). The setting must match the kit.",
+ wrongCal:"You just made a <b>new</b> batch of solution, so you need new standards.",
+ okHome:"Good. Now choose the type of DNA.",okDna:"Good. Now choose the kit.",okKit:"Good. Now the calibration choice.",okCal:"Good. Open the lid, insert <b>Standard #1</b>, close the lid, press <b>GO</b>.",
+ insert1:"Insert Standard #1",insert2:"Insert Standard #2",insertS:"Insert Sample",
+ closeLid:"Close the lid before you press GO — room light ruins the reading.",
+ openFirst:"Open the lid first (click the round lid).",
+ full:"There is already a tube in the chamber. Click the chamber to take it out.",
+ wrongTube:"That is not the right tube. The screen tells you which tube to insert.",
+ noTube:"There is no tube in the chamber.",
+ reading:"Reading…",
+ ok1:"Standard #1 read (background, no DNA). Remove it, insert <b>Standard #2</b>, close the lid, press <b>GO</b>.",
+ ok2:"Both standards read. Check the calibration line and press <b>GO</b>.",
+ curve:"Calibration",curveOK:"Line goes up from #1 to #2 ✓",
+ okCurve:"Insert <b>Sample 1</b>, close the lid, press <b>GO</b>.",
+ inTube:"in assay tube",calcStock:"Calculate Stock",next:"Read next sample",
+ okRead:"This number is the concentration <b>in the assay tube</b> (diluted). Choose <b>Calculate Stock</b> and press GO.",
+ wrongNext:"First calculate the stock concentration of this sample.",
+ volTitle:"Sample volume",volHelp:"▲ ▼ then GO",
+ wrongVol:"How many µL of DNA did you put in each sample tube? Check your tube table.",
+ okVol:"Correct, {v} µL. Now choose the units.",
+ unitTitle:"Units",wrongUnit:"Use <b>ng/µL</b> (the same as the module and the PCR recipe).",
+ stock:"Stock concentration",
+ okUnit:"Write this number in the <b>Your results</b> table (2 decimals) and click ✓.",
+ recordFirst:"Write down the result in the table first.",
+ recWrong:"Check the number on the Qubit screen again.",
+ next2:"Remove the tube, insert <b>Sample {n}</b>, close the lid, press <b>GO</b>.",
+ done:"All samples measured! 🎉 Look at the last column: total DNA = concentration × 100 µL. Which extraction worked best?",
+ doneScreen:"All done",
+ iDsH:"Correct: dsDNA",iDs:"<b>dsDNA</b> = double-stranded DNA, like the genomic DNA we extract from snakes, mice and birds. <b>ssDNA</b> = single-stranded DNA, such as primers. RNA has its own assay.",
+ iBrH:"Correct: Broad Range",iBr:"We are using the <b>BR (Broad Range)</b> kit, for standard samples like DNA from well-preserved tissue. <b>HS (High Sensitivity)</b> is a different kit, for samples with very little DNA, such as eDNA or ancient DNA.",
+ iStd1H:"Standard #1 (0 ng/µL)",iStd1:"Quantification Solution with <b>no DNA</b>. It tells the Qubit how much fluorescence the solution gives with no DNA: the <b>background fluorescence</b>.",
+ iStd2H:"Standard #2 (100 ng/µL)",iStd2:"Contains a <b>known amount</b> of DNA. It tells the Qubit how much fluorescence 100 ng/µL of DNA produces.",
+ iCurveH:"Why calibrate?",iCurve:"The Qubit draws a straight line from \"no DNA\" (#1) to \"known DNA\" (#2). Each sample's fluorescence is placed on this line to find its concentration. The dye's fluorescence changes with every new batch of solution and with temperature, so we calibrate every time we make new solution.",
+ iSampleH:"What is the Qubit reading?",iSample:"It excites the dye with blue light and measures the green fluorescence emitted by dye bound to double-stranded DNA: more fluorescence = more DNA."
+},
+fr:{subtitle:"S'entraîner au dosage Qubit ADNdb Broad Range",reset:"Recommencer",steps:"Étapes",prep:"1 · Préparez vos tubes de dosage",tube:"Tube",sol:"Solution de quantification",add:"Standard ou ADN",tot:"Total",s1:"Standard n°1",s2:"Standard n°2",sm:"Chaque échantillon",check:"Vérifier mes tubes",qubit:"2 · Utilisez le Qubit",rack:"Vos tubes",rackHint:"Ouvrez le couvercle, cliquez sur un tube pour l'insérer. Cliquez sur la chambre pour le retirer.",rec:"3 · Vos résultats",thS:"Échantillon",thC:"Conc. stock (ng/µL)",thY:"ADN total dans 100 µL d'AE",
+ stepList:["Préparer les tubes","Choisir ce que vous mesurez","Choisir le type d'ADN","Choisir le kit","Choisir une option de calibration","Lire le premier standard","Lire le deuxième standard","Lire vos échantillons et trouver leur concentration","Noter tous les résultats"],
+ foot:"Field to Phylogeny · Madagascar 2026 · outil d'entraînement, valeurs simulées",
+ start:"Commencez par préparer vos tubes. Entrez les volumes, puis cliquez sur <b>Vérifier mes tubes</b>.",
+ tot200:"Chaque tube doit contenir <b>200 µL</b> au total.",
+ stdWrong:"Standards : <b>190 µL</b> de solution de quantification + <b>10 µL</b> de standard.",
+ smWrong:"Échantillons : utilisez <b>1 à 10 µL</b> d'ADN (nous recommandons <b>5 µL</b>), puis ajoutez la solution de quantification pour faire <b>200 µL</b> au total.",
+ prepOK:"Les tubes sont prêts ({sol} µL de solution + {dna} µL d'ADN) ! Mélangez, attendez 2 minutes… c'est fait. Sur le Qubit : choisissez ce que vous mesurez avec ▲ ▼ et appuyez sur <b>GO</b>.",
+ home:"Choose your assay",dnaMenu:"DNA assays",kitMenu:"dsDNA kit",calMenu:"Calibration",
+ runNew:"Run New Standard",useOld:"Use Existing Calibration",hs:"High Sensitivity",br:"Broad Range",
+ wrongHome:"Nous mesurons de l'<b>ADN</b> (DNA).",wrongDna:"Notre ADN est <b>double brin</b> (dsDNA).",wrongKit:"Notre kit est <b>AccuGreen Broad Range</b> (ruban orange). Le réglage doit correspondre au kit.",
+ wrongCal:"Vous venez de préparer une <b>nouvelle</b> solution : il faut de nouveaux standards.",
+ okHome:"Bien. Choisissez maintenant le type d'ADN.",okDna:"Bien. Choisissez maintenant le kit.",okKit:"Bien. Maintenant, le choix de calibration.",okCal:"Bien. Ouvrez le couvercle, insérez le <b>Standard n°1</b>, fermez, appuyez sur <b>GO</b>.",
+ insert1:"Insert Standard #1",insert2:"Insert Standard #2",insertS:"Insert Sample",
+ closeLid:"Fermez le couvercle avant d'appuyer sur GO : la lumière de la pièce fausse la mesure.",
+ openFirst:"Ouvrez d'abord le couvercle (cliquez sur le couvercle rond).",
+ full:"Il y a déjà un tube dans la chambre. Cliquez sur la chambre pour le retirer.",
+ wrongTube:"Ce n'est pas le bon tube. L'écran indique quel tube insérer.",
+ noTube:"Il n'y a pas de tube dans la chambre.",
+ reading:"Reading…",
+ ok1:"Standard n°1 lu (bruit de fond, sans ADN). Retirez-le, insérez le <b>Standard n°2</b>, fermez, appuyez sur <b>GO</b>.",
+ ok2:"Les deux standards sont lus. Vérifiez la droite de calibration et appuyez sur <b>GO</b>.",
+ curve:"Calibration",curveOK:"La droite monte de n°1 à n°2 ✓",
+ okCurve:"Insérez l'<b>échantillon 1</b>, fermez, appuyez sur <b>GO</b>.",
+ inTube:"dans le tube de dosage",calcStock:"Calculate Stock",next:"Read next sample",
+ okRead:"Ce nombre est la concentration <b>dans le tube de dosage</b> (diluée). Choisissez <b>Calculate Stock</b> et appuyez sur GO.",
+ wrongNext:"Calculez d'abord la concentration stock de cet échantillon.",
+ volTitle:"Sample volume",volHelp:"▲ ▼ puis GO",
+ wrongVol:"Combien de µL d'ADN avez-vous mis dans chaque tube d'échantillon ? Vérifiez votre tableau.",
+ okVol:"Correct, {v} µL. Choisissez maintenant l'unité.",
+ unitTitle:"Units",wrongUnit:"Utilisez <b>ng/µL</b> (comme dans le module et la recette PCR).",
+ stock:"Stock concentration",
+ okUnit:"Notez ce nombre dans le tableau <b>Vos résultats</b> (2 décimales) et cliquez sur ✓.",
+ recordFirst:"Notez d'abord le résultat dans le tableau.",
+ recWrong:"Vérifiez à nouveau le nombre sur l'écran du Qubit.",
+ next2:"Retirez le tube, insérez l'<b>échantillon {n}</b>, fermez, appuyez sur <b>GO</b>.",
+ done:"Tous les échantillons sont mesurés ! 🎉 Regardez la dernière colonne : ADN total = concentration × 100 µL. Quelle extraction a le mieux marché ?",
+ doneScreen:"All done",
+ iDsH:"Correct : dsDNA",iDs:"<b>dsDNA</b> = ADN double brin, comme l'ADN génomique que nous extrayons des serpents, des souris et des oiseaux. <b>ssDNA</b> = ADN simple brin, par exemple les amorces. L'ARN a son propre dosage.",
+ iBrH:"Correct : Broad Range",iBr:"Nous utilisons le kit <b>BR (Broad Range, large gamme)</b>, pour les échantillons standards comme l'ADN de tissus bien conservés. <b>HS (High Sensitivity, haute sensibilité)</b> est un autre kit, pour les échantillons avec très peu d'ADN, comme l'ADNe (ADN environnemental) ou l'ADN ancien.",
+ iStd1H:"Standard n°1 (0 ng/µL)",iStd1:"Solution de quantification <b>sans ADN</b>. Il indique au Qubit la fluorescence de la solution sans ADN : la <b>fluorescence de fond</b>.",
+ iStd2H:"Standard n°2 (100 ng/µL)",iStd2:"Contient une <b>quantité connue</b> d'ADN. Il indique au Qubit la fluorescence produite par 100 ng/µL d'ADN.",
+ iCurveH:"Pourquoi calibrer ?",iCurve:"Le Qubit trace une droite entre « pas d'ADN » (n°1) et « ADN connu » (n°2). La fluorescence de chaque échantillon est placée sur cette droite pour trouver sa concentration. La fluorescence du colorant change avec chaque nouvelle solution et avec la température : on calibre donc à chaque nouvelle solution.",
+ iSampleH:"Que mesure le Qubit ?",iSample:"Il excite le colorant avec une lumière bleue et mesure la fluorescence verte émise par le colorant fixé à l'ADN double brin : plus de fluorescence = plus d'ADN."
+}};
+let L='en';const t=k=>T[L][k];
+const $=id=>document.getElementById(id);
+const NS=3;
+let S;
+function newState(){
+  const st=[0,0,0].map(()=>+(8+Math.random()*70).toFixed(1));
+  st[1]=+(1.2+Math.random()*3).toFixed(1); // one weak extraction
+  S={step:'prep',sel:0,lid:false,inCh:null,prepOK:false,vol:1,unit:0,si:0,stocks:st,recorded:[],used:new Set(),dna:5,info:null,busy:false,msg:['start',''],stepIdx:0};
+}
+const MENUS={home:[['DNA','RNA','Protein'],0,'home','wrongHome','okHome','dna',1],
+             dna:[['dsDNA','ssDNA'],0,'dnaMenu','wrongDna','okDna','kit',2],
+             kit:[[()=>t('hs'),()=>t('br')],1,'kitMenu','wrongKit','okKit','cal',3],
+             cal:[[()=>t('runNew'),()=>t('useOld')],0,'calMenu','wrongCal','okCal','std1',4],
+             assay:[[()=>t('calcStock'),()=>t('next')],0,null,'wrongNext','','vol',null],
+             unit:[['ng/µL','ng/mL','µg/mL'],0,'unitTitle','wrongUnit','okUnit','result',null]};
+const lab=o=>typeof o==='function'?o():o;
+function info(k){S.info=k;renderInfo()}
+function renderInfo(){const el=$('info');if(!S.info){el.className='';el.innerHTML='';return}el.innerHTML=`<b class="h">${t('i'+S.info+'H')}</b>${t('i'+S.info)}`;el.className='';void el.offsetWidth;el.className='show'}
+function say(key,cls,extra){S.msg=[key,cls||'',extra||{}];renderMsg()}
+function renderMsg(){let h=t(S.msg[0])||S.msg[0];const e=S.msg[2]||{};for(const k in e)h=h.replace('{'+k+'}',e[k]);$('msg').innerHTML=h;$('msg').className=S.msg[1]}
+function assayConc(i){return S.stocks[i]*S.dna/200}
+function stockShown(i){return assayConc(i)*200/S.vol}
+function renderScreen(){
+  const b=$('sbody'),sc=$('screen');sc.classList.toggle('off',S.step==='prep');
+  if(S.step==='prep'){b.innerHTML='';return}
+  let h='';const m=MENUS[S.step];
+  if(m){
+    if(S.step==='assay') h+=`<div class="small">${t('thS')} ${S.si+1}</div><div class="big">${assayConc(S.si).toFixed(3)}</div><div class="small">ng/µL ${t('inTube')}</div>`;
+    else h+=`<div class="stitle">${t(m[2])}</div>`;
+    m[0].forEach((o,i)=>h+=`<div class="opt${i===S.sel?' sel':''}" data-i="${i}">${lab(o)}</div>`);
+  }else if(S.step==='std1'||S.step==='std2'||S.step==='sample'){
+    const k=S.step==='std1'?'insert1':S.step==='std2'?'insert2':'insertS';
+    h+=`<div class="stitle">${t(k)}</div>`;
+    if(S.step==='sample')h+=`<div class="small">${t('thS')} ${S.si+1} / ${NS}</div>`;
+    h+=`<div style="flex:1"></div><div class="bar"><i id="pbar"></i></div><div class="small" id="rd"></div>`;
+  }else if(S.step==='curve'){
+    h+=`<div class="stitle">${t('curve')}</div><svg viewBox="0 0 160 110" width="100%" height="120"><line x1="14" y1="96" x2="150" y2="96" stroke="#c7d6e8"/><line x1="14" y1="96" x2="14" y2="6" stroke="#c7d6e8"/><line x1="24" y1="88" x2="140" y2="16" stroke="#6fd18c" stroke-width="3"/><circle cx="24" cy="88" r="6" fill="#f08a24"/><circle cx="140" cy="16" r="6" fill="#f08a24"/><text x="24" y="106" fill="#fff" font-size="10" text-anchor="middle">#1</text><text x="140" y="32" fill="#fff" font-size="10" text-anchor="middle">#2</text></svg><div class="small">${t('curveOK')}</div>`;
+  }else if(S.step==='vol'){
+    h+=`<div class="stitle">${t('volTitle')}</div><div class="big" style="font-size:34px;margin-top:22px">${S.vol} µL</div><div class="small">1 – 20 µL · ${t('volHelp')}</div>`;
+  }else if(S.step==='result'){
+    const u=['ng/µL','ng/mL','µg/mL'][S.unit];
+    h+=`<div class="small">${t('thS')} ${S.si+1}</div><div class="stitle">${t('stock')}</div><div class="big" style="font-size:30px;margin-top:10px">${stockShown(S.si).toFixed(2)}</div><div class="small">${u}</div><div class="small" style="margin-top:14px">${S.dna} µL → 200 µL</div>`;
+  }else if(S.step==='done'){
+    h+=`<div class="stitle" style="margin-top:60px">${t('doneScreen')} ✓</div>`;
+  }
+  b.innerHTML=h;
+  b.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{S.sel=+el.dataset.i;renderScreen()});
+}
+function renderSteps(){
+  const idx={prep:0,home:1,dna:2,kit:3,cal:4,std1:5,std2:6,curve:7,sample:7,assay:7,vol:7,unit:7,result:7,done:9}[S.step];
+  let s=idx; if(S.step!=='done'&&S.recorded.length>0&&idx>=7)s=7;
+  $('steps').innerHTML=t('stepList').map((x,i)=>`<li class="${i<s?'done':i===s?'now':''}">${x}${i===7?` (${S.recorded.length}/${NS})`:''}</li>`).join('');
+}
+function tubeSVG(c,fill){return `<svg width="20" height="44" viewBox="0 0 20 44"><rect x="2" y="1" width="16" height="5" rx="2" fill="#fff" stroke="#5d6663" stroke-width="1.5"/><circle cx="10" cy="3.5" r="2.5" fill="${c}"/><path d="M3,6 h14 v20 l-7,16 l-7,-16 z" fill="#fff" stroke="#5d6663" stroke-width="1.5"/><path d="M3,16 h14 v10 l-7,16 l-7,-16 z" fill="${fill}"/></svg>`}
+function tubes(){const a=[['std1',t('s1'),'#f08a24'],['std2',t('s2'),'#f08a24']];for(let i=0;i<NS;i++)a.push(['s'+i,`${t('thS')} ${i+1}`,'#2f7d5f']);return a}
+function renderRack(){
+  const r=$('rack');
+  if(!S.prepOK){r.innerHTML=`<div class="hint">—</div>`;return}
+  r.innerHTML=tubes().map(([id,name,c])=>`<div class="tube${S.inCh===id?' in':''}${S.used.has(id)&&S.inCh!==id?' used':''}" data-id="${id}">${tubeSVG(c,'#e9f7d6')}${name}</div>`).join('');
+  r.querySelectorAll('.tube').forEach(el=>el.onclick=()=>insert(el.dataset.id));
+}
+function renderChamber(){
+  $('lid').classList.toggle('open',S.lid);
+  $('tin').style.display=S.inCh?'block':'none';
+  if(S.inCh)$('tdot').style.background=S.inCh.startsWith('std')?'#f08a24':'#2f7d5f';
+}
+function renderRecord(){
+  let h='';
+  for(let i=0;i<NS;i++){
+    const ok=S.recorded[i]!==undefined;const can=S.step==='result'&&S.si===i&&!ok;
+    const val=ok?S.recorded[i].toFixed(2):'';
+    h+=`<tr><td>${t('thS')} ${i+1}</td><td>${can?`<input type="number" step="0.01" id="recIn"> <button class="btn" id="recBtn" style="padding:5px 10px">✓</button>`:val}</td><td>${ok?'<span class="tick">✓</span>':''}</td><td>${ok&&S.step==='done'?(S.recorded[i]*100/1000).toFixed(2)+' µg':''}</td></tr>`;
+  }
+  $('recBody').innerHTML=h;
+  if($('recBtn')){$('recBtn').onclick=record;$('recIn').onkeydown=e=>{if(e.key==='Enter')record()};}
+}
+const INFOSTEP={Ds:'kit',Br:'cal',Std1:'std1',Std2:'std2',Curve:'curve',Sample:'assay'};
+function renderAll(){if(S.info&&(INFOSTEP[S.info]!==S.step||(S.info==='Sample'&&S.si!==0))){S.info=null;renderInfo()}renderScreen();renderSteps();renderRack();renderChamber();renderRecord();renderMsg();
+  ['s1a','s1b','s2a','s2b','sma','smb','bCheck'].forEach(id=>$(id).disabled=S.prepOK);}
+function staticText(){
+  document.documentElement.lang=L;
+  const map={subtitle:'subtitle',bReset:'reset',hSteps:'steps',hPrep:'prep',thTube:'tube',thSol:'sol',thAdd:'add',thTot:'tot',lS1:'s1',lS2:'s2',lSm:'sm',bCheck:'check',hQubit:'qubit',hRack:'rack',rackHint:'rackHint',hRec:'rec',thS:'thS',thC:'thC',thY:'thY',foot:'foot'};
+  for(const k in map)$(k).textContent=t(map[k]);
+  $('bEN').classList.toggle('on',L==='en');$('bFR').classList.toggle('on',L==='fr');
+}
+/* ---- prep ---- */
+function sumRow(a,b,o){const x=+$(a).value||0,y=+$(b).value||0;$(o).textContent=($(a).value||$(b).value)?(x+y)+' µL':'–'}
+['s1','s2','sm'].forEach(p=>['a','b'].forEach(q=>$(p+q).oninput=()=>sumRow(p+'a',p+'b',p+'t')));
+$('bCheck').onclick=()=>{
+  const v=id=>+$(id).value;
+  for(const p of ['s1','s2','sm'])if(v(p+'a')+v(p+'b')!==200){say('tot200','bad');return}
+  if(v('s1a')!==190||v('s1b')!==10||v('s2a')!==190||v('s2b')!==10){say('stdWrong','bad');return}
+  const d=v('smb');if(!Number.isInteger(d)||d<1||d>10){say('smWrong','bad');return}
+  S.dna=d;S.prepOK=true;S.step='home';S.sel=0;say('prepOK','good',{sol:200-d,dna:d});renderAll();
+};
+/* ---- qubit controls ---- */
+$('lid').onclick=()=>{if(S.busy)return;S.lid=!S.lid;renderChamber()};
+$('slot').onclick=e=>{if(e.target.id==='lid'||S.busy)return;if(!S.lid){say('openFirst','bad');return}if(S.inCh){S.inCh=null;renderRack();renderChamber()}};
+function insert(id){
+  if(S.busy)return;
+  if(!S.lid){say('openFirst','bad');return}
+  if(S.inCh){say('full','bad');return}
+  S.inCh=id;renderRack();renderChamber();
+  if(id==='std1'&&S.step==='std1'&&S.info!=='Std1')info('Std1');
+  if(id==='std2'&&S.step==='std2'&&S.info!=='Std2')info('Std2');
+}
+$('up').onclick=()=>arrow(-1);$('dn').onclick=()=>arrow(1);
+function arrow(d){
+  if(S.busy)return;
+  if(MENUS[S.step]){const n=MENUS[S.step][0].length;S.sel=(S.sel+d+n)%n}
+  else if(S.step==='vol'){S.vol=Math.min(20,Math.max(1,S.vol-d))}
+  renderScreen();
+}
+function needTube(id){
+  if(S.lid){say('closeLid','bad');return false}
+  if(!S.inCh){say('noTube','bad');return false}
+  if(S.inCh!==id){say('wrongTube','bad');return false}
+  return true;
+}
+function readAnim(after){
+  S.busy=true;const p=$('pbar'),r=$('rd');if(r)r.textContent=t('reading');
+  requestAnimationFrame(()=>{if(p)p.style.width='100%'});
+  setTimeout(()=>{S.busy=false;after()},1200);
+}
+$('go').onclick=()=>{
+  if(S.busy)return;
+  const st=S.step;
+  if(st==='prep'){say('start','bad');return}
+  const m=MENUS[st];
+  if(m){
+    if(S.sel!==m[1]){say(m[3],'bad');return}
+    if(st==='unit'){S.unit=0;S.step='result';say('okUnit','good');renderAll();return}
+    S.step=m[5];S.sel=0;if(m[4])say(m[4],'good');
+    if(st==='dna')info('Ds');if(st==='kit')info('Br');
+    if(st==='assay'){S.vol=1;}
+    renderAll();return;
+  }
+  if(st==='std1'){if(!needTube('std1'))return;readAnim(()=>{S.used.add('std1');S.step='std2';say('ok1','good');renderAll()});return}
+  if(st==='std2'){if(!needTube('std2'))return;readAnim(()=>{S.used.add('std2');S.step='curve';say('ok2','good');renderAll();info('Curve')});return}
+  if(st==='curve'){S.step='sample';say('okCurve','good');renderAll();return}
+  if(st==='sample'){const id='s'+S.si;if(!needTube(id))return;readAnim(()=>{S.used.add(id);S.step='assay';S.sel=0;say('okRead','good');renderAll();if(S.si===0)info('Sample')});return}
+  if(st==='vol'){if(S.vol!==S.dna){say('wrongVol','bad');return}S.step='unit';S.sel=0;say('okVol','good',{v:S.dna});renderAll();return}
+  if(st==='result'){
+    if(S.recorded[S.si]===undefined){say('recordFirst','bad');return}
+    S.si++;
+    if(S.si>=NS){S.step='done';say('done','good');renderAll();return}
+    S.step='sample';say('next2','',{n:S.si+1});renderAll();return;
+  }
+};
+function record(){
+  const x=parseFloat($('recIn').value);
+  const right=+stockShown(S.si).toFixed(2);
+  if(isNaN(x)||Math.abs(x-right)>0.011){say('recWrong','bad');return}
+  S.recorded[S.si]=right;
+  if(S.si+1>=NS){S.si++;S.step='done';say('done','good');renderAll();return}
+  S.si++;S.step='sample';say('next2','good',{n:S.si+1});renderAll();
+}
+/* language + reset */
+$('bEN').onclick=()=>{L='en';staticText();renderAll();renderInfo()};
+$('bFR').onclick=()=>{L='fr';staticText();renderAll();renderInfo()};
+$('bReset').onclick=()=>{newState();renderInfo();['s1a','s1b','s2a','s2b','sma','smb'].forEach(i=>$(i).value='');['s1t','s2t','smt'].forEach(i=>$(i).textContent='–');renderAll()};
+function tick(){const d=new Date();$('clock').textContent=d.toTimeString().slice(0,5)}setInterval(tick,30000);tick();
+newState();staticText();renderAll();
+</script>
+</body>
+</html>
