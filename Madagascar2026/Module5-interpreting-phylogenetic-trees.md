@@ -1,9 +1,6 @@
----
-title: Viewing and Interpreting Phylogenetic Trees
----
+<img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
 
-![Field2Phylogeny](images/Field2Phylogeny-logo.png)
-
+---
 # Viewing and Interpreting Phylogenetic Trees
 
 ## *From a Newick file to a figure for a paper, and a map of where your samples came from*
