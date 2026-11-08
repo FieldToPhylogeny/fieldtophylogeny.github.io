@@ -200,7 +200,7 @@ Choose A or B first (alone or with your partner), then click to check.
 <details markdown="1">
 <summary><b>Answer</b> <i>(click to check)</i></summary>
 
-**A.** A sequence that differs almost everywhere is very often just **backwards** (it was not reverse-complemented). Reverse-complement it first: if it suddenly matches the others, the problem is solved. If it still looks wrong, the chromatogram will tell you whether the read was bad. Only remove a sequence when you know *why* it is wrong: every sample is valuable data.
+**A.** *A sequence that differs almost everywhere is very often just **backwards** (it was not reverse-complemented). Reverse-complement it first: if it suddenly matches the others, the problem is solved. If it still looks wrong, check the chromatogram. *
 
 </details>
 
@@ -212,19 +212,7 @@ Choose A or B first (alone or with your partner), then click to check.
 <details markdown="1">
 <summary><b>Answer</b> <i>(click to check)</i></summary>
 
-**A.** 3 bases = one codon, so the reading frame is not broken. This can be a **real insertion**. If the chromatogram is clean, keep the bases and give the other sequences a gap. Deleting real bases would remove real data.
-
-</details>
-
-**4. The last 15 bases of one sequence do not match any other sequence. What is the most likely cause?**
-
-* **A)** This species has a lot of real variation at the end of the gene.
-* **B)** The end of the read was low quality. Check the chromatogram, then replace those bases with N (or trim them).
-
-<details markdown="1">
-<summary><b>Answer</b> <i>(click to check)</i></summary>
-
-**B.** The ends of a Sanger read are usually the lowest quality (small, messy peaks). Differences that are only at the very end of **one** sequence are almost always sequencing errors, not real mutations.
+**A.** *3 bases = one codon, so the reading frame is correct. This can be a **real insertion**. If the chromatogram is clean, keep the bases and give the other sequences a gap. *
 
 </details>
 
@@ -232,9 +220,7 @@ Choose A or B first (alone or with your partner), then click to check.
 
 Open your `GroupA_COI_aligned.fasta` from Exercise 1 in AlignLab and repeat the checks from Exercise 2:
 
-1. Any backwards sequences?
-2. Which frame has no stop codons?
-3. Any single-base gaps or extra bases? Check them against your chromatogram in TraceLab.
+3. Are there any single-base gaps or extra bases? Check them against your chromatogram in TraceLab.
 4. Save as `GroupA_COI_aligned_edited.fasta`. This is the input for **Module 4: Estimating phylogenetic trees**.
 
 ## Discussion Questions
