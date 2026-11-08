@@ -120,3 +120,9 @@ The DNA we extract is invisible, and a tiny amount of another sample's DNA can e
 * Label the **lid and the side** of every tube before you start, with a permanent marker. A good side label has the catalogue number, the species and the tissue, for example:
   `UADBA 43227` / *Nesomys lambertoni* / `liver in EtOH`. Record each sample on your group's sheet.
 * Put liquid waste in the waste beaker, not down the sink.
+
+### Continue the workshop
+
+* Next: [DNA Extraction](DNA-extraction.md)
+* [Madagascar 2026 workshop home](https://fieldtophylogeny.github.io/Madagascar2026/)
+
