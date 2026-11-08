@@ -80,6 +80,6 @@ AAGATATTGGAACCCTATACC...
 
 ### Continue the workshop
 
-* Previous: [Module 1: Sequence editing](Module1-sequence-editing-lab.html)
-* Next: [Module 3: Sequence alignment](Module3-sequence-alignment.html)
+* Previous: [Module 1: Sequence editing](Module1-sequence-editing-lab.md)
+* Next: [Module 3: Sequence alignment](Module3-sequence-alignment.md)
 * [Madagascar 2026 workshop home](https://fieldtophylogeny.github.io/Madagascar2026/)
