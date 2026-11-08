@@ -28,9 +28,9 @@ The alignment contains gaps (`-`) and a few ambiguous nucleotide codes (`N`, `R`
 
 A tree consists of **tips** (sampled sequences), **internal branches** connecting groups of samples, and **nodes** where branches meet. Its branching arrangement is the **topology**. Branch lengths describe inferred evolutionary change.
 
-**Maximum likelihood (ML)** asks: given a model of sequence evolution, which tree and model parameters make the observed alignment most likely? The program searches among possible topologies and estimates branch lengths and model parameters. With 200 samples, there are far too many possible trees to examine every one, so programs use search strategies to find good solutions. RAxML-NG is a widely used ML program; see [Kozlov et al. (2019)](https://doi.org/10.1093/bioinformatics/btz305).
+**Maximum likelihood (ML)** asks: given a model of how DNA sequence evolves, which phylogenetic tree and model parameters make our alignment most likely? The program searches among possible tree relationships and estimates branch lengths and model parameters. With 200 samples, there are far too many possible trees to examine every one, so programs use search strategies to find good solutions. RAxML-NG is a common ML program; see [Kozlov et al. (2019)](https://doi.org/10.1093/bioinformatics/btz305).
 
-The result is a hypothesis conditional on the sequences, alignment, model, and search. It is not a direct observation of evolutionary history. A larger likelihood is better when comparing candidate trees under the same data and model, but it is not a probability that a tree is correct.
+The result is a hypothesis, meaning we might re-do the analysis or add more data and obtain a different results. 
 
 ### What is a substitution model?
 
@@ -45,20 +45,17 @@ We choose this model to make the settings reproducible, rather than claiming it 
 
 ## Bootstrapping: How well supported are the branches?
 
-Some relationships in a tree have much more support than others. **Nonparametric bootstrapping** measures how consistently a branch is recovered when we resample alignment columns.
+Some relationships in a tree have much more support than others because we have more data that suggests they are correct. **Nonparametric bootstrapping** measures how consistently a branch is recovered when we resample alignment columns.
 
 1. Start with the original alignment of 671 columns.
 2. Draw 671 columns at random, **with replacement**. Some columns appear several times; others are left out. Each sampled column includes the bases from all 200 samples, preserving their correspondence.
 3. Estimate a tree from this resampled alignment.
 4. Repeat to obtain many bootstrap trees, then count how often each split in the original ML tree occurs.
 
-For a tiny alignment with columns `1 2 3 4 5`, one bootstrap replicate might use `2 5 2 1 4`. We resample **columns**, not individuals, and do not sequence new DNA.
 
-If a split appears in 87 of 100 bootstrap trees, it receives **87% bootstrap support**. Support concerns an individual split, rather than recovery of the entire tree unchanged. It is also **not an 87% probability that the relationship is true**. Consistent errors in an alignment or model can still produce high support.
+If a node splits into two branches in 87 of 100 bootstrap trees, it receives **87% bootstrap support**. We will request **100 standard bootstrap replicates** for our run, but your own research analyses may require more replicates. 
 
-We will request **100 standard bootstrap replicates** for a practical introductory run. This does not guarantee that support estimates have stabilized; research analyses may require more replicates and a convergence assessment. Repeating a tree search on the unchanged alignment is different from bootstrapping.
-
-> *If two branches have support values of 98 and 42, which is more stable to resampling? Would either value prove a species identification?*
+> *If two branches have support values of 98 and 42, which is more stable? Would either value prove a species identification?*
 
 ## Exercise 1: Configure the analysis
 
