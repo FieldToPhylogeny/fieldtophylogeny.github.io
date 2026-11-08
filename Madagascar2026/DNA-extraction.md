@@ -200,7 +200,7 @@ Tonight (short term): the **fridge, 4 °C**. For a year (long term): the **freez
 
 The DNeasy Blood & Tissue Kit works well for fresh or ethanol-preserved animal tissue. Other kinds of samples need different kits. The four basic steps (lyse, bind, wash, elute) stay the same, but the lysis and clean-up are changed for the sample.
 
-| Sample type | Problem | A commonly used kit | Notes |
+| Sample type | Problem | Example kit | Notes |
 |---|---|---|---|
 | Animal tissue, nucleated blood (reptiles, birds, amphibians) | None: this is today's kit | [Qiagen DNeasy Blood & Tissue](https://www.qiagen.com/us/products/discovery-and-translational-research/dna-rna-purification/dna-purification/genomic-dna/dneasy-blood-and-tissue-kit) | Use 5–10 µL of nucleated blood |
 | Plants (leaves, including chloroplast DNA) | Tough cell walls; chemicals (polysaccharides, polyphenols) that block PCR | [Qiagen DNeasy Plant Pro](https://www.qiagen.com/us/products/discovery-and-translational-research/dna-rna-purification/dna-purification/genomic-dna/dneasy-plant-pro-kits) | Tissue is ground with beads. The DNA includes the chloroplast genome, used for plant barcodes (*rbcL*, *matK*). CTAB extraction is a cheap alternative. |
@@ -208,8 +208,6 @@ The DNeasy Blood & Tissue Kit works well for fresh or ethanol-preserved animal t
 | Very long DNA for genome sequencing (PacBio, Oxford Nanopore) | Columns and vortexing break DNA into short pieces | [NEB Monarch HMW DNA Extraction Kit for Tissue](https://www.neb.com/products/t3060-monarch-hmw-dna-extraction-kit-for-tissue) | Gentle handling, no vortexing. Needs fresh or frozen tissue. PacBio Nanobind kits are another option. |
 | Environmental DNA (eDNA) from water | Very little DNA, mixed with chemicals that block PCR | [Qiagen DNeasy PowerWater](https://www.qiagen.com/us/products/discovery-and-translational-research/dna-rna-purification/dna-purification/microbial-dna/dneasy-powerwater-kit) | Water is first filtered; the filter is extracted. Sterivex filters have their own kit. Controls are essential because contamination is easy. |
 | Soil, sediment, faeces | Humic acids and other inhibitors | [Qiagen DNeasy PowerSoil Pro](https://www.qiagen.com/us/products/discovery-and-translational-research/dna-rna-purification/dna-purification/microbial-dna/dneasy-powersoil-pro-kit) | Bead beating plus an inhibitor-removal step |
-
-Other companies (Zymo, Macherey-Nagel, Thermo Fisher, NEB and others) make kits for each of these sample types.
 
 ## Troubleshooting
 
@@ -232,7 +230,7 @@ Other companies (Zymo, Macherey-Nagel, Thermo Fisher, NEB and others) make kits 
 
 ## References
 
-* <sub>QIAGEN (2023). DNeasy Blood & Tissue Handbook. Available at [qiagen.com/handbooks](https://www.qiagen.com/handbooks).</sub>
+* QIAGEN (2023). DNeasy Blood & Tissue Handbook. Available at [qiagen.com/handbooks](https://www.qiagen.com/handbooks).
 
 ### Continue the workshop
 
