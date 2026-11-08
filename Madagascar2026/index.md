@@ -37,7 +37,7 @@ By the end of this workshop, participants will be able to:
   - [Dr. Fidisoa Rasambainarivo](https://biology.ecu.edu/faculty/fidisoa-rasambainarivo/) (East Carolina University; collaborator)
   - [Dr. Isaac Overcast](https://isaacovercast.github.io/) (University of Maine; INHS; collaborator)
 
-### Instructor and partricipant introduction slides
+### Instructor and participant introduction slides
 
 [Brief introductions for the instructors and participants](https://docs.google.com/presentation/d/1RBkyEjekzo9iSPmykFqkeRvw5_-QtKkCoJFK7NFnG1c) (1-2 min. each)
 
@@ -52,7 +52,7 @@ Times       | Day 1 (Wed Nov 11); Mahaliana | Day 2 (Thu Nov 12); Vahatra |
 8:30-9:00   | Check-in & [Intro to Pipetting](pipetting-basics.md) | Check-in and computer setup |
 9:00-12:00  | [DNA Extraction Part I](DNA-extraction.md) & Molecular Lab Lecture | [DNA Barcoding](Intro-Barcoding.md), [Sequence Editing Lab](Module1-sequence-editing-lab.md), [BLAST Searches](Module2-BLAST-searching.md), [Sequence Alignment Lab](Module3-sequence-alignment)|
 12:00-13:30 | Lunch | Lunch |
-13:30-17:00 | [DNA Extraction Part II](DNA-extraction.md) & DNA Quantification Lab | [Phylogenetic Inference w/ RAxML](Module4-estimating-phylogenetic-trees.md) & [Phylogenetics Visualization Lab](Module5-interpreting-phylogenetic-trees.md) |
+13:30-17:00 | [DNA Extraction Part II](DNA-extraction.md) & [DNA Quantification Lab](DNA-quantification.md) | [Phylogenetic Inference w/ RAxML](Module4-estimating-phylogenetic-trees.md) & [Phylogenetics Visualization Lab](Module5-interpreting-phylogenetic-trees.md) |
 
 
 ## Workshop sponsored by:
