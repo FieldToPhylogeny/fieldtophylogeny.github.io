@@ -8,21 +8,20 @@ Pipetting and DNA Extraction
 
 # Pipetting and DNA Extraction
 
-## *From a piece of tissue to a tube of clean DNA*
+## *From tissue samples in the field to isolated, genomic DNA*
 
-Everything in this workshop starts with DNA. Today you will extract DNA from reptile and amphibian tissue using the **Qiagen DNeasy Blood & Tissue Kit**. Before you start, you will practise using a **micropipette**, because almost every step of the extraction depends on measuring small volumes accurately.
+Today you will extract DNA from reptile and amphibian tissue using the **Qiagen DNeasy Blood & Tissue Kit**. Before you start, you will practise using a **micropipette**, because almost every step of the extraction depends on measuring small volumes accurately.
 
-You will work in groups. Each group has its own set of pipettes and its own samples. Every person in the group extracts DNA from their own samples.
+You will work in groups. Each group has its own preserved tissue samples collected from Kirindy Forest in Western Madagascar. Every person should pratice with pipettes and with extraction steps.
 
 ### Learning objectives
 
 By the end of this module you should be able to:
 
-1. Choose the right micropipette for a volume, set it, and use the first and second stops correctly.
-2. Avoid contaminating your samples, your reagents and the other groups' samples.
+1. Choose the right micropipette and tip, set it, and use the first and second stops correctly.
+2. Understand steps for avoiding sample contamination.
 3. Explain what each step of a silica-column DNA extraction does: lyse, bind, wash, elute.
 4. Carry out the DNeasy Blood & Tissue extraction from start to finish.
-5. Name a suitable kit for other sample types: plants, formalin-fixed tissue, blood, genome sequencing and environmental DNA.
 
 ## Part 1: Using a micropipette
 
@@ -37,7 +36,7 @@ By the end of this module you should be able to:
 | 1 | Plunger button | Piston | Press it to take up and release liquid |
 | 2 | Tip ejector | Éjecteur | Pushes the used tip off without touching it |
 | 3 | Volume display | Affichage du volume | Shows the volume the pipette is set to |
-| 4 | Disposable tip | Cône | The only part that touches the liquid. Use a new one every time. Some tips have a **filter** (the small plug at the top) that stops liquid from being sucked up into the pipette, where it would contaminate the pipette and your next samples. |
+| 4 | Disposable tip | Cône | The only part that touches the liquid. Use a new one every time. Some tips have a **filter** that stops liquid from being sucked up into the pipette, where it would contaminate the pipette and your next samples. |
 
 ### The two stops
 
