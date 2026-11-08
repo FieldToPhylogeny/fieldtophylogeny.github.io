@@ -65,11 +65,8 @@ Many tree programs, including RAxML, treat `-` and `N` the same way (as missing 
 
 | What you see in the alignment | Likely cause | How to check | Fix |
 |---|---|---|---|
-| One sequence is different almost everywhere | It was not reverse-complemented (it is backwards) | Differences everywhere; many stop codons in every frame | Reverse-complement the sequence, then realign |
-| A base in a column where **every other** sequence has a gap, often in a run like `CCCCCC` | Extra base called in a **homopolymer** (a run of the same base) | Look at the chromatogram at that spot | Delete the extra base (delete the column) |
-| A single gap in one sequence | A base was missed (deleted) during sequencing or editing | Stop codons after the gap; check the chromatogram | Put the missing base back, or replace the gap with `N` |
+| One sequence is different almost everywhere | It was not reverse-complemented (it is backwards) | Differences everywhere; many stop codons in every frame | Reverse-complement the sequence |
 | Many differences bunched at the very start or end of one sequence | Low-quality read ends that were not trimmed | Look at the chromatogram quality at that end | Replace those bases with `N` |
-| A double-peak code (R, Y…) in a mitochondrial gene | Mixed signal: contamination, a nuclear copy of the gene (**NUMT**), or a noisy peak | Look at the chromatogram | Keep the code, or re-sequence |
 | Stop codons in **every** sequence after one column | One sequence's error made the aligner add a gap column to all the others | Find the column where only one sequence has a base | Fix that one sequence; remove the now-empty column |
 
 ## Alignment programs
