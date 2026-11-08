@@ -243,8 +243,8 @@ Open your `GroupA_COI_aligned.fasta` from Exercise 1 in AlignLab and repeat the 
 
 ### Continue the workshop
 
-* Previous: [Module 2: BLAST and BOLD searches](Module2-BLAST-searching.html)
-* Next: [Module 4: Estimating phylogenetic trees](Module4-estimating-phylogenetic-trees.html)
+* Previous: [Module 2: BLAST and BOLD searches](Module2-BLAST-searching.md)
+* Next: [Module 4: Estimating phylogenetic trees](Module4-estimating-phylogenetic-trees.md)
 * [Madagascar 2026 workshop home](https://fieldtophylogeny.github.io/Madagascar2026/)
 
 
