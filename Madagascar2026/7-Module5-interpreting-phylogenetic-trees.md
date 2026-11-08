@@ -63,7 +63,7 @@ Questions as you go:
 * Which species is the **sister** of *Compsophis boulengeri*? Does the answer change when you rotate nodes?
 * Look at the **Newick text** under the tree as you rotate. What changes, and what stays the same?
 
-> **Key idea:** a tree is like a mobile hanging from the ceiling. You can spin any branch around its node, and the picture changes, but **who is connected to whom does not**. Never read relationships from the order of names from top to bottom.
+> **Key idea:** a tree is like a mobile hanging from the ceiling. You can spin any branch around its node, and the picture changes, but **what species is most closely related to what species does not**. 
 
 ### Exercise 2: Rooting
 
@@ -248,21 +248,15 @@ The full code, including how `tr`, `X` and the colours `cols` are made, is in se
 
 2.) Why must the outgroup be chosen **before** you look at the tree?
 
-3.) Which clades in your own tree have bootstrap support of at least 70%? Which do not?
+3.) What is the closest relative of the mystery sample, and how well supported is that relationship?
 
-4.) Where does your mystery sample fall in the tree? What is its closest relative, and how well supported is that relationship?
-
-5.) Look at your map. Are closely related samples collected close to each other? Are there any surprises?
-
-6.) If two samples are 99% identical but were collected at opposite ends of Madagascar, what could explain it?
-
-7.) Why is a PDF better than a PNG for a figure in a paper?
+4.) If two samples are 99% identical but were collected at opposite ends of Madagascar, what could explain it?
 
 ### Record your analysis
 
-> The maximum likelihood tree with bootstrap support (Module 4) was rooted with [outgroup] and plotted in R v[version] with ape v[version] (Paradis & Schliep 2019) and ggtree v[version] (Yu et al. 2017). Bootstrap values ≥ 70% are shown. Samples were linked to their collection localities with phytools::phylo.to.map (Revell 2024).
+> For publication: *The maximum likelihood tree with bootstrap support (Module 4) was rooted with [outgroup] and plotted in R v[version] with ape v[version] (Paradis & Schliep 2019) and ggtree v[version] (Yu et al. 2017). Bootstrap values ≥ 70% are shown. Samples were linked to their collection localities with phytools::phylo.to.map (Revell 2024).*
 
-You can print the package versions with `packageVersion("ggtree")`, or all of them with `sessionInfo()`.
+You can print the package versions using `packageVersion("ggtree")`, or all of them with `sessionInfo()`.
 
 ## Troubleshooting
 
@@ -292,7 +286,3 @@ You can print the package versions with `packageVersion("ggtree")`, or all of th
 * [Madagascar 2026 workshop home](https://fieldtophylogeny.github.io/Madagascar2026/)
 =======
 <img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
-
-# Viewing & Interpreting Phlyogenetic Trees
-
-## RAxML raw output files
