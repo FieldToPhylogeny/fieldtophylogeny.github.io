@@ -113,10 +113,8 @@ Answer each question in your head (or with your partner) first, then click to ch
 
 The DNA we extract is invisible, and a tiny amount of another sample's DNA can end up in your tube. Most mistakes in DNA work happen here, not in the kit.
 
-* Wear gloves in the lab to prevent **your** DNA or other contaminants from getting into samples. Change them if you touch your face, your phone or your notebook.
+* Wear gloves in the lab to prevent **your** DNA or other contaminants from getting into samples. 
 * Use a **new tip for every tube and every reagent**. Never put a used tip back into a reagent bottle.
-* If you aren't familiar with a protocol, you can either open all tubes and close each one as the liquid goes in, or open only one tube at a time. If you do not have a method for tracking, it is easy to mix up samples or add a reagent twice.
-* Sterilize forceps between tissue samples, using methods like ethanol + flame.
 * Label the **lid and the side** of every tube before you start, with a permanent marker. A good side label has the catalogue number, the species and the tissue, for example:
   `UADBA 43227` / *Nesomys lambertoni* / `liver in EtOH`. Record each sample on your group's sheet.
 * Put liquid waste in the waste beaker, not down the sink.
