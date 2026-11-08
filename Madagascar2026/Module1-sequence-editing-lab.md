@@ -42,14 +42,21 @@ Group B:
 
 Open [TraceLab Chromatogram Viewer](TraceLab-V2.html) then follow these steps:
 
-## Exercises
+## Discussion Questions
 1.) After uploading your forward and reverse sequences to the viewer, how many basepairs were ambiguous?  
 
 2.) What quality score works best for your alignment: strict, regular, or relaxed? how many basepairs of difference are there between each?    
 
 3.) Which sequence was better quality, forward or reverse? Did having both improve your sequence?    
 
-4.) Which reading frame was correct for your contig?    
+4.) Which reading frame was correct for your contig?  
+
+
+### Continue the workshop
+
+* Next: [Module 2: Blast searching](Module2-BLAST-searching.md)
+* [Madagascar 2026 workshop home](https://fieldtophylogeny.github.io/Madagascar2026/)
+
 
 
 
