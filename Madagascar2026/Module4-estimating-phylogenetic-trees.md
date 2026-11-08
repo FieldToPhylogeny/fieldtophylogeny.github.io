@@ -176,7 +176,6 @@ Complete this methods statement using your own results:
 
 ### Continue the workshop
 
-* Previous: [Sequence alignment](Module3-sequence-alignment.md)
 * Next: [Interpreting phylogenetic trees](Module5-interpreting-phylogenetic-trees.md)
 * [Madagascar 2026 workshop home](index.md)
 * [Field2Phylogeny home](https://fieldtophylogeny.github.io/)
