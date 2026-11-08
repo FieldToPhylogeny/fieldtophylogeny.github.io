@@ -1,7 +1,7 @@
 <img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
 
 ---
-# DNA Quantification with the Qubit
+# DNA Quantification
 
 After extraction, your DNA is in a tube of clear liquid, so how do you know if the extraction worked? We **measure how much DNA (dsDNA) is in each tube** with a small fluorometer called the **Qubit** and the **AccuGreen Broad Range (BR) dsDNA assay** (Biotium).
 
