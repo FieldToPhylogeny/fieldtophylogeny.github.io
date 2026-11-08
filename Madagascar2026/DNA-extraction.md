@@ -3,9 +3,7 @@
 ---
 # DNA Extraction
 
-Today you will extract DNA from reptile and amphibian tissue using the **Qiagen DNeasy Blood & Tissue Kit**. 
-
-You will work in groups. Each group has its own preserved tissue samples collected from Kirindy Forest in Western Madagascar. Every person extraction steps.
+Today you will extract DNA from reptile and amphibian tissue using the **Qiagen DNeasy Blood & Tissue Kit**. You will work in groups. Each group has its own preserved tissue samples collected from Kirindy Forest in Western Madagascar. Every person extraction steps.
 
 ### Learning objectives
 
@@ -20,15 +18,15 @@ Every silica-column kit does the same four jobs: **lyse** the cells, **bind** th
 
 | Section | What it does | Buffer |
 |---|---|---|
-| Sample and tube prep | Label tubes, cut tissue, start the digestion | ATL + proteinase K |
-| Incubation | Digest the tissue completely | |
-| Tube prep | Label the final extraction tubes and spin columns | |
-| Cell lysis and denaturation | Finish lysis and switch off enzymes | AL |
-| Precipitation | Make the DNA ready to stick to the filter | Ethanol |
-| Bind DNA to the filter | DNA sticks to the filter membrane | |
-| Washing and purifying I | Remove proteins, enzymes and pigments | AW1 |
-| Washing and purifying II | Remove salts | AW2 |
-| Elution | Release clean DNA from filter | AE |
+| 1. Sample and digestion tube prep | Label tubes, cut tissue, start the digestion | ATL + proteinase K |
+| 2. Incubation | Digest the tissue completely | |
+| 3. Extractoion tube prep | Label the final extraction tubes and spin columns | |
+| 4. Cell lysis and denaturation | Finish lysis and switch off enzymes | AL |
+| 5. Precipitation | Make the DNA ready to stick to the filter | Ethanol |
+| 7. 6. Bind DNA to the filter | DNA sticks to the filter membrane | |
+| 8. Washing and purifying I | Remove proteins, enzymes and pigments | AW1 |
+| 9. Washing and purifying II | Remove salts | AW2 |
+| 10. Incubation and Elution | Release clean DNA from filter | AE |
 | **Hooray!** | Store your DNA | |
 
 ### Before you start
@@ -39,7 +37,7 @@ Preheat a thermal block or incubator to **56 °C**.
 
 > <small>*Also check that ethanol has already been added to the **AW1** and **AW2** bottles (there is a box to tick on each label). If Buffer ATL or AL has white crystals in it, warm the bottle at 56 °C until they dissolve.*</small>
 
-### Sample and tube prep
+### 1. Sample and digestion tube prep
 
 <img src="images/section-tube-prep.png" alt="A bottle of Buffer ATL, then a pipette with one tip moving from tube to tube; each tube is labelled on the side, and a top view shows the lid labelled 43227" width="560">
 
@@ -59,7 +57,7 @@ Add **20 µL proteinase K** and mix by **vortexing**.
 >
 > <small>*Proteinase K ("ProK" for short) is a protease: an enzyme that digests proteins. It rapidly breaks down the nucleases (DNases and RNases) that would otherwise destroy the genetic material you are trying to isolate and purify.*</small>
 
-### Incubation
+### 2. Incubation
 
 <img src="images/section-incubation.png" alt="Tubes in a 56 °C heat block; at 0 hours the tissue is a cube in blue buffer, at 1–2 hours it is in fragments (vortex and put back on the block), and after more than 2 hours the liquid is tan with no tissue left" width="580">
 
@@ -71,7 +69,7 @@ Incubate all samples at **56 °C**. We will vortex at least once during the incu
 
 Three hours is usually the minimum; overnight is ideal for complete digestion.
 
-### Post-incubation tube prep
+### 3. Post-incubation extraction tube prep
 
 <img src="images/section-relabel.png" alt="Spin columns taken out of their blister pack and labelled on the lid; then final 1.5 mL tubes with coloured side labels and labelled lids" width="680">
 
@@ -80,7 +78,7 @@ This is not an essential step, but it is one I always do to save time and organi
 1. **Get the spin columns out of their packaging and label them.** Spin columns come in plastic blister packs (for more than 40 samples, unpacking can take a lot of time!). Label each column on the **lid only**. We will throw the columns away at the end, but until then you need the labels to keep track of your samples.
 2. **Prepare the tubes for your final DNA extracts.** Label a new 1.5 mL tube for each sample on the **lid** and on the **side**. Use a **coloured label** on the side so your final DNA tubes are easy to tell apart from all the other tubes. Besides the catalogue number and species, it helps to add your initials and an extraction number, for example `ALK EXT 1`.
 
-### Cell lysis and denaturation
+### 4. Cell lysis and denaturation
 
 <img src="images/section-add-AL.png" alt="Buffer AL bottle, 200 µL added to the digested tissue with a yellow tip, then vortexed" width="400">
 
@@ -92,7 +90,7 @@ All steps after the incubation should be done in sequence for the best DNA yield
 > * <small>*Deactivates enzymes: it denatures cellular proteins, disabling the nucleases that would otherwise break down your newly released DNA.*</small>
 > * <small>*Helps purification: it creates a high-salt environment, so the DNA will bind tightly to the silica filter of the spin column. The later washes can then remove cell debris* without *washing away your DNA.*</small>
 
-### Precipitation
+### 5. Precipitation
 
 <img src="images/section-ethanol.png" alt="Ethanol bottle, 200 µL added with a yellow tip, then vortexed: the mixture turns cloudy with white strands" width="400">
 
@@ -102,7 +100,7 @@ Add **200 µL ethanol (96–100%)** and mix thoroughly by vortexing. You will im
 
 > <small>*Ethanol changes the properties of the water in your tube. This matters because DNA molecules are negatively charged. Ethanol strips water away from the DNA, so the salts from Buffer AL can bind to it and neutralize its charge. This is what makes the DNA stick to your filter!*</small>
 
-### Bind DNA to the filter
+### 6. Bind DNA to the filter
 
 <img src="images/section-bind.png" alt="About 600 µL of the mixture pipetted with a blue tip into a spin column, centrifuged 1 min at 6000 × g; the DNA binds to the silica filter, the flow-through is discarded, and the filter goes into a new sterile collection tube" width="720">
 
@@ -110,7 +108,7 @@ Next, set your pipette so it will take up all of the solution. We have already a
 
 **Centrifuge** the spin columns at **≥ 6,000 × g (8,000 rpm) for 1 minute**. Take the tubes out of the centrifuge and *throw away* **only** the collection tube and the liquid in it. Keep your spin column: that's your DNA! Place the spin column in a brand-new collection tube.
 
-### Washing and purifying I
+### 7. Washing and purifying I
 
 <img src="images/section-wash1.png" alt="500 µL Buffer AW1 added to the spin column with a blue tip, centrifuged 1 min at 6000 × g; the flow-through is discarded and the filter goes into a new sterile collection tube" width="720">
 
@@ -118,7 +116,7 @@ Add **500 µL Buffer AW1**. Be careful not to mix this up with AW2! Centrifuge f
 
 > <small>*AW1 is the first of two special wash buffers that clean the DNA while it is bound to the spin column membrane. It breaks down and washes away leftover proteins, denatured enzymes and pigments, while the DNA stays bound to the filter. So the liquid you throw away here is the stuff we* **don't** *want, and the spin column holds our precious trapped DNA!*</small>
 
-### Washing and purifying II
+### 8. Washing and purifying II
 
 <img src="images/section-wash2.png" alt="500 µL Buffer AW2 added to the spin column with a blue tip, centrifuged 3 min at 20,000 × g; the flow-through is discarded and the filter goes into the pre-labelled 1.5 mL tube for the final DNA extract" width="720">
 
@@ -126,7 +124,7 @@ Add **500 µL Buffer AW2** and centrifuge for **3 minutes at 20,000 × g (14,000
 
 > <small>*Buffer AW2 contains more ethanol than AW1, but none of AW1's special salts. This is really important! AW2 dissolves away the salts left behind by AW1 (which got rid of all the garbage), while the ethanol keeps the DNA on the filter. This prepares the DNA for the next step, where we get it* off *the filter!*</small>
 
-### Elution
+### 9. Elution
 
 <img src="images/section-elute.png" alt="100 µL Buffer AE added with a yellow tip onto the centre of the filter, wait 3 minutes, centrifuge 1 min at 6000 × g, discard the filter; your DNA extract is in the labelled tube" width="720">
 
@@ -141,7 +139,7 @@ Next, **elute** the DNA by adding **100 µL Buffer AE** to the centre of the spi
 
 ### Hooray!
 
-<img src="images/section-storage.png" alt="Your DNA tube goes in the fridge (3 °C) for short-term storage, the −20 °C freezer for long-term storage, or the −80 °C freezer for very long-term storage" width="560">
+<img src="images/section-storage.png" alt="Your DNA tube goes in the fridge (3 °C) for short-term storage, the −20 °C freezer for long-term storage, or the −80 °C freezer for very long-term storage" width="360">
 
 **Do not throw away this tube: it now contains your genomic DNA extract!**
 
@@ -151,7 +149,7 @@ Next, **elute** the DNA by adding **100 µL Buffer AE** to the centre of the spi
 
 Avoid repeated freeze–thaw cycles (for example fridge to freezer to fridge): they damage the DNA in your sample and give lower-quality sequencing results later on.
 
-### Record your extraction
+### 10. Record your extraction
 
 Write the details of every extract in your **lab notebook** *and* in the lab's **digital spreadsheet**, so that anyone can find the sample again later:
 
@@ -159,9 +157,7 @@ Write the details of every extract in your **lab notebook** *and* in the lab's *
 |---|---|---|---|---|
 | ALK EXT 1 | 11 Nov 2026 | *Nesomys lambertoni* (UADBA 43227) | Liver in EtOH | −20 °C freezer, box 1 |
 
-The extract number always goes in the first column, and it must match the label on your tube.
-
-Next, we will measure the total amount of DNA in each of our samples. Good luck!
+> For publication: *"Genomic DNA was extracted from [tissue type] preserved in [95% ethanol / DMSO buffer] using the Qiagen DNeasy Blood & Tissue Kit, following the manufacturer's protocol for animal tissues (lysis at 56 °C for [time]; elution in [volume] µL Buffer AE). DNA concentration was measured with a Qubit fluorometer using the Biotium [kit name] assay."*
 
 ### Quiz: DNA extraction
 
@@ -178,37 +174,9 @@ Next, we will measure the total amount of DNA in each of our samples. Good luck!
 </details>
 
 <details markdown="1">
-<summary><b>2. What does proteinase K do, and how does that protect your DNA?</b> <i>(click for the answer)</i></summary>
-
-Proteinase K is an enzyme that **digests proteins**. It breaks down the **nucleases** (DNases) that would otherwise cut up your DNA.
-
-</details>
-
-<details markdown="1">
-<summary><b>3. Why do we add ethanol before putting the sample on the spin column?</b> <i>(click for the answer)</i></summary>
-
-Ethanol strips water away from the DNA, so the **salts** from Buffer AL can neutralize its negative charge. This lets the DNA **stick to the silica filter**.
-
-</details>
-
-<details markdown="1">
 <summary><b>4. After the first spin, what do you throw away: the spin column or the collection tube?</b> <i>(click for the answer)</i></summary>
 
 The **collection tube and the liquid in it.** Your DNA is stuck to the filter in the **spin column**, so keep it!
-
-</details>
-
-<details markdown="1">
-<summary><b>5. What is the difference between Buffer AW1 and Buffer AW2?</b> <i>(click for the answer)</i></summary>
-
-**AW1** washes away leftover proteins, enzymes and pigments. **AW2** washes away the **salts** left behind by AW1. Both contain ethanol, so the DNA stays on the filter.
-
-</details>
-
-<details markdown="1">
-<summary><b>6. Why does Buffer AE make the DNA come off the filter?</b> <i>(click for the answer)</i></summary>
-
-AE is **low in salt**, so the salt "bridge" holding the DNA to the silica breaks. The DNA **rehydrates** and dissolves into the buffer.
 
 </details>
 
@@ -228,7 +196,7 @@ Tonight (short term): the **fridge, 4 °C**. For a year (long term): the **freez
 
 ## Part 4: Other sample types, other kits
 
-<img src="images/section-other-samples.png" alt="Other sample types: plant leaf, museum specimen in a jar, blood, long DNA for genomes, filtered water, and soil" width="620">
+<img src="images/section-other-samples.png" alt="Other sample types: plant leaf, museum specimen in a jar, blood, long DNA for genomes, filtered water, and soil" width="520">
 
 The DNeasy Blood & Tissue Kit works well for fresh or ethanol-preserved animal tissue. Other kinds of samples need different kits. The four basic steps (lyse, bind, wash, elute) stay the same, but the lysis and clean-up are changed for the sample.
 
@@ -243,6 +211,15 @@ The DNeasy Blood & Tissue Kit works well for fresh or ethanol-preserved animal t
 
 Other companies (Zymo, Macherey-Nagel, Thermo Fisher, NEB and others) make kits for each of these sample types.
 
+## Troubleshooting
+
+| Problem | Likely cause | What to do |
+|---|---|---|
+| Tissue has not dissolved after 3 hours | Piece too big, or tough tissue (skin, scales) | Cut smaller; add 20 µL more Proteinase K; incubate longer |
+| Liquid does not pass through filter | Too much tissue, or undigested pieces | Spin longer; next time use less tissue |
+| Liquid touched the column after the last spin | Collection tube too full | Empty it and spin again for 1 minute |
+| Very low DNA (Qubit) | Little tissue, old sample, or ethanol left on the membrane | Elute in less buffer; elute a second time |
+
 ## Questions for discussion
 
 1.) What is the difference between the first stop and the second stop?
@@ -253,29 +230,13 @@ Other companies (Zymo, Macherey-Nagel, Thermo Fisher, NEB and others) make kits 
 
 4.) A colleague wants to sequence a whole genome with long reads. Why is today's kit not the best choice?
 
-### Record your extraction
-
-> Genomic DNA was extracted from [tissue type] preserved in [95% ethanol / DMSO buffer] using the Qiagen DNeasy Blood & Tissue Kit, following the manufacturer's protocol for animal tissues (lysis at 56 °C for [time]; elution in [volume] µL Buffer AE). DNA concentration was measured with a Qubit fluorometer using the Biotium [kit name] assay.
-
-## Troubleshooting
-
-| Problem | Likely cause | What to do |
-|---|---|---|
-| Tissue has not dissolved after 3 hours | Piece too big, or tough tissue (skin, scales) | Cut smaller; add 20 µL more Proteinase K; incubate longer |
-| The column is blocked; liquid stays on top | Too much tissue, or undigested pieces | Spin longer; next time use less tissue |
-| Liquid touched the column after the last spin | Collection tube too full | Empty it and spin again for 1 minute |
-| Very low DNA (Qubit) | Little tissue, old sample, or ethanol left on the membrane | Elute in less buffer; elute a second time; make sure the dry spin was 3 minutes |
-| Pipette volume looks wrong | Tip loose, plunger released too fast, or pipette past its range | Push the tip on firmly; release slowly; check the range |
-| Liquid inside the pipette | Pipette laid down or turned over with liquid in the tip | Tell an instructor; do not keep using it |
-
 ## References
 
 * <sub>QIAGEN (2023). DNeasy Blood & Tissue Handbook. Available at [qiagen.com/handbooks](https://www.qiagen.com/handbooks).</sub>
-* <sub>Taberlet, P., Bonin, A., Zinger, L., & Coissac, E. (2018). [*Environmental DNA: For Biodiversity Research and Monitoring*](https://doi.org/10.1093/oso/9780198767220.001.0001). Oxford University Press.</sub>
 
 ### Continue the workshop
 
-* Next: [Module 1: Sequence editing](Module1-sequence-editing-lab.html)
+* Next: [Module 1: Sequence editing](Module1-sequence-editing-lab.md)
 * [Madagascar 2026 workshop home](https://fieldtophylogeny.github.io/Madagascar2026/)
 
 
