@@ -281,5 +281,3 @@ You can print the package versions using `packageVersion("ggtree")`, or all of t
 
 * Previous: [Module 4: Estimating phylogenetic trees](Module4-estimating-phylogenetic-trees.html)
 * [Madagascar 2026 workshop home](https://fieldtophylogeny.github.io/Madagascar2026/)
-=======
-<img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
