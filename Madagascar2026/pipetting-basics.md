@@ -1,11 +1,11 @@
 <img src="images/Field2Phylogeny-logo.png" alt="Field2Phylogeny" width="600">
 
 ---
-# Pipetting and DNA Extraction
+# Pipetting Basics
 
 Today you will extract DNA from reptile and amphibian tissue using the **Qiagen DNeasy Blood & Tissue Kit**. Before you start, you will practise using a **micropipette**, because almost every step of the extraction depends on measuring small volumes accurately.
 
-You will work in groups. Each group has its own preserved tissue samples collected from Kirindy Forest in Western Madagascar. Every person should pratice with pipettes and with extraction steps.
+You will work in groups. Every person should pratice with pipettes.
 
 ### Learning objectives
 
@@ -13,8 +13,6 @@ By the end of this module you should be able to:
 
 1. Choose the right micropipette and tip, set it, and use the first and second stops correctly.
 2. Understand steps for avoiding sample contamination.
-3. Explain what each step of a silica-column DNA extraction does: lyse, bind, wash, elute.
-4. Carry out the DNeasy Blood & Tissue extraction from start to finish.
 
 ## Part 1: Using a micropipette
 
@@ -68,10 +66,10 @@ The labs' pipettes come from several brands (Eppendorf, VWR, Thermo Scientific, 
 
 > Some extra tips:
 
-* **Never** lay a pipette down, or turn it upside down, with liquid in the tip. Liquid runs into the pipette and contaminates it.
-* Let the plunger come up slowly. If it snaps up, you will pull in air bubbles or splash liquid into the pipette.
-* Ethanol and some buffers drip from the tip. Take up and release the liquid once (**pre-wet** the tip), then take up the volume you need.
-* Buffer AL foams! Pipette very bubbly solutions slowly.
+> * **Never** lay a pipette down, or turn it upside down, with liquid in the tip. Liquid runs into the pipette and contaminates it.
+> * Let the plunger come up slowly. If it snaps up, you will pull in air bubbles or splash liquid into the pipette.
+> * Ethanol and some buffers drip from the tip. Take up and release the liquid once (**pre-wet** the tip), then take up the volume you need.
+> * Buffer AL foams! Pipette very bubbly solutions slowly.
 
 ### Practice exercise
 
@@ -95,29 +93,16 @@ Answer each question in your head (or with your partner) first, then click to ch
 </details>
 
 <details markdown="1">
-<summary><b>2. Which stop do you press to when you take up liquid?</b> <i>(click for the answer)</i></summary>
+<summary><b>2. Which stop do you press to when you suck up liquid?</b> <i>(click for the answer)</i></summary>
 
-**The first stop.** The second stop is only for pushing out the last drop when you *release* liquid. If you take up liquid from the second stop, you will take up too much.
+**The first stop.** *If you take up liquid from the second stop, you will take up too much.*
 
 </details>
 
 <details markdown="1">
 <summary><b>3. Why should you never lay a pipette down with liquid in the tip?</b> <i>(click for the answer)</i></summary>
 
-The liquid runs back **into the pipette**. This contaminates it (and the next samples you pipette) and can damage it.
+*The liquid runs back **into the pipette**. This contaminates it (and the next samples you pipette) and can damage it.*
 
-</details>
-
-<details markdown="1">
-<summary><b>4. You need 5 µL. Should you use the P10 or the P20?</b> <i>(click for the answer)</i></summary>
-
-**P10.** 5 µL is inside the range of both, but it is near the bottom of the P20 range, where the P20 is least accurate.
-
-</details>
-
-<details markdown="1">
-<summary><b>5. Your ethanol keeps dripping out of the tip before you reach the tube. What can you do?</b> <i>(click for the answer)</i></summary>
-
-**Pre-wet the tip:** take up the ethanol and release it once, then take up the volume you need. Move quickly and keep the tube close.
 
 </details>
