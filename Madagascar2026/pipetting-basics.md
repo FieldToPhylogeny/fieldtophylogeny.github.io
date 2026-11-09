@@ -3,16 +3,12 @@
 ---
 # Molecular Lab Basics
 
-Today you will extract DNA from reptile and amphibian tissue using the **Qiagen DNeasy Blood & Tissue Kit**. Before you start, you will practise using a **micropipette**, because almost every step of the extraction depends on measuring small volumes accurately.
+Today you will extract DNA from reptile and amphibian tissue. Almost every step uses a **micropipette** (*micropipette*). First, you will practice with a micropipette. Every person in your group should try parts of the exercise
 
-You will work in groups. Every person should pratice with pipettes.
+**Goals:**
 
-### Learning objectives
-
-By the end of this module you should be able to:
-
-1. Choose the right micropipette and tip, set it, and use the first and second stops correctly.
-2. Understand steps for avoiding sample contamination.
+1. Choose the correct pipette and tip, and use the first and second stops.
+2. Contamination is the biggest risk to our samples, follow tips to prevent this during the extraction!
 
 ## Part 1: Using a micropipette
 
@@ -20,104 +16,101 @@ By the end of this module you should be able to:
 
 <img src="images/pipette-parts.png" alt="Parts of a micropipette" width="160">
 
-*Figure 1: The parts of a micropipette.*
-
 | | Part | Partie | What it does |
 |---|---|---|---|
-| 1 | Plunger button | Piston | Press it to take up and release liquid |
-| 2 | Tip ejector | Éjecteur | Pushes the used tip off without touching it |
-| 3 | Volume display | Affichage du volume | Shows the volume the pipette is set to |
-| 4 | Disposable tip | Cône | The only part that touches the liquid. Use a new one every time. Some tips have a **filter** that stops liquid from being sucked up into the pipette, where it would contaminate the pipette and your next samples. |
+| 1 | Plunger button | Piston | Press to take up and release liquid |
+| 2 | Tip ejector | Éjecteur | Removes the used tip |
+| 3 | Volume display | Affichage du volume | Shows the volume |
+| 4 | Tip | Cône | The only part that touches the liquid. Use a **new tip** every time. |
 
 ### The two stops
 
-<img src="images/pipette-stops.png" alt="The three positions of the plunger" width="440">
+<img src="images/pipette-stops.png" alt="The plunger at rest, at the first stop and at the second stop" width="440">
 
-*Figure 2: The plunger at rest (1), at the first stop (2) and at the second stop (3).*
-
-| | Position | Use it to |
+| Stop | How it feels | Use it to |
 |---|---|---|
-| 1 | **First stop** (you feel resistance) | Take up liquid, and release most of it |
-| 2 | **Second stop** (press harder, past the resistance) | Push out the last drop when releasing. **Never** use it when taking up liquid. |
+| **First stop** (*premier cran*) | You feel resistance | **Take up** liquid. Release most of the liquid. |
+| **Second stop** (*deuxième cran*) | Press harder | Release the **last drop** only. **Never** to take up liquid. |
 
-### Choose the right pipette
+### Choose the correct pipette
 
-Always use the **smallest pipette that can hold the volume**. A pipette is most accurate near the top of its range and least accurate near the bottom.
+Use the **smallest pipette** for your volume. It is more accurate (*précis*).
 
-| Pipette | Volume range | Use it today for |
-|---|---|---|
-| P10 | 0.5–10 µL | DNA sample for the Qubit (5 µL)|
-| P200 | 20–200 µL | Buffer ATL (180 µL)|
-| P1000 | 100–1000 µL | Buffer AW1 and AW2 (500 µL each) |
+| Pipette | Volume | Tip colour | Today we use it for |
+|---|---|---|---|
+| P10 | 0.5–10 µL | clear | DNA for the Qubit (5 µL) |
+| P200 | 20–200 µL | yellow | Proteinase K (20 µL), Buffer ATL (180 µL), AL (200 µL), ethanol (200 µL), AE (100 µL) |
+| P1000 | 100–1000 µL | blue | Transfer to the column (~600 µL), AW1 and AW2 (500 µL) |
 
-The labs' pipettes come from several brands (Eppendorf, VWR, Thermo Scientific, miniPCR). They all work the same way, but **the volume display can look different**. 
-
-> **Never** turn the volume past the top or bottom of the range or press beyond the stop to suck up liquid. It will result in incorrect measurements.
+> **Never** turn the volume past the top or bottom of the range.
 
 ### Take up and release liquid
 
-1. Put a **new tip** on the pipette. Press firmly, but do not hammer the pipette into the tip box.
-2. Hold the pipette **vertically**. Press the plunger down to the **first stop** and hold it.
-3. Put the end of the tip just **2–3 mm** below the surface of the liquid.
-4. **Slowly** let the plunger come up. Wait one second, then lift the tip out.
-5. To release the liquid, touch the tip to the inside wall of the tube. Press slowly to the **first stop**, then on to the **second stop** to push out the last drop.
-6. Keep the plunger pressed down while you lift the tip out of the tube. Then let the plunger go.
-7. Press the **tip ejector** to drop the tip in the waste.
-
-> Some extra tips:
-
-> * **Never** lay a pipette down, or turn it upside down, with liquid in the tip. Liquid runs into the pipette and contaminates it.
-> * Let the plunger come up slowly. If it snaps up, you will pull in air bubbles or splash liquid into the pipette.
-> * Ethanol and some buffers drip from the tip. Take up and release the liquid once (**pre-wet** the tip), then take up the volume you need.
-> * Buffer AL foams! Pipette very bubbly solutions slowly.
-
-### Practice exercise
-
-Use the water at your bench.
-
-| Volume | Pipette | Into |
-|---|---|---|
-| 900 µL | P1000 | An empty 1.5 mL tube. Check it reaches the 0.9 mark. |
-| 20 µL | P20 | A drop on parafilm. Compare it with the instructor's reference drop. |
-| 5 µL | P10 | A drop on parafilm. Compare it with the 20 µL drop. |
-
-### Quiz: pipetting
-
-Answer each question in your head (or with your partner) first, then click to check.
+1. Put a **new tip** on the pipette. Press firmly.
+2. Hold the pipette **vertical**. Press to the **first stop** and hold.
+3. Put the tip **2–3 mm** into the liquid.
+4. Release the plunger **slowly**. Wait 1 second. Take the tip out.
+5. Touch the tip to the inside wall of the tube. Press slowly to the **first stop**, then to the **second stop**.
+6. Keep the plunger pressed. Take the tip out of the tube. Then release the plunger.
+7. Press the **tip ejector**. The tip goes in the waste.
 
 <details markdown="1">
-<summary><b>1. You need 180 µL of Buffer ATL. Which pipette do you use?</b> <i>(click for the answer)</i></summary>  
+<summary><b>More tips</b> <i>(click to open)</i></summary>
 
-**P200.** *Always use the smallest pipette that can hold the volume. A P1000 *can* take up 180 µL, but it is much less accurate for small volumes.*
+* **Never** lay the pipette down with liquid in the tip. The liquid goes into the pipette.
+* Release the plunger **slowly**. If it is fast, you get air bubbles.
+* Ethanol drips from the tip. Take up and release it once first (*pré-humidifier*), then take up your volume.
+* Buffer AL makes foam (*mousse*). Pipette it slowly.
+
+</details>
+
+### Practice
+
+Use the water on your bench.
+
+| Volume | Pipette | Into | Check |
+|---|---|---|---|
+| 900 µL | P1000 | An empty 1.5 mL tube | It reaches the 0.9 mark |
+| 20 µL | P200 | A drop on parafilm | Same size as the instructor's drop |
+| 5 µL | P10 | A drop on parafilm | Smaller than the 20 µL drop |
+
+✓ **Checkpoint:** every person in your group has done all three volumes.
+
+### Quiz
+
+Answer first, then click.
+
+<details markdown="1">
+<summary><b>1. You need 180 µL of Buffer ATL. Which pipette?</b></summary>
+
+**P200.** Use the smallest pipette for the volume. A P1000 is less accurate for 180 µL.
 
 </details>
 
 <details markdown="1">
-<summary><b>2. Which stop do you press to when you suck up liquid?</b> <i>(click for the answer)</i></summary>
+<summary><b>2. Which stop do you use to take up liquid?</b></summary>
 
-**The first stop.** *If you take up liquid from the second stop, you will take up too much.*
+**The first stop.** From the second stop, you take up too much.
 
 </details>
 
 <details markdown="1">
-<summary><b>3. Why should you never lay a pipette down with liquid in the tip?</b> <i>(click for the answer)</i></summary>
+<summary><b>3. Why do you never lay a pipette down with liquid in the tip?</b></summary>
 
-*The liquid runs back **into the pipette**. This contaminates it (and the next samples you pipette) and can damage it.*
-
+The liquid goes **into the pipette**. This contaminates the pipette and your next samples.
 
 </details>
 
 ## Part 2: Working clean
 
-<img src="images/section-working-clean.png" alt="A nitrile glove; a cycle from the tip box to a pipette with a tip to the waste bin and back to the box; labelled 1.5 mL tubes with an enlarged label reading UADBA 43227, Nesomys lambertoni, liver in EtOH, and a marker labelling a tube" width="720">
+<img src="images/section-working-clean.png" alt="A glove box and a glove; a cycle from the tip box to a pipette with a tip, to the waste, and back to the tip box; three labelled 1.5 mL tubes with an enlarged label: UADBA 43227, Nesomys lambertoni, liver in EtOH" width="720">
 
-The DNA we extract is invisible, and a tiny amount of another sample's DNA can end up in your tube. Most mistakes in DNA work happen here, not in the kit.
+DNA is invisible. A very small amount of DNA from another sample can go into your tube. This is the most common error in DNA work.
 
-* Wear gloves in the lab to prevent **your** DNA or other contaminants from getting into samples. 
-* Use a **new tip for every tube and every reagent**. Never put a used tip back into a reagent bottle.
-* Label the **lid and the side** of every tube before you start, with a permanent marker. A good side label has the catalogue number, the species and the tissue, for example:
-  `UADBA 43227` / *Nesomys lambertoni* / `liver in EtOH`. Record each sample on your group's sheet.
-* Put liquid waste in the waste beaker, not down the sink.
+* Wear **gloves**. They keep **your** DNA out of the samples.
+* Use a **new tip for every tube and every reagent**. Never put a used tip in a reagent bottle.
+* Label the **lid** and the **side** of every tube before you start. Side label: catalogue number / species / tissue. Example: `UADBA 43227` / *Nesomys lambertoni* / `liver in EtOH`.
+* Liquid waste goes in the **waste beaker**, not in the sink.
 
 ### Continue the workshop
 
