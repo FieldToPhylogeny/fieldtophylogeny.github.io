@@ -12,7 +12,7 @@ Today you will extract DNA from reptile and amphibian tissue. Almost every step 
 
 ## Part 1: Using a micropipette
 
-### Parts of a micropipette
+### 1. Parts of a micropipette
 
 <img src="images/pipette-parts.png" alt="Parts of a micropipette" width="160">
 
@@ -23,7 +23,7 @@ Today you will extract DNA from reptile and amphibian tissue. Almost every step 
 | 3 | Volume display | Affichage du volume | Shows the volume |
 | 4 | Tip | Cône | The only part that touches the liquid. Use a **new tip** every time. |
 
-### The two stops
+### 2. Learning plunger stops
 
 <img src="images/pipette-stops.png" alt="The plunger at rest, at the first stop and at the second stop" width="440">
 
@@ -32,7 +32,7 @@ Today you will extract DNA from reptile and amphibian tissue. Almost every step 
 | **First stop** (*premier cran*) | You feel resistance | **Take up** liquid. Release most of the liquid. |
 | **Second stop** (*deuxième cran*) | Press harder | Release the **last drop** only. **Never** to take up liquid. |
 
-### Choose the correct pipette
+### 3. Choose the correct size pipette
 
 Use the **smallest pipette** for your volume. It is more accurate (*précis*).
 
