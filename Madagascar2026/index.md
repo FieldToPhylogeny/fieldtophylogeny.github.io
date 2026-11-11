@@ -72,6 +72,7 @@ Don't forget to fill this out at the end of the workshop!
 
 Really don't forget to take a few group photos!
 <!-- ![Group photo](RADCampUIUC2026.jpg) -->
+![Day1 Lab Work](images/Day1-LabWork.jpg)
 
 
 ## Acknowledgements
